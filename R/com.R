@@ -1,4 +1,29 @@
-
+#' Computes COM-Poisson Regression
+#' 
+#' Computes the maximum likelihood estimates of the COM-Poisson model for given
+#' count data.
+#' 
+#' The argument x should consist of a matrix where the first column is the
+#' level and the second column is the count for the corresponding level.
+#' 
+#' @param x matrix of count data
+#' @return Returns an object containing four fields: \item{lambda }{ Estimate
+#' of the lambda parameter} \item{nu }{ Estimate of the nu parameter} \item{z
+#' }{ Normalizing constant} \item{fitted.values }{ Estimated counts at given
+#' levels }
+#' @author Jeffrey Dunn
+#' @seealso \code{\link{com.compute.z}}, \code{\link{com.loglikelihood}}
+#' @references Shmueli, G., Minka, T. P., Kadane, J. B., Borle, S. and
+#' Boatwright, P., \dQuote{A useful distribution for fitting discrete data:
+#' Revival of the Conway-Maxwell-Poisson distribution,} J. Royal Statist. Soc.,
+#' v54, pp. 127-142, 2005.
+#' @keywords models regression
+#' @examples
+#' 
+#' 	data(insurance)
+#' 	com.fit(Lemaire);
+#' 
+#' @export com.fit
 com.fit = function(x)
 {
 	xbar = (x[,1] %*% x[,2]) / sum(x[,2]);
@@ -40,11 +65,87 @@ com.compute.log.z = function(lambda, nu, log.error = 0.001)
 	return (z);
 }
 
+
+
+
+
+#' Compute COM-Poisson Normalizing Constant
+#' 
+#' Computes the normalizing constant in the COM-Poisson model for given values
+#' of the parameters.
+#' 
+#' \code{com.compute.z} computes the COM-Poisson normalizing constant \deqn{
+#' }{z = Sum (lambda^j)/(j!^nu) }\deqn{ z = \sum_{i=0}^\infty
+#' \frac{\lambda^j}{(j!)^\nu} }{z = Sum (lambda^j)/(j!^nu) }\deqn{ }{z = Sum
+#' (lambda^j)/(j!^nu) } to the specified precision. If no precision is
+#' specified, then the package default is used.
+#' 
+#' \code{com.compute.log.z} is equivalent to \code{log(com.compute.z(lambda,
+#' nu))} but provudes additional precision.
+#' 
+#' @aliases com.compute.z com.compute.log.z
+#' @param lambda Lambda value in COM-Poisson distribution
+#' @param nu Nu value in COM-Poisson distribution
+#' @param log.error Precision in the log of the normalizing constant
+#' @return The normalizing constant as a real number with specified precision.
+#' @author Jeffrey Dunn
+#' @seealso \code{\link{com.fit}}
+#' @references Shmueli, G., Minka, T. P., Kadane, J. B., Borle, S. and
+#' Boatwright, P., \dQuote{A useful distribution for fitting discrete data:
+#' Revival of the Conway-Maxwell-Poisson distribution,} J. Royal Statist. Soc.,
+#' v54, pp. 127-142, 2005.
+#' @keywords models
+#' @examples
+#' 
+#' 	data(insurance);
+#' 	fit = com.fit(Lemaire);
+#' 	z = com.compute.z(fit$lambda, fit$nu);
+#' 
+#' @export com.compute.z
 com.compute.z = function(lambda, nu, log.error = 0.001)
 {
 	return (exp(com.compute.log.z(lambda,nu,log.error)));
 }
 
+
+
+
+
+#' The COM-Poisson Distribution
+#' 
+#' Probability mass function and random generation for the COM-Poisson
+#' distribution for given values of the parameters.
+#' 
+#' Computes the probability mass function of the COM-Poisson distribution
+#' \deqn{ }{f(x) = (1/Z) (lambda^x)/(x!^nu).}\deqn{ f(x) =
+#' \frac{1}{Z(\lambda,\nu)}\frac{\lambda^x}{(x!)^\nu}. }{f(x) = (1/Z)
+#' (lambda^x)/(x!^nu).}\deqn{ }{f(x) = (1/Z) (lambda^x)/(x!^nu).}
+#' 
+#' @aliases dcom rcom
+#' @param x level to evaluate the PMF at
+#' @param lambda value of lambda parameter
+#' @param nu value of nu parameter
+#' @param z normalizing constant, computed if not specified
+#' @param n number of random values to return
+#' @param log.z natural log of z
+#' @return \code{dcom} gives the probability that a random COM-Poisson variable
+#' X takes value x.  \code{rcom} gives a vector of \code{n} random values
+#' sampled from the COM-Poisson distribution.
+#' @author Jeffrey Dunn
+#' @seealso \code{\link{com.loglikelihood}}, \code{\link{com.log.density}}
+#' @references Shmueli, G., Minka, T. P., Kadane, J. B., Borle, S. and
+#' Boatwright, P., \dQuote{A useful distribution for fitting discrete data:
+#' Revival of the Conway-Maxwell-Poisson distribution,} J. Royal Statist. Soc.,
+#' v54, pp. 127-142, 2005.
+#' @keywords models
+#' @examples
+#' 
+#' 	data(insurance);
+#' 	fit = com.fit(Lemaire);
+#' 	dcom(0, fit$lambda, fit$nu, fit$z);
+#' 	r = rcom(10, fit$lambda, fit$nu);
+#' 
+#' @export dcom
 dcom = function(x, lambda, nu, z = NULL)
 {
 	# Perform argument checking
@@ -59,6 +160,41 @@ dcom = function(x, lambda, nu, z = NULL)
 	return ((lambda ^ x) * ((factorial(x)) ^ -nu) / z);
 }
 
+
+
+
+
+#' Computes the Log PMF of the COM-Poisson Distribution
+#' 
+#' Computes the log probability mass function of the COM-Poisson distribution
+#' for given values of the parameters.
+#' 
+#' Computes the log probability mass function of the COM-Poisson distribution
+#' \deqn{ }{log f(x) = x * log(lambda) - log(Z) - nu * log(x!). }\deqn{ \log
+#' f(x) = x \log \lambda - \log(Z(\lambda,\nu)) - \nu \sum_{i=1}^x x. }{log
+#' f(x) = x * log(lambda) - log(Z) - nu * log(x!). }\deqn{ }{log f(x) = x *
+#' log(lambda) - log(Z) - nu * log(x!). }
+#' 
+#' @param x level to evaulate the log PMF at
+#' @param lambda value of the lambda parameter
+#' @param nu value of the nu parameter
+#' @param log.z log of the normalizing constant, computed if not specified
+#' @return The log probability that a random COM-Poisson variable X takes value
+#' x.
+#' @author Jeffrey Dunn
+#' @seealso \code{\link{com.loglikelihood}}, \code{\link{dcom}}
+#' @references Shmueli, G., Minka, T. P., Kadane, J. B., Borle, S. and
+#' Boatwright, P., \dQuote{A useful distribution for fitting discrete data:
+#' Revival of the Conway-Maxwell-Poisson distribution,} J. Royal Statist. Soc.,
+#' v54, pp. 127-142, 2005.
+#' @keywords models
+#' @examples
+#' 
+#' 	data(insurance);
+#' 	fit = com.fit(Lemaire);
+#' 	com.log.density(0, fit$lambda, fit$nu, fit$z);
+#' 
+#' @export com.log.density
 com.log.density = function(x, lambda, nu, log.z = NULL)
 {
 	# Perform argument checking
@@ -72,6 +208,30 @@ com.log.density = function(x, lambda, nu, log.z = NULL)
 	return ((x * log(lambda) - nu * com.log.factorial(x)) - log.z);
 }
 
+
+
+
+
+#' Computes Log-Likelihood of COM-Poisson
+#' 
+#' Given a set of data, computes the log-likelihood of the data under the
+#' COM-Poisson distribution for values of the parameters.
+#' 
+#' The argument x should consist of a matrix where the first column is the
+#' level and the second column is the count for the corresponding level.
+#' 
+#' @param x matrix of count data
+#' @param lambda value of lambda parameter
+#' @param nu value of nu parameter
+#' @return The log-likelihood of the data.
+#' @author Jeffrey Dunn
+#' @seealso \code{\link{com.fit}}, \code{\link{dcom}}
+#' @references Shmueli, G., Minka, T. P., Kadane, J. B., Borle, S. and
+#' Boatwright, P., \dQuote{A useful distribution for fitting discrete data:
+#' Revival of the Conway-Maxwell-Poisson distribution,} J. Royal Statist. Soc.,
+#' v54, pp. 127-142, 2005.
+#' @keywords models
+#' @export com.loglikelihood
 com.loglikelihood = function(x, lambda, nu)
 {
 	# Perform argument checking
@@ -82,6 +242,31 @@ com.loglikelihood = function(x, lambda, nu)
 	return (x[,2] %*% ( x[,1] * log(lambda) - nu * com.log.factorial(x[,1]) - log.z ));
 }
 
+
+
+
+
+#' Computes Expectation of a Function of a COM-Poisson Random Variable
+#' 
+#' Computes an expectation of a function of a COM-Poisson random variable.
+#' 
+#' Computes the expectation \eqn{E[f(X)]}{E[f(X)]} where X is a COM-Poisson
+#' random variable.
+#' 
+#' @param f function taking as a single argument the value of x
+#' @param lambda value of lambda parameter
+#' @param nu value of nu parameter
+#' @param log.error precision in the log of the expectation
+#' @return The expectation as a real number.
+#' @author Jeffrey Dunn
+#' @seealso \code{\link{com.mean}}, \code{\link{com.var}},
+#' \code{\link{com.fit}}
+#' @references Shmueli, G., Minka, T. P., Kadane, J. B., Borle, S. and
+#' Boatwright, P., \dQuote{A useful distribution for fitting discrete data:
+#' Revival of the Conway-Maxwell-Poisson distribution,} J. Royal Statist. Soc.,
+#' v54, pp. 127-142, 2005.
+#' @keywords models
+#' @export com.expectation
 com.expectation = function(f, lambda, nu, log.error = 0.001)
 {
 	log.z = com.compute.log.z(lambda, nu);
@@ -102,11 +287,70 @@ com.expectation = function(f, lambda, nu, log.error = 0.001)
 	return (exp(ex));
 }
 
+
+
+
+
+#' Computes Mean of the COM-Poisson Distribution
+#' 
+#' Computes the mean of the COM-Poisson distribution for given values of the
+#' parameters.
+#' 
+#' Uses \code{\link{com.expectation}} to compute the first moment of the
+#' distribution.
+#' 
+#' @param lambda value of lambda parameter
+#' @param nu value of the nu parameter
+#' @return The mean of the distribution.
+#' @author Jeffrey Dunn
+#' @seealso \code{\link{com.expectation}}, \code{\link{com.var}}
+#' @references Shmueli, G., Minka, T. P., Kadane, J. B., Borle, S. and
+#' Boatwright, P., \dQuote{A useful distribution for fitting discrete data:
+#' Revival of the Conway-Maxwell-Poisson distribution,} J. Royal Statist. Soc.,
+#' v54, pp. 127-142, 2005.
+#' @keywords models
+#' @examples
+#' 
+#' 	data(insurance)
+#' 	model = com.fit(Lemaire);
+#' 	com.mean(model$lambda, model$nu);
+#' 
+#' @export com.mean
 com.mean = function(lambda, nu)
 {
 	return ( com.expectation(function (x) {x}, lambda, nu) );
 }
 
+
+
+
+
+#' Computes Variance of the COM-Poisson Distribution
+#' 
+#' Computes the variance of the COM-Poisson distribution for given values of
+#' the parameters.
+#' 
+#' Uses \code{\link{com.expectation}} to compute the second moment of the
+#' distribution and subtracts the squared mean, computed using
+#' \code{\link{com.mean}}.
+#' 
+#' @param lambda value of lambda parameter
+#' @param nu value of the nu parameter
+#' @return The variance of the distribution.
+#' @author Jeffrey Dunn
+#' @seealso \code{\link{com.expectation}}, \code{\link{com.mean}}
+#' @references Shmueli, G., Minka, T. P., Kadane, J. B., Borle, S. and
+#' Boatwright, P., \dQuote{A useful distribution for fitting discrete data:
+#' Revival of the Conway-Maxwell-Poisson distribution,} J. Royal Statist. Soc.,
+#' v54, pp. 127-142, 2005.
+#' @keywords models
+#' @examples
+#' 
+#' 	data(insurance)
+#' 	model = com.fit(Lemaire);
+#' 	com.var(model$lambda, model$nu);
+#' 
+#' @export com.var
 com.var = function(lambda, nu)
 {
 	return ( com.expectation(function(x) {x^2}, lambda, nu) - (com.mean(lambda,nu))^2 );
@@ -145,6 +389,29 @@ rcom = function(n, lambda, nu, log.z = NULL)
 }
 
 
+
+
+
+
+#' Computes a confidence interval for parameter estimates of the COM-Poisson
+#' Distribution
+#' 
+#' Computes a pivotal bootstrap confidence interval for maximum likelihood
+#' parameter estimates.
+#' 
+#' Uses a standard pivotal confidence interval from a bootstrap sample.
+#' 
+#' @param data the matrix of data to fit
+#' @param level the level of the confidence interval
+#' @param B number of repetitions of the bootstrap
+#' @param n number of data points in each bootstrap sample
+#' @return A matrix containing the confidence intervals for each parameter
+#' @author Akshaya Jha, Jeffrey Dunn
+#' @seealso \code{\link{com.fit}}
+#' @references Wasserman, L. (2005). "All of Statistics: A Concise Course in
+#' Statistical Inference," Springer Texts in Statistics.
+#' @keywords models
+#' @export com.confint
 com.confint = function(data, level=0.95, B=1000, n=1000)
 {
 	# B = Number of repetitions of bootstrap
