@@ -10,6 +10,31 @@ com.log.sum = function(x,y)		# log.sum(x,y) = log( exp(x) + exp(y) )
 		{ return (y + log( 1 + exp(x - y) ) ); }
 }
 
+#' Operations in Log-space
+#' 
+#' Computes the difference of two values in log-space.
+#' 
+#' \code{com.log.difference} computes the difference of two values in
+#' log-space, \eqn{log( e^x - e^y )}, without significant chance of overflow or
+#' underflow.
+#' 
+#' \code{com.log.sum} computes the sum of two values in log-space, \eqn{log(
+#' e^x + e^y )}, without significant change of overflow or underflow.
+#' 
+#' \code{com.log.factorial} computes \eqn{log(x!)} which is equivalent to a
+#' summation.
+#' 
+#' @aliases com.log.difference com.log.sum com.log.factorial
+#' @param x first value
+#' @param y second value
+#' @return The requested computation in log-space.
+#' @author Jeffrey Dunn
+#' @keywords manip
+#' @examples
+#' 
+#' 	a = exp(com.log.difference(log(100), log(20))); # a = 80
+#' 	b = exp(com.log.sum(log(100), log(20))); # b = 120
+#' 	c = exp(com.log.factorial(4)); # c = 24
 com.log.difference = function(x,y)	# log.difference(x,y) = log( exp(x) - exp(y) )
 {
 	if (x == -Inf)
