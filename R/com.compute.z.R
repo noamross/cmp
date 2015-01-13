@@ -36,6 +36,7 @@ com.compute.z = function(lambda, nu, log.error = 0.001)
 	return (exp(com.compute.log.z(lambda,nu,log.error)));
 }
 
+#' @importFrom matrixStats logSumExp
 com.compute.log.z = function(lambda, nu, log.error = 0.001)
 {
 	# Perform argument checking
@@ -51,7 +52,7 @@ com.compute.log.z = function(lambda, nu, log.error = 0.001)
 	while (abs(z - z.last) > log.error)
 	{
 		z.last = z;
-		z = com.log.sum(z, j * log(lambda) - nu * com.log.factorial(j));
+		z = logSumExp(c(z, j * log(lambda) - nu * com.log.factorial(j)));
 
 		j = j + 1;
 	}
