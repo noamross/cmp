@@ -1,6 +1,6 @@
-Package: compoisson
+Package: compoisson2
 Type: Package
-Title: Conway-Maxwell-Poisson Distribution
+Title: Conway-Maxwell-Poisson Distribution, optimized
 Version: 0.3.1
 Date: 2008-05-07
 Author: Jeffrey Dunn, Noam Ross
