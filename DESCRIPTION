@@ -14,3 +14,4 @@ Depends: stats, MASS
 Packaged: 2012-10-29 08:58:27 UTC; ripley
 Repository: CRAN
 Date/Publication: 2012-10-29 08:58:27
+Suggests: testthat
