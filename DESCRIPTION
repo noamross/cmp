@@ -10,8 +10,10 @@ Description: Provides routines for density and moments of the
         fitting the COM-Poisson model for over/under-dispersed count
         data.
 License: BSD
-Depends: stats, MASS
+Imports: stats
 Packaged: 2012-10-29 08:58:27 UTC; ripley
 Repository: CRAN
 Date/Publication: 2012-10-29 08:58:27
 Suggests: testthat
+LinkingTo: Rcpp
+Imports: Rcpp

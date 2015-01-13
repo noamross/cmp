@@ -24,6 +24,7 @@
 #' 	data(insurance)
 #' 	com.fit(Lemaire);
 #' 
+#' @importFrom stats optim
 #' @export com.fit
 com.fit = function(x, par=NULL)
 {
