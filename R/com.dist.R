@@ -47,6 +47,40 @@ dcom = function(x, lambda, nu, z = NULL)
 	return ((lambda ^ x) * ((factorial(x)) ^ -nu) / z);
 }
 
+#' @export
+rcom = function(n, lambda, nu, log.z = NULL)
+{
+  # Check arguments
+	if (lambda < 0 || nu < 0)
+		stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
+	if (is.null(log.z))
+		log.z = com.compute.log.z(lambda, nu);
+
+	r = NULL;	# Vector of random values
+
+	for (i in 1:n)
+	{
+		# Get a uniform random variable and find the smallest value x such that
+		# the cdf of x is greater than the random value
+		log.prob = log(runif(1));
+		j = 0;
+		while (1)
+		{
+			new.log.prob = com.log.difference( log.prob, com.log.density(j, lambda, nu, log.z) );
+			if (is.nan(new.log.prob))
+				break;
+
+			log.prob = new.log.prob;
+			j = j + 1;
+		}
+
+		r = c(r, j);
+	}
+
+	return (r);
+}
+
+
 #' Computes the Log PMF of the COM-Poisson Distribution
 #' 
 #' Computes the log probability mass function of the COM-Poisson distribution

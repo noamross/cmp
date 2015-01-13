@@ -1,15 +1,3 @@
-com.log.sum = function(x,y)		# log.sum(x,y) = log( exp(x) + exp(y) )
-{
-	if (x == -Inf)
-		{ return (y); }
-	else if (y == -Inf)
-		{ return (x); }
-	else if (x > y)
-		{ return (x + log( 1 + exp(y - x) ) ); }
-	else
-		{ return (y + log( 1 + exp(x - y) ) ); }
-}
-
 #' Operations in Log-space
 #' 
 #' Computes the difference of two values in log-space.
@@ -35,19 +23,21 @@ com.log.sum = function(x,y)		# log.sum(x,y) = log( exp(x) + exp(y) )
 #' 	a = exp(com.log.difference(log(100), log(20))); # a = 80
 #' 	b = exp(com.log.sum(log(100), log(20))); # b = 120
 #' 	c = exp(com.log.factorial(4)); # c = 24
-com.log.difference = function(x,y)	# log.difference(x,y) = log( exp(x) - exp(y) )
-{
-	if (x == -Inf)
-		{ return (NaN); }
-	else if (y == -Inf)
-		{ return (x); }
-	else if (x > y)
-		{ return (x + log( 1 - exp(y - x) ) ); }
-	else
-		{ return (NaN); }
+#'  
+#'  @export
+com.log.difference = function(x,y) { # log.difference(x,y) = log(exp(x)- xp(y))
+	if (x == -Inf) {
+		return (NaN)
+	} else if (y == -Inf) {
+		return (x)
+	} else if (x > y) {
+	  return (x + log( 1 - exp(y - x) ) )
+	} else {
+		return (NaN)
+	}
 }
 
-
+#' @export
 com.log.factorial = function(x)	# log(factorial(x))
 {
 	if (is.vector(x) && length(x) > 1)
@@ -63,3 +53,17 @@ com.log.factorial = function(x)	# log(factorial(x))
 	}
 	else { stop("x must be a vector or number."); }
 }
+
+#' @export
+com.log.sum = function(x,y)  	# log.sum(x,y) = log( exp(x) + exp(y) )
+{
+	if (x == -Inf)
+		{ return (y); }
+	else if (y == -Inf)
+		{ return (x); }
+	else if (x > y)
+		{ return (x + log( 1 + exp(y - x) ) ); }
+	else
+		{ return (y + log( 1 + exp(x - y) ) ); }
+}
+
