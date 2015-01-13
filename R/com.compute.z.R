@@ -52,7 +52,7 @@ com.compute.log.z = function(lambda, nu, log.error = 0.001)
 	while (abs(z - z.last) > log.error)
 	{
 		z.last = z;
-		z = logSumExp(c(z, j * log(lambda) - nu * com.log.factorial(j)));
+		z = logSumExp(c(z, j * log(lambda) - nu * lfactorial(j)));
 
 		j = j + 1;
 	}

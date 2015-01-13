@@ -122,5 +122,5 @@ com.log.density = function(x, lambda, nu, log.z = NULL)
 	if (is.null(log.z)) { log.z = com.compute.log.z(lambda, nu); }
 	
 	# Return log pmf
-	return ((x * log(lambda) - nu * com.log.factorial(x)) - log.z);
+	return ((x * log(lambda) - nu * lfactorial(x)) - log.z);
 }
