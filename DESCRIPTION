@@ -10,6 +10,9 @@ Description: Provides routines for density and moments of the
         fitting the COM-Poisson model for over/under-dispersed count
         data.
 License: BSD
-Suggests: testthat
+Suggests: testthat,
+    knitr,
+    compoisson
 LinkingTo: Rcpp
 Imports: Rcpp, matrixStats, stats
+VignetteBuilder: knitr

@@ -1,0 +1,27 @@
+---
+title: "Performance Improvements in compoisson2"
+author: "Noam Ross"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+Here's a quick comparison of performance between the compoisson and compoisson2
+packages.  In a first pass, I've improved speed by replacing two of the package
+functions, `com.log.sum()` and `com.log.factorial()` with functions in the `base`
+and `matrixStats` package that implement the same functions, but are written in
+C.
+
+
+```{r}
+library(compoisson)
+data("insurance")
+library(microbenchmark)
+com_fit_compare = microbenchmark(compoisson::com.fit(Lemaire), compoisson2::com.fit(Lemaire), times=500L)
+summary(com_fit_compare)
+```
+
+We can an approximately 6-fold improvement right off the bat.
