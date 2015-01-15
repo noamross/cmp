@@ -4,7 +4,7 @@
 \alias{com.mean}
 \title{Computes Mean of the COM-Poisson Distribution}
 \usage{
-com.mean(lambda, nu)
+com.mean(lambda, nu, ...)
 }
 \arguments{
 \item{lambda}{value of lambda parameter}

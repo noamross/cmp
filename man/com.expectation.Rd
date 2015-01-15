@@ -4,7 +4,7 @@
 \alias{com.expectation}
 \title{Computes Expectation of a Function of a COM-Poisson Random Variable}
 \usage{
-com.expectation(f, lambda, nu, log.error = 0.001)
+com.expectation(f, lambda, nu, log.error = 0.001, maxit = 100, z = NULL)
 }
 \arguments{
 \item{f}{function taking as a single argument the value of x}

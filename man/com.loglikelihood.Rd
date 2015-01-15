@@ -4,7 +4,7 @@
 \alias{com.loglikelihood}
 \title{Computes Log-Likelihood of COM-Poisson}
 \usage{
-com.loglikelihood(x, lambda, nu)
+com.loglikelihood(x, lambda, nu, ...)
 }
 \arguments{
 \item{x}{matrix of count data}

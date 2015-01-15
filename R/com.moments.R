@@ -20,9 +20,13 @@
 #' @keywords models
 #' @importFrom matrixStats logSumExp
 #' @export com.expectation
-com.expectation = function(f, lambda, nu, log.error = 0.001)
+com.expectation = function(f, lambda, nu, log.error = 0.001, maxit=100, z=NULL)
 {
-	log.z = com.compute.log.z(lambda, nu);
+	if(is.null(z)) {
+    log.z = com.compute.log.z(lambda, nu)
+	} else {
+    log.z = log(z)
+	}
 
 	# Initialize variables
 	ex = -.Machine$double.xmax;
@@ -30,7 +34,7 @@ com.expectation = function(f, lambda, nu, log.error = 0.001)
 	j = 0;
 
 	# Continue until we have reached specified precision
-	while ((ex == -.Machine$double.xmax && ex.last == -.Machine$double.xmax) || abs(ex - ex.last) > log.error)
+	while (((ex == -.Machine$double.xmax && ex.last == -.Machine$double.xmax) || abs(ex - ex.last) > log.error) && j <= maxit)
 	{
 		ex.last = ex;
 		ex = logSumExp(c(ex, log(f(j)) + com.log.density(j, lambda, nu, log.z)));
@@ -68,9 +72,9 @@ com.expectation = function(f, lambda, nu, log.error = 0.001)
 #' 	com.mean(model$lambda, model$nu);
 #' 
 #' @export com.mean
-com.mean = function(lambda, nu)
+com.mean = function(lambda, nu, ...)
 {
-	return ( com.expectation(function (x) {x}, lambda, nu) );
+	return ( com.expectation(function (x) {x}, lambda, nu, ...) );
 }
 
 
@@ -103,9 +107,9 @@ com.mean = function(lambda, nu)
 #' 	com.var(model$lambda, model$nu);
 #' 
 #' @export com.var
-com.var = function(lambda, nu)
+com.var = function(lambda, nu, ...)
 {
-	return ( com.expectation(function(x) {x^2}, lambda, nu) - (com.mean(lambda,nu))^2 );
+	return ( com.expectation(function(x) {x^2}, lambda, nu, ...) - (com.mean(lambda,nu, ...))^2 );
 }
 
 

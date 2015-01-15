@@ -31,13 +31,13 @@
 #' 	z = com.compute.z(fit$lambda, fit$nu);
 #' 
 #' @export com.compute.z
-com.compute.z = function(lambda, nu, log.error = 0.001)
+com.compute.z = function(lambda, nu, log.error = 0.001, ...)
 {
-	return (exp(com.compute.log.z(lambda,nu,log.error)));
+	return (exp(com.compute.log.z(lambda,nu,log.error, ...)));
 }
 
 #' @importFrom matrixStats logSumExp
-com.compute.log.z = function(lambda, nu, log.error = 0.001)
+com.compute.log.z = function(lambda, nu, log.error = 0.001, maxit=100)
 {
 	# Perform argument checking
 	if (lambda < 0 || nu < 0)
@@ -49,7 +49,7 @@ com.compute.log.z = function(lambda, nu, log.error = 0.001)
 	j = 0;
 
 	# Continue until we have reached specified precision
-	while (abs(z - z.last) > log.error)
+	while ((abs(z - z.last) > log.error) && j <= maxit)
 	{
 		z.last = z;
 		z = logSumExp(c(z, j * log(lambda) - nu * lfactorial(j)));

@@ -4,7 +4,7 @@
 \alias{com.fit}
 \title{Computes COM-Poisson Regression}
 \usage{
-com.fit(x, par = NULL)
+com.fit(x, par = NULL, ...)
 }
 \arguments{
 \item{x}{matrix of count data}

@@ -5,7 +5,7 @@
 \alias{com.compute.z}
 \title{Compute COM-Poisson Normalizing Constant}
 \usage{
-com.compute.z(lambda, nu, log.error = 0.001)
+com.compute.z(lambda, nu, log.error = 0.001, ...)
 }
 \arguments{
 \item{lambda}{Lambda value in COM-Poisson distribution}

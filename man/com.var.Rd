@@ -4,7 +4,7 @@
 \alias{com.var}
 \title{Computes Variance of the COM-Poisson Distribution}
 \usage{
-com.var(lambda, nu)
+com.var(lambda, nu, ...)
 }
 \arguments{
 \item{lambda}{value of lambda parameter}

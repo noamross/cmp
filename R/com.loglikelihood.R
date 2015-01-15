@@ -18,12 +18,12 @@
 #' v54, pp. 127-142, 2005.
 #' @keywords models
 #' @export com.loglikelihood
-com.loglikelihood = function(x, lambda, nu)
+com.loglikelihood = function(x, lambda, nu, ...)
 {
 	# Perform argument checking
 	if (lambda < 0 || nu < 0)
 		return (-Inf);
 
-	log.z = com.compute.log.z(lambda, nu);
+	log.z = com.compute.log.z(lambda, nu, ...);
 	return (x[,2] %*% ( x[,1] * log(lambda) - nu * lfactorial(x[,1]) - log.z ));
 }

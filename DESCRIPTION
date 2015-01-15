@@ -14,5 +14,5 @@ Suggests: testthat,
     knitr,
     compoisson
 LinkingTo: Rcpp
-Imports: Rcpp, matrixStats, stats
+Imports: Rcpp, matrixStats, stats, optimx
 VignetteBuilder: knitr

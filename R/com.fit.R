@@ -26,14 +26,14 @@
 #' 
 #' @importFrom stats optim
 #' @export com.fit
-com.fit = function(x, par=NULL)
+com.fit = function(x, par=NULL, ...)
 {
 	if (is.null(par)) {
 		xbar = (x[,1] %*% x[,2]) / sum(x[,2]);
 		par = c(xbar, 1)
 	}
 #	options(warn = -1);
-	result = optim(par, function(p) {return (-com.loglikelihood(x, p[1], p[2]));},
+	result = optim(par, function(p) {return (-com.loglikelihood(x, p[1], p[2], ...));},
 		method="L-BFGS-B", lower=c(1e-10,0));
 #	options(warn = 0);
 	
