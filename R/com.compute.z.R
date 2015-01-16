@@ -37,6 +37,7 @@ com.compute.z = function(lambda, nu, log.error = 0.001, ...)
 }
 
 #' @importFrom matrixStats logSumExp
+#' @export
 com.compute.log.z = function(lambda, nu, log.error = 0.001, maxit=100)
 {
 	# Perform argument checking
