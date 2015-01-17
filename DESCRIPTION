@@ -1,4 +1,4 @@
-Package: compoisson2
+Package: compoisson
 Type: Package
 Title: Conway-Maxwell-Poisson Distribution, optimized
 Version: 0.3.1
