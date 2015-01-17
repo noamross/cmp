@@ -1,4 +1,3 @@
 library(testthat)
-library(compoisson2)
-
+library(compoisson)
 # test_check("compoisson")

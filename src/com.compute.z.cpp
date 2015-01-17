@@ -1,8 +1,10 @@
 #include <Rcpp.h>
 #include "compoisson.h"
 
-
 using namespace Rcpp;
+
+// [[Rcpp::interfaces(r, cpp)]]
+
 
 //' @export
 // [[Rcpp::export]]

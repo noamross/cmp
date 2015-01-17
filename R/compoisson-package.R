@@ -49,7 +49,7 @@ NULL
 #' 
 NULL
 
-#' @useDynLib compoisson2
+#' @useDynLib compoisson
 #' @importFrom Rcpp sourceCpp
 NULL
 

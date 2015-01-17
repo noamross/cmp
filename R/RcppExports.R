@@ -3,40 +3,40 @@
 
 #' @export
 compute_z <- function(lambda, nu, log_error = 0.001, maxit = 100L) {
-    .Call('compoisson2_compute_z', PACKAGE = 'compoisson2', lambda, nu, log_error, maxit)
+    .Call('compoisson_compute_z', PACKAGE = 'compoisson', lambda, nu, log_error, maxit)
 }
 
 #' @export
 compute_log_z <- function(lambda, nu, log_error = 0.001, maxit = 100L) {
-    .Call('compoisson2_compute_log_z', PACKAGE = 'compoisson2', lambda, nu, log_error, maxit)
+    .Call('compoisson_compute_log_z', PACKAGE = 'compoisson', lambda, nu, log_error, maxit)
 }
 
 #' @export
 logsumexp <- function(x) {
-    .Call('compoisson2_logsumexp', PACKAGE = 'compoisson2', x)
+    .Call('compoisson_logsumexp', PACKAGE = 'compoisson', x)
 }
 
 #' @export
 d_com <- function(x, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
-    .Call('compoisson2_d_com', PACKAGE = 'compoisson2', x, lambda, nu, log, z, log_error, maxit)
+    .Call('compoisson_d_com', PACKAGE = 'compoisson', x, lambda, nu, log, z, log_error, maxit)
 }
 
 #' @export
 p_com <- function(q, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
-    .Call('compoisson2_p_com', PACKAGE = 'compoisson2', q, lambda, nu, log, z, log_error, maxit)
+    .Call('compoisson_p_com', PACKAGE = 'compoisson', q, lambda, nu, log, z, log_error, maxit)
 }
 
 #' @export
 q_com <- function(p, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
-    .Call('compoisson2_q_com', PACKAGE = 'compoisson2', p, lambda, nu, log, z, log_error, maxit)
+    .Call('compoisson_q_com', PACKAGE = 'compoisson', p, lambda, nu, log, z, log_error, maxit)
 }
 
 #' @export
 r_com <- function(n, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
-    .Call('compoisson2_r_com', PACKAGE = 'compoisson2', n, lambda, nu, log, z, log_error, maxit)
+    .Call('compoisson_r_com', PACKAGE = 'compoisson', n, lambda, nu, log, z, log_error, maxit)
 }
 
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
-    .Call('compoisson2_RcppExport_registerCCallable', PACKAGE = 'compoisson2')
+    .Call('compoisson_RcppExport_registerCCallable', PACKAGE = 'compoisson')
 })

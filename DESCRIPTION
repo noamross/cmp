@@ -1,4 +1,4 @@
-Package: compoisson2
+Package: compoisson
 Type: Package
 Title: Conway-Maxwell-Poisson Distribution, optimized
 Version: 0.3.1
@@ -11,8 +11,7 @@ Description: Provides routines for density and moments of the
         data.
 License: BSD
 Suggests: testthat,
-    knitr,
-    compoisson
-LinkingTo: Rcpp, matrixStats
-Imports: Rcpp, matrixStats, stats
+    knitr
+LinkingTo: Rcpp
+Imports: Rcpp, matrixStats
 VignetteBuilder: knitr
