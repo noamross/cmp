@@ -7,4 +7,6 @@ extern double compute_z(double lambda, double nu, double log_error, int maxit);
 extern double logsumexp(NumericVector x);
 extern double d_com(double x, double lambda, double nu, double z, double log_error, int maxit);
 extern double p_com(double q, double lambda, double nu, bool log, double z, double log_error, int maxit);
+extern int q_com(double p, double lambda, double nu, bool log, double z, double log_error, int maxit);
+extern NumericVector r_com(int n, double lambda, double nu, bool log, double z, double log_error, int maxit);
 #endif

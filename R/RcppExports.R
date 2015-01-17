@@ -2,6 +2,11 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @export
+compute_z <- function(lambda, nu, log_error = 0.001, maxit = 100L) {
+    .Call('compoisson2_compute_z', PACKAGE = 'compoisson2', lambda, nu, log_error, maxit)
+}
+
+#' @export
 compute_log_z <- function(lambda, nu, log_error = 0.001, maxit = 100L) {
     .Call('compoisson2_compute_log_z', PACKAGE = 'compoisson2', lambda, nu, log_error, maxit)
 }
@@ -11,3 +16,27 @@ logsumexp <- function(x) {
     .Call('compoisson2_logsumexp', PACKAGE = 'compoisson2', x)
 }
 
+#' @export
+d_com <- function(x, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
+    .Call('compoisson2_d_com', PACKAGE = 'compoisson2', x, lambda, nu, log, z, log_error, maxit)
+}
+
+#' @export
+p_com <- function(q, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
+    .Call('compoisson2_p_com', PACKAGE = 'compoisson2', q, lambda, nu, log, z, log_error, maxit)
+}
+
+#' @export
+q_com <- function(p, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
+    .Call('compoisson2_q_com', PACKAGE = 'compoisson2', p, lambda, nu, log, z, log_error, maxit)
+}
+
+#' @export
+r_com <- function(n, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
+    .Call('compoisson2_r_com', PACKAGE = 'compoisson2', n, lambda, nu, log, z, log_error, maxit)
+}
+
+# Register entry points for exported C++ functions
+methods::setLoadAction(function(ns) {
+    .Call('compoisson2_RcppExport_registerCCallable', PACKAGE = 'compoisson2')
+})
