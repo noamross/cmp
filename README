@@ -1,0 +1,3 @@
+This is a reference copy of v0.3 of compoisson, renamed compoissonOld so that
+the package can be loaded concurrently with the latest versio for the
+purpose of performance comparisons and testing.
