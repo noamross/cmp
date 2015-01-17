@@ -1,9 +1,14 @@
 #include <Rcpp.h>
-#include <math.h>
-#include "com.compute.z.h"
+#include "compoisson.h"
+
 
 using namespace Rcpp;
 
+//' @export
+// [[Rcpp::export]]
+double compute_z(double lambda, double nu, double log_error = 0.001, int maxit=100) {
+  return(exp(compute_log_z(lambda, nu, log_error, maxit)));
+}
 
 //' @export
 // [[Rcpp::export]]
