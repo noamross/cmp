@@ -18,7 +18,6 @@
 #' Revival of the Conway-Maxwell-Poisson distribution,} J. Royal Statist. Soc.,
 #' v54, pp. 127-142, 2005.
 #' @keywords models
-#' @importFrom matrixStats logSumExp
 #' @export com.expectation
 com.expectation = function(f, lambda, nu, log.error = 0.001, maxit=100, z=NULL) {
 
@@ -37,7 +36,7 @@ com.expectation = function(f, lambda, nu, log.error = 0.001, maxit=100, z=NULL) 
   while (((ex == -.Machine$double.xmax && ex.last == -.Machine$double.xmax) ||
             abs(ex - ex.last) > log.error) && j <= maxit) {
     ex.last = ex
-    ex = logSumExp(c(ex, log(f(j)) + com.log.density(j, lambda, nu, log.z)))
+    ex = logsumexp(c(ex, log(f(j)) + com.log.density(j, lambda, nu, log.z)))
     j = j + 1
   }
 

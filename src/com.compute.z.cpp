@@ -36,5 +36,5 @@ double compute_log_z(double lambda, double nu, double log_error = 0.001, int max
 //' @export
 // [[Rcpp::export]]
 double logsumexp(NumericVector x) {
-    return(log(sum(exp(x - max(x)))) + max(x));
+  return(log(sum(exp(x - max(x)))) + max(x));
 }

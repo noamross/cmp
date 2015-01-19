@@ -13,5 +13,5 @@ License: BSD
 Suggests: testthat,
     knitr
 LinkingTo: Rcpp
-Imports: Rcpp, matrixStats
+Imports: Rcpp
 VignetteBuilder: knitr
