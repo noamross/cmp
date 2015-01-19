@@ -15,7 +15,7 @@
 #' \code{com_compute_log_z} is equivalent to \code{log(com_compute_z(lambda,
 #' nu))} but provudes additional precision.
 #'
-#' @aliases com_compute_z com_compute_log_z com.compute.z com.compute.log.z
+#' @aliases com_compute_z com_compute_log_z
 #' @param lambda Lambda value in COM-Poisson distribution
 #' @param nu Nu value in COM-Poisson distribution
 #' @param log.error Precision in the log of the normalizing constant
@@ -38,6 +38,7 @@ com_compute_z <- function(lambda, nu, log_error = 0.001, maxit = 100L) {
     .Call('compoisson_com_compute_z', PACKAGE = 'compoisson', lambda, nu, log_error, maxit)
 }
 
+#' @rdname com_compute_z
 #' @export
 com_compute_log_z <- function(lambda, nu, log_error = 0.001, maxit = 100L) {
     .Call('compoisson_com_compute_log_z', PACKAGE = 'compoisson', lambda, nu, log_error, maxit)
@@ -80,16 +81,19 @@ dcom <- function(x, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, ma
     .Call('compoisson_dcom', PACKAGE = 'compoisson', x, lambda, nu, log, z, log_error, maxit)
 }
 
+#' @rdname dcom
 #' @export
 pcom <- function(q, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
     .Call('compoisson_pcom', PACKAGE = 'compoisson', q, lambda, nu, log, z, log_error, maxit)
 }
 
+#' @rdname dcom
 #' @export
 qcom <- function(p, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
     .Call('compoisson_qcom', PACKAGE = 'compoisson', p, lambda, nu, log, z, log_error, maxit)
 }
 
+#' @rdname dcom
 #' @export
 rcom <- function(n, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
     .Call('compoisson_rcom', PACKAGE = 'compoisson', n, lambda, nu, log, z, log_error, maxit)

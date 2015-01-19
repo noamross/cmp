@@ -54,6 +54,7 @@ double dcom(double x, double lambda, double nu, bool log = false, double z = NA_
   }
 }
 
+//' @rdname dcom
 //' @export
 // [[Rcpp::export]]
 double pcom(double q, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit=100) {
@@ -69,6 +70,7 @@ double pcom(double q, double lambda, double nu, bool log = false, double z = NA_
   return(prob);
 }
 
+//' @rdname dcom
 //' @export
 // [[Rcpp::export]]
 int qcom(double p, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit=100) {
@@ -87,6 +89,7 @@ int qcom(double p, double lambda, double nu, bool log = false, double z = NA_REA
   return (i - 1);
 }
 
+//' @rdname dcom
 //' @export
 // [[Rcpp::export]]
 NumericVector rcom(int n, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit=100) {

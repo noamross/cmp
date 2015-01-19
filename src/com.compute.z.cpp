@@ -19,7 +19,7 @@ using namespace Rcpp;
 //' \code{com_compute_log_z} is equivalent to \code{log(com_compute_z(lambda,
 //' nu))} but provudes additional precision.
 //'
-//' @aliases com_compute_z com_compute_log_z com.compute.z com.compute.log.z
+//' @aliases com_compute_z com_compute_log_z
 //' @param lambda Lambda value in COM-Poisson distribution
 //' @param nu Nu value in COM-Poisson distribution
 //' @param log.error Precision in the log of the normalizing constant
@@ -43,6 +43,8 @@ double com_compute_z(double lambda, double nu, double log_error = 0.001, int max
   return(exp(com_compute_log_z(lambda, nu, log_error, maxit)));
 }
 
+
+//' @rdname com_compute_z
 //' @export
 // [[Rcpp::export]]
 double com_compute_log_z(double lambda, double nu, double log_error = 0.001, int maxit=100) {
