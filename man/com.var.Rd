@@ -25,8 +25,8 @@ distribution and subtracts the squared mean, computed using
 }
 \examples{
 data(insurance)
-	model = com.fit(Lemaire);
-	com.var(model$lambda, model$nu);
+  model = com.fit(Lemaire)
+  com.var(model$lambda, model$nu)
 }
 \author{
 Jeffrey Dunn

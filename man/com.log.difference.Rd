@@ -23,9 +23,9 @@ log-space, \eqn{log( e^x - e^y )}, without significant chance of overflow or
 underflow.
 }
 \examples{
-a = exp(com.log.difference(log(100), log(20))); # a = 80
-	b = exp(matrixStats::logSumExp(log(100), log(20))); # b = 120
-	c = exp(lfactorial(4)); # c = 24
+a = exp(com.log.difference(log(100), log(20))) # a = 80
+ b = exp(logsumexp(log(100), log(20))) # b = 120
+ c = exp(lfactorial(4)) # c = 24
 }
 \author{
 Jeffrey Dunn

@@ -27,7 +27,7 @@ level and the second column is the count for the corresponding level.
 }
 \examples{
 data(insurance)
-	com.fit(Lemaire);
+  com.fit(Lemaire)
 }
 \author{
 Jeffrey Dunn
@@ -39,7 +39,7 @@ Revival of the Conway-Maxwell-Poisson distribution,} J. Royal Statist. Soc.,
 v54, pp. 127-142, 2005.
 }
 \seealso{
-\code{\link{com.compute.z}}, \code{\link{com.loglikelihood}}
+\code{\link{com_compute_z}}, \code{\link{com.loglikelihood}}
 }
 \keyword{models}
 \keyword{regression}

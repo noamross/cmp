@@ -26,8 +26,8 @@ third-party liability insurance of a Belgian insurance company in the early
 }
 \examples{
 data(insurance)
-	Lemaire
-	Buhlmann
+ Lemaire
+ Buhlmann
 }
 \keyword{datasets}
 

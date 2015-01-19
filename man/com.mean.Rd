@@ -24,8 +24,8 @@ distribution.
 }
 \examples{
 data(insurance)
-	model = com.fit(Lemaire);
-	com.mean(model$lambda, model$nu);
+  model = com.fit(Lemaire)
+  com.mean(model$lambda, model$nu)
 }
 \author{
 Jeffrey Dunn
