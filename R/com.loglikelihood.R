@@ -21,6 +21,6 @@
 com.loglikelihood = function(x, lambda, nu, ...) {
   if (lambda < 0 || nu < 0)
       return (-Inf)
-  log.z = com.compute.log.z(lambda, nu, ...)
+  log.z = com_compute_log_z(lambda, nu, ...)
   return (x[,2] %*% ( x[,1] * log(lambda) - nu * lfactorial(x[,1]) - log.z ))
 }

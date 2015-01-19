@@ -13,7 +13,7 @@
 #' }{ Normalizing constant} \item{fitted.values }{ Estimated counts at given
 #' levels }
 #' @author Jeffrey Dunn
-#' @seealso \code{\link{com.compute.z}}, \code{\link{com.loglikelihood}}
+#' @seealso \code{\link{com_compute_z}}, \code{\link{com.loglikelihood}}
 #' @references Shmueli, G., Minka, T. P., Kadane, J. B., Borle, S. and
 #' Boatwright, P., \dQuote{A useful distribution for fitting discrete data:
 #' Revival of the Conway-Maxwell-Poisson distribution,} J. Royal Statist. Soc.,
@@ -43,7 +43,7 @@ com.fit = function(x, par=NULL, ...) {
   nu = result$par[2]
   fit = list(lambda = lambda,
              nu = nu,
-             z = com.compute.z(lambda, nu),
+             z = com_compute_z(lambda, nu),
              fitted.values = sum(x[,2]) * dcom(x[,1], lambda, nu),
              log.likelihood = com.loglikelihood(x, lambda, nu))
   return (fit)

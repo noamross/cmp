@@ -42,9 +42,9 @@ double dcom(double x, double lambda, double nu, bool log = false, double z = NA_
   } else if (x < 0 || x != floor(x)) {
     return (0);
   } else if (ISNA(z) && !log) {
-    z = compute_z(lambda, nu, log_error, maxit);
+    z = com_compute_z(lambda, nu, log_error, maxit);
   } else if (ISNA(z) && log) {
-    z = compute_log_z(lambda, nu, log_error, maxit);
+    z = com_compute_log_z(lambda, nu, log_error, maxit);
   }  
   
   if (log) {

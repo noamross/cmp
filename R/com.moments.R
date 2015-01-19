@@ -22,7 +22,7 @@
 com.expectation = function(f, lambda, nu, log.error = 0.001, maxit=100, z=NULL) {
 
   if(is.null(z)) {
-    log.z = com.compute.log.z(lambda, nu)
+    log.z = com_compute_log_z(lambda, nu)
   } else {
     log.z = log(z)
   }
