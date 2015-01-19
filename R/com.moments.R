@@ -1,10 +1,10 @@
 #' Computes Expectation of a Function of a COM-Poisson Random Variable
-#' 
+#'
 #' Computes an expectation of a function of a COM-Poisson random variable.
-#' 
+#'
 #' Computes the expectation \eqn{E[f(X)]}{E[f(X)]} where X is a COM-Poisson
 #' random variable.
-#' 
+#'
 #' @param f function taking as a single argument the value of x
 #' @param lambda value of lambda parameter
 #' @param nu value of nu parameter
@@ -20,41 +20,38 @@
 #' @keywords models
 #' @importFrom matrixStats logSumExp
 #' @export com.expectation
-com.expectation = function(f, lambda, nu, log.error = 0.001, maxit=100, z=NULL)
-{
-	if(is.null(z)) {
+com.expectation = function(f, lambda, nu, log.error = 0.001, maxit=100, z=NULL) {
+
+  if(is.null(z)) {
     log.z = com.compute.log.z(lambda, nu)
-	} else {
+  } else {
     log.z = log(z)
-	}
+  }
 
-	# Initialize variables
-	ex = -.Machine$double.xmax;
-	ex.last = 0;
-	j = 0;
+  # Initialize variables
+  ex = -.Machine$double.xmax
+  ex.last = 0
+  j = 0
 
-	# Continue until we have reached specified precision
-	while (((ex == -.Machine$double.xmax && ex.last == -.Machine$double.xmax) || abs(ex - ex.last) > log.error) && j <= maxit)
-	{
-		ex.last = ex;
-		ex = logSumExp(c(ex, log(f(j)) + com.log.density(j, lambda, nu, log.z)));
-		j = j + 1;
-	}
-	return (exp(ex));
+  # Continue until we have reached specified precision
+  while (((ex == -.Machine$double.xmax && ex.last == -.Machine$double.xmax) ||
+            abs(ex - ex.last) > log.error) && j <= maxit) {
+    ex.last = ex
+    ex = logSumExp(c(ex, log(f(j)) + com.log.density(j, lambda, nu, log.z)))
+    j = j + 1
+  }
+
+  return (exp(ex))
 }
 
-
-
-
-
 #' Computes Mean of the COM-Poisson Distribution
-#' 
+#'
 #' Computes the mean of the COM-Poisson distribution for given values of the
 #' parameters.
-#' 
+#'
 #' Uses \code{\link{com.expectation}} to compute the first moment of the
 #' distribution.
-#' 
+#'
 #' @param lambda value of lambda parameter
 #' @param nu value of the nu parameter
 #' @return The mean of the distribution.
@@ -66,30 +63,25 @@ com.expectation = function(f, lambda, nu, log.error = 0.001, maxit=100, z=NULL)
 #' v54, pp. 127-142, 2005.
 #' @keywords models
 #' @examples
-#' 
-#' 	data(insurance)
-#' 	model = com.fit(Lemaire);
-#' 	com.mean(model$lambda, model$nu);
-#' 
+#'
+#'   data(insurance)
+#'   model = com.fit(Lemaire)
+#'   com.mean(model$lambda, model$nu)
+#'
 #' @export com.mean
-com.mean = function(lambda, nu, ...)
-{
-	return ( com.expectation(function (x) {x}, lambda, nu, ...) );
+com.mean = function(lambda, nu, ...) {
+  return ( com.expectation(function (x) {x}, lambda, nu, ...))
 }
 
-
-
-
-
 #' Computes Variance of the COM-Poisson Distribution
-#' 
+#'
 #' Computes the variance of the COM-Poisson distribution for given values of
 #' the parameters.
-#' 
+#'
 #' Uses \code{\link{com.expectation}} to compute the second moment of the
 #' distribution and subtracts the squared mean, computed using
 #' \code{\link{com.mean}}.
-#' 
+#'
 #' @param lambda value of lambda parameter
 #' @param nu value of the nu parameter
 #' @return The variance of the distribution.
@@ -101,15 +93,12 @@ com.mean = function(lambda, nu, ...)
 #' v54, pp. 127-142, 2005.
 #' @keywords models
 #' @examples
-#' 
-#' 	data(insurance)
-#' 	model = com.fit(Lemaire);
-#' 	com.var(model$lambda, model$nu);
-#' 
+#'
+#'   data(insurance)
+#'   model = com.fit(Lemaire)
+#'   com.var(model$lambda, model$nu)
+#'
 #' @export com.var
-com.var = function(lambda, nu, ...)
-{
-	return ( com.expectation(function(x) {x^2}, lambda, nu, ...) - (com.mean(lambda,nu, ...))^2 );
+com.var = function(lambda, nu, ...) {
+  return ( com.expectation(function(x) {x^2}, lambda, nu, ...) - (com.mean(lambda,nu, ...))^2 )
 }
-
-

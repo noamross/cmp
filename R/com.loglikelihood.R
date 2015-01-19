@@ -1,11 +1,11 @@
 #' Computes Log-Likelihood of COM-Poisson
-#' 
+#'
 #' Given a set of data, computes the log-likelihood of the data under the
 #' COM-Poisson distribution for values of the parameters.
-#' 
+#'
 #' The argument x should consist of a matrix where the first column is the
 #' level and the second column is the count for the corresponding level.
-#' 
+#'
 #' @param x matrix of count data
 #' @param lambda value of lambda parameter
 #' @param nu value of nu parameter
@@ -18,12 +18,9 @@
 #' v54, pp. 127-142, 2005.
 #' @keywords models
 #' @export com.loglikelihood
-com.loglikelihood = function(x, lambda, nu, ...)
-{
-	# Perform argument checking
-	if (lambda < 0 || nu < 0)
-		return (-Inf);
-
-	log.z = com.compute.log.z(lambda, nu, ...);
-	return (x[,2] %*% ( x[,1] * log(lambda) - nu * lfactorial(x[,1]) - log.z ));
+com.loglikelihood = function(x, lambda, nu, ...) {
+  if (lambda < 0 || nu < 0)
+      return (-Inf)
+  log.z = com.compute.log.z(lambda, nu, ...)
+  return (x[,2] %*% ( x[,1] * log(lambda) - nu * lfactorial(x[,1]) - log.z ))
 }
