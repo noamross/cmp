@@ -1,0 +1,59 @@
+---
+title: "Plotting COM-Poisson Distributions"
+author: "Noam Ross"
+date: "January 20, 2015"
+output: html_document
+runtime: shiny
+---
+
+```{r setup, echo = FALSE}
+#library(devtools)
+#install_github('noamross/noamtools')
+#install_github('noamross/compoisson')
+library(compoisson)
+library(ggplot2)
+library(gridExtra)
+library(noamtools)
+```
+
+The Conway-Maxwell-Poisson (COM-Poisson) distribution has the form:
+
+$$P(X = x) = \frac{\lambda^x}{(x!)^\nu} \frac{1}{Z(\lambda, \nu)}$$
+
+where
+
+$$Z(\lambda, \nu) = \sum_{j=0}^\infty \frac{\lambda^j}{(j!)^\nu}$$ 
+
+
+Here is an interactive plot of the COM-Poisson distribution, where you can
+adjust $\lambda$ and $\nu$.  Note that the slider for $\nu$ is on a log scale.
+
+```{r plot_compois, echo = FALSE}
+inputPanel(
+  sliderInput("lambda", label = "Lambda:",
+              min = 0, max = 10, value = 1, step = 0.1),
+  sliderInput("nu", label = "Log Nu:",
+              min = -5, max = 5, value = 0, step = 0.1),
+  sliderInput("max_x", label = "Max value shown:",
+              min = 1, max = 100, value = 10, step = 1)
+)
+
+renderPlot({
+  data = data.frame(Value = 0:input$max_x,
+                    Probability = dcom(0:input$max_x, lambda=input$lambda,
+                                       nu=exp(input$nu)))
+  meanval = com.mean(lambda = input$lambda, nu = exp(input$nu))
+  ggplot(data, aes(x=Value, y=Probability)) +
+    geom_bar(stat="identity") +
+    geom_vline(xintercept=meanval, col="red") + 
+    scale_x_discrete(breaks=0:input$max_x, limits=c(0, input$max_x)) +
+    annotation_custom(grob=textGrob(substitute(paste(lambda, ": ", LL, ", ",
+                                                     nu, ": ", NN, ", ",
+                                                     E(X), ": ", MM, ", "),
+                                               list(LL = input$lambda,
+                                                    NN = exp(input$nu),
+                                                    MM = meanval)),
+                                    x = 0.8, y= 0.8)) +
+    theme_nr
+})
+```

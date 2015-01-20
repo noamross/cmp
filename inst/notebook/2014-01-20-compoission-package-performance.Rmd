@@ -1,5 +1,5 @@
 ---
-title: "Performance Improvements in compoisson2"
+title: "Performance Improvements in compoisson"
 author: "Noam Ross"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -15,13 +15,5 @@ functions, `com.log.sum()` and `com.log.factorial()` with functions in the `base
 and `matrixStats` package that implement the same functions, but are written in
 C.
 
-
-```{r}
-library(compoisson)
-data("insurance")
-library(microbenchmark)
-com_fit_compare = microbenchmark(compoisson::com.fit(Lemaire), compoisson2::com.fit(Lemaire), times=500L)
-summary(com_fit_compare)
-```
 
 We can an approximately 6-fold improvement right off the bat.
