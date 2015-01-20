@@ -39,7 +39,7 @@ using namespace Rcpp;
 //'
 //' @export
 // [[Rcpp::export]]
-double com_compute_z(double lambda, double nu, double log_error = 0.001, int maxit=100) {
+double com_compute_z(double lambda, double nu, double log_error = 0.001, int maxit=1000) {
   return(exp(com_compute_log_z(lambda, nu, log_error, maxit)));
 }
 
@@ -47,7 +47,7 @@ double com_compute_z(double lambda, double nu, double log_error = 0.001, int max
 //' @rdname com_compute_z
 //' @export
 // [[Rcpp::export]]
-double com_compute_log_z(double lambda, double nu, double log_error = 0.001, int maxit=100) {
+double com_compute_log_z(double lambda, double nu, double log_error = 0.001, int maxit=1000) {
   // Perform argument checking
   if (lambda < 0 || nu < 0) {
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");

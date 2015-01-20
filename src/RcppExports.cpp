@@ -9,7 +9,7 @@
 using namespace Rcpp;
 
 // com_compute_z
-double com_compute_z(double lambda, double nu, double log_error = 0.001, int maxit = 100);
+double com_compute_z(double lambda, double nu, double log_error = 0.001, int maxit = 1000);
 static SEXP compoisson_com_compute_z_try(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
@@ -46,7 +46,7 @@ RcppExport SEXP compoisson_com_compute_z(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_
     return __result;
 }
 // com_compute_log_z
-double com_compute_log_z(double lambda, double nu, double log_error = 0.001, int maxit = 100);
+double com_compute_log_z(double lambda, double nu, double log_error = 0.001, int maxit = 1000);
 static SEXP compoisson_com_compute_log_z_try(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
@@ -117,7 +117,7 @@ RcppExport SEXP compoisson_logsumexp(SEXP xSEXP) {
     return __result;
 }
 // dcom
-NumericVector dcom(NumericVector x, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 100);
+NumericVector dcom(NumericVector x, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 1000);
 static SEXP compoisson_dcom_try(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP logSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
@@ -157,7 +157,7 @@ RcppExport SEXP compoisson_dcom(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP z
     return __result;
 }
 // pcom
-NumericVector pcom(NumericVector q, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 100);
+NumericVector pcom(NumericVector q, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 1000);
 static SEXP compoisson_pcom_try(SEXP qSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP logSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
@@ -197,7 +197,7 @@ RcppExport SEXP compoisson_pcom(SEXP qSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP z
     return __result;
 }
 // qcom
-NumericVector qcom(NumericVector p, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 100);
+NumericVector qcom(NumericVector p, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 1000);
 static SEXP compoisson_qcom_try(SEXP pSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP logSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
@@ -237,7 +237,7 @@ RcppExport SEXP compoisson_qcom(SEXP pSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP z
     return __result;
 }
 // rcom
-NumericVector rcom(int n, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 100);
+NumericVector rcom(int n, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 1000);
 static SEXP compoisson_rcom_try(SEXP nSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP logSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;

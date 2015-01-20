@@ -8,16 +8,16 @@
 \title{The COM-Poisson Distribution}
 \usage{
 dcom(x, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001,
-  maxit = 100L)
+  maxit = 1000L)
 
 pcom(q, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001,
-  maxit = 100L)
+  maxit = 1000L)
 
 qcom(p, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001,
-  maxit = 100L)
+  maxit = 1000L)
 
 rcom(n, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001,
-  maxit = 100L)
+  maxit = 1000L)
 }
 \arguments{
 \item{x}{level to evaluate the PMF at}

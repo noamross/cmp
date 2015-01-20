@@ -34,13 +34,13 @@
 #' z = com_compute_z(fit$lambda, fit$nu)
 #'
 #' @export
-com_compute_z <- function(lambda, nu, log_error = 0.001, maxit = 100L) {
+com_compute_z <- function(lambda, nu, log_error = 0.001, maxit = 1000L) {
     .Call('compoisson_com_compute_z', PACKAGE = 'compoisson', lambda, nu, log_error, maxit)
 }
 
 #' @rdname com_compute_z
 #' @export
-com_compute_log_z <- function(lambda, nu, log_error = 0.001, maxit = 100L) {
+com_compute_log_z <- function(lambda, nu, log_error = 0.001, maxit = 1000L) {
     .Call('compoisson_com_compute_log_z', PACKAGE = 'compoisson', lambda, nu, log_error, maxit)
 }
 
@@ -77,25 +77,25 @@ logsumexp <- function(x) {
 #' v54, pp. 127-142, 2005.
 #' @keywords models
 #' @export
-dcom <- function(x, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 100L) {
+dcom <- function(x, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 1000L) {
     .Call('compoisson_dcom', PACKAGE = 'compoisson', x, lambda, nu, z, log, log_error, maxit)
 }
 
 #' @rdname dcom
 #' @export
-pcom <- function(q, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 100L) {
+pcom <- function(q, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 1000L) {
     .Call('compoisson_pcom', PACKAGE = 'compoisson', q, lambda, nu, z, log, log_error, maxit)
 }
 
 #' @rdname dcom
 #' @export
-qcom <- function(p, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 100L) {
+qcom <- function(p, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 1000L) {
     .Call('compoisson_qcom', PACKAGE = 'compoisson', p, lambda, nu, z, log, log_error, maxit)
 }
 
 #' @rdname dcom
 #' @export
-rcom <- function(n, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 100L) {
+rcom <- function(n, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 1000L) {
     .Call('compoisson_rcom', PACKAGE = 'compoisson', n, lambda, nu, z, log, log_error, maxit)
 }
 

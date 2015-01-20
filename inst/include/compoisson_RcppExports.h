@@ -24,7 +24,7 @@ namespace compoisson {
         }
     }
 
-    inline double com_compute_z(double lambda, double nu, double log_error = 0.001, int maxit = 100) {
+    inline double com_compute_z(double lambda, double nu, double log_error = 0.001, int maxit = 1000) {
         typedef SEXP(*Ptr_com_compute_z)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_com_compute_z p_com_compute_z = NULL;
         if (p_com_compute_z == NULL) {
@@ -43,7 +43,7 @@ namespace compoisson {
         return Rcpp::as<double >(__result);
     }
 
-    inline double com_compute_log_z(double lambda, double nu, double log_error = 0.001, int maxit = 100) {
+    inline double com_compute_log_z(double lambda, double nu, double log_error = 0.001, int maxit = 1000) {
         typedef SEXP(*Ptr_com_compute_log_z)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_com_compute_log_z p_com_compute_log_z = NULL;
         if (p_com_compute_log_z == NULL) {
@@ -81,7 +81,7 @@ namespace compoisson {
         return Rcpp::as<double >(__result);
     }
 
-    inline NumericVector dcom(NumericVector x, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 100) {
+    inline NumericVector dcom(NumericVector x, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 1000) {
         typedef SEXP(*Ptr_dcom)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_dcom p_dcom = NULL;
         if (p_dcom == NULL) {
@@ -100,7 +100,7 @@ namespace compoisson {
         return Rcpp::as<NumericVector >(__result);
     }
 
-    inline NumericVector pcom(NumericVector q, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 100) {
+    inline NumericVector pcom(NumericVector q, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 1000) {
         typedef SEXP(*Ptr_pcom)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_pcom p_pcom = NULL;
         if (p_pcom == NULL) {
@@ -119,7 +119,7 @@ namespace compoisson {
         return Rcpp::as<NumericVector >(__result);
     }
 
-    inline NumericVector qcom(NumericVector p, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 100) {
+    inline NumericVector qcom(NumericVector p, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 1000) {
         typedef SEXP(*Ptr_qcom)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_qcom p_qcom = NULL;
         if (p_qcom == NULL) {
@@ -138,7 +138,7 @@ namespace compoisson {
         return Rcpp::as<NumericVector >(__result);
     }
 
-    inline NumericVector rcom(int n, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 100) {
+    inline NumericVector rcom(int n, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 1000) {
         typedef SEXP(*Ptr_rcom)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_rcom p_rcom = NULL;
         if (p_rcom == NULL) {
