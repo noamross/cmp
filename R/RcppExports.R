@@ -77,26 +77,26 @@ logsumexp <- function(x) {
 #' v54, pp. 127-142, 2005.
 #' @keywords models
 #' @export
-dcom <- function(x, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
-    .Call('compoisson_dcom', PACKAGE = 'compoisson', x, lambda, nu, log, z, log_error, maxit)
+dcom <- function(x, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 100L) {
+    .Call('compoisson_dcom', PACKAGE = 'compoisson', x, lambda, nu, z, log, log_error, maxit)
 }
 
 #' @rdname dcom
 #' @export
-pcom <- function(q, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
-    .Call('compoisson_pcom', PACKAGE = 'compoisson', q, lambda, nu, log, z, log_error, maxit)
+pcom <- function(q, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 100L) {
+    .Call('compoisson_pcom', PACKAGE = 'compoisson', q, lambda, nu, z, log, log_error, maxit)
 }
 
 #' @rdname dcom
 #' @export
-qcom <- function(p, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
-    .Call('compoisson_qcom', PACKAGE = 'compoisson', p, lambda, nu, log, z, log_error, maxit)
+qcom <- function(p, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 100L) {
+    .Call('compoisson_qcom', PACKAGE = 'compoisson', p, lambda, nu, z, log, log_error, maxit)
 }
 
 #' @rdname dcom
 #' @export
-rcom <- function(n, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
-    .Call('compoisson_rcom', PACKAGE = 'compoisson', n, lambda, nu, log, z, log_error, maxit)
+rcom <- function(n, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 100L) {
+    .Call('compoisson_rcom', PACKAGE = 'compoisson', n, lambda, nu, z, log, log_error, maxit)
 }
 
 # Register entry points for exported C++ functions

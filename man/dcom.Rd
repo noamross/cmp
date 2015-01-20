@@ -7,16 +7,16 @@
 \alias{rcom}
 \title{The COM-Poisson Distribution}
 \usage{
-dcom(x, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001,
+dcom(x, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001,
   maxit = 100L)
 
-pcom(q, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001,
+pcom(q, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001,
   maxit = 100L)
 
-qcom(p, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001,
+qcom(p, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001,
   maxit = 100L)
 
-rcom(n, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001,
+rcom(n, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001,
   maxit = 100L)
 }
 \arguments{

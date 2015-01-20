@@ -35,7 +35,7 @@ using namespace Rcpp;
 //' @keywords models
 //' @export
 // [[Rcpp::export]]
-NumericVector dcom(NumericVector x, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit=100) {
+NumericVector dcom(NumericVector x, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit=100) {
   
   // Perform argument checking
   if (lambda < 0 || nu < 0) {
@@ -68,7 +68,7 @@ double dcom_single(double x, double lambda, double nu, double z) {
 //' @rdname dcom
 //' @export
 // [[Rcpp::export]]
-NumericVector pcom(NumericVector q, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit=100) {
+NumericVector pcom(NumericVector q, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit=100) {
 
   // Perform argument checking
   if (lambda < 0 || nu < 0) {
@@ -97,7 +97,7 @@ NumericVector pcom(NumericVector q, double lambda, double nu, bool log = false, 
 //' @rdname dcom
 //' @export
 // [[Rcpp::export]]
-NumericVector qcom(NumericVector p, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit=100) {
+NumericVector qcom(NumericVector p, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit=100) {
   
   
     // Perform argument checking
@@ -137,6 +137,6 @@ NumericVector qcom(NumericVector p, double lambda, double nu, bool log = false, 
 //' @rdname dcom
 //' @export
 // [[Rcpp::export]]
-NumericVector rcom(int n, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit=100) {
-    return(qcom(runif(n, 0, 1), lambda, nu, log, z, log_error, maxit));
+NumericVector rcom(int n, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit=100) {
+    return(qcom(runif(n, 0, 1), lambda, nu, z, log, log_error, maxit));
 }

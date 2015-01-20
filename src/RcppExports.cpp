@@ -117,30 +117,30 @@ RcppExport SEXP compoisson_logsumexp(SEXP xSEXP) {
     return __result;
 }
 // dcom
-NumericVector dcom(NumericVector x, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit = 100);
-static SEXP compoisson_dcom_try(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP logSEXP, SEXP zSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
+NumericVector dcom(NumericVector x, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 100);
+static SEXP compoisson_dcom_try(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP logSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP );
         Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
         Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        Rcpp::traits::input_parameter< bool >::type log(logSEXP );
         Rcpp::traits::input_parameter< double >::type z(zSEXP );
+        Rcpp::traits::input_parameter< bool >::type log(logSEXP );
         Rcpp::traits::input_parameter< double >::type log_error(log_errorSEXP );
         Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP );
-        NumericVector __result = dcom(x, lambda, nu, log, z, log_error, maxit);
+        NumericVector __result = dcom(x, lambda, nu, z, log, log_error, maxit);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
     return __sexp_result;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP compoisson_dcom(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP logSEXP, SEXP zSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
+RcppExport SEXP compoisson_dcom(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP logSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(compoisson_dcom_try(xSEXP, lambdaSEXP, nuSEXP, logSEXP, zSEXP, log_errorSEXP, maxitSEXP));
+        __result = PROTECT(compoisson_dcom_try(xSEXP, lambdaSEXP, nuSEXP, zSEXP, logSEXP, log_errorSEXP, maxitSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -157,30 +157,30 @@ RcppExport SEXP compoisson_dcom(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP l
     return __result;
 }
 // pcom
-NumericVector pcom(NumericVector q, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit = 100);
-static SEXP compoisson_pcom_try(SEXP qSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP logSEXP, SEXP zSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
+NumericVector pcom(NumericVector q, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 100);
+static SEXP compoisson_pcom_try(SEXP qSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP logSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::traits::input_parameter< NumericVector >::type q(qSEXP );
         Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
         Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        Rcpp::traits::input_parameter< bool >::type log(logSEXP );
         Rcpp::traits::input_parameter< double >::type z(zSEXP );
+        Rcpp::traits::input_parameter< bool >::type log(logSEXP );
         Rcpp::traits::input_parameter< double >::type log_error(log_errorSEXP );
         Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP );
-        NumericVector __result = pcom(q, lambda, nu, log, z, log_error, maxit);
+        NumericVector __result = pcom(q, lambda, nu, z, log, log_error, maxit);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
     return __sexp_result;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP compoisson_pcom(SEXP qSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP logSEXP, SEXP zSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
+RcppExport SEXP compoisson_pcom(SEXP qSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP logSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(compoisson_pcom_try(qSEXP, lambdaSEXP, nuSEXP, logSEXP, zSEXP, log_errorSEXP, maxitSEXP));
+        __result = PROTECT(compoisson_pcom_try(qSEXP, lambdaSEXP, nuSEXP, zSEXP, logSEXP, log_errorSEXP, maxitSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -197,30 +197,30 @@ RcppExport SEXP compoisson_pcom(SEXP qSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP l
     return __result;
 }
 // qcom
-NumericVector qcom(NumericVector p, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit = 100);
-static SEXP compoisson_qcom_try(SEXP pSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP logSEXP, SEXP zSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
+NumericVector qcom(NumericVector p, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 100);
+static SEXP compoisson_qcom_try(SEXP pSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP logSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::traits::input_parameter< NumericVector >::type p(pSEXP );
         Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
         Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        Rcpp::traits::input_parameter< bool >::type log(logSEXP );
         Rcpp::traits::input_parameter< double >::type z(zSEXP );
+        Rcpp::traits::input_parameter< bool >::type log(logSEXP );
         Rcpp::traits::input_parameter< double >::type log_error(log_errorSEXP );
         Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP );
-        NumericVector __result = qcom(p, lambda, nu, log, z, log_error, maxit);
+        NumericVector __result = qcom(p, lambda, nu, z, log, log_error, maxit);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
     return __sexp_result;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP compoisson_qcom(SEXP pSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP logSEXP, SEXP zSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
+RcppExport SEXP compoisson_qcom(SEXP pSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP logSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(compoisson_qcom_try(pSEXP, lambdaSEXP, nuSEXP, logSEXP, zSEXP, log_errorSEXP, maxitSEXP));
+        __result = PROTECT(compoisson_qcom_try(pSEXP, lambdaSEXP, nuSEXP, zSEXP, logSEXP, log_errorSEXP, maxitSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -237,30 +237,30 @@ RcppExport SEXP compoisson_qcom(SEXP pSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP l
     return __result;
 }
 // rcom
-NumericVector rcom(int n, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit = 100);
-static SEXP compoisson_rcom_try(SEXP nSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP logSEXP, SEXP zSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
+NumericVector rcom(int n, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 100);
+static SEXP compoisson_rcom_try(SEXP nSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP logSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::traits::input_parameter< int >::type n(nSEXP );
         Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
         Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        Rcpp::traits::input_parameter< bool >::type log(logSEXP );
         Rcpp::traits::input_parameter< double >::type z(zSEXP );
+        Rcpp::traits::input_parameter< bool >::type log(logSEXP );
         Rcpp::traits::input_parameter< double >::type log_error(log_errorSEXP );
         Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP );
-        NumericVector __result = rcom(n, lambda, nu, log, z, log_error, maxit);
+        NumericVector __result = rcom(n, lambda, nu, z, log, log_error, maxit);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
     return __sexp_result;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP compoisson_rcom(SEXP nSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP logSEXP, SEXP zSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
+RcppExport SEXP compoisson_rcom(SEXP nSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP logSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(compoisson_rcom_try(nSEXP, lambdaSEXP, nuSEXP, logSEXP, zSEXP, log_errorSEXP, maxitSEXP));
+        __result = PROTECT(compoisson_rcom_try(nSEXP, lambdaSEXP, nuSEXP, zSEXP, logSEXP, log_errorSEXP, maxitSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -284,10 +284,10 @@ static int compoisson_RcppExport_validate(const char* sig) {
         signatures.insert("double(*com_compute_z)(double,double,double,int)");
         signatures.insert("double(*com_compute_log_z)(double,double,double,int)");
         signatures.insert("double(*logsumexp)(NumericVector)");
-        signatures.insert("NumericVector(*dcom)(NumericVector,double,double,bool,double,double,int)");
-        signatures.insert("NumericVector(*pcom)(NumericVector,double,double,bool,double,double,int)");
-        signatures.insert("NumericVector(*qcom)(NumericVector,double,double,bool,double,double,int)");
-        signatures.insert("NumericVector(*rcom)(int,double,double,bool,double,double,int)");
+        signatures.insert("NumericVector(*dcom)(NumericVector,double,double,double,bool,double,int)");
+        signatures.insert("NumericVector(*pcom)(NumericVector,double,double,double,bool,double,int)");
+        signatures.insert("NumericVector(*qcom)(NumericVector,double,double,double,bool,double,int)");
+        signatures.insert("NumericVector(*rcom)(int,double,double,double,bool,double,int)");
     }
     return signatures.find(sig) != signatures.end();
 }
