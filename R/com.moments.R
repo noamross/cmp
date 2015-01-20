@@ -22,10 +22,9 @@
 com.expectation = function(f, lambda, nu, log.error = 0.001, maxit=100, z=NULL) {
 
   if(is.null(z)) {
-    log.z = com_compute_log_z(lambda, nu)
-  } else {
-    log.z = log(z)
+    z = com_compute_z(lambda, nu)
   }
+    
 
   # Initialize variables
   ex = -.Machine$double.xmax
@@ -36,7 +35,7 @@ com.expectation = function(f, lambda, nu, log.error = 0.001, maxit=100, z=NULL) 
   while (((ex == -.Machine$double.xmax && ex.last == -.Machine$double.xmax) ||
             abs(ex - ex.last) > log.error) && j <= maxit) {
     ex.last = ex
-    ex = logsumexp(c(ex, log(f(j)) + com.log.density(j, lambda, nu, log.z)))
+    ex = logsumexp(c(ex, log(f(j)) + dcom(j, lambda, nu, z, TRUE)))
     j = j + 1
   }
 
