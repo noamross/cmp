@@ -1,4 +1,5 @@
 #include <Rcpp.h>
+#include <math.h>
 #include "compoisson.h"
 
 using namespace Rcpp;
@@ -34,70 +35,108 @@ using namespace Rcpp;
 //' @keywords models
 //' @export
 // [[Rcpp::export]]
-double dcom(double x, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit=100) {
+NumericVector dcom(NumericVector x, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit=100) {
   
   // Perform argument checking
   if (lambda < 0 || nu < 0) {
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
-  } else if (x < 0 || x != floor(x)) {
-    return (0);
-  } else if (ISNA(z) && !log) {
+  } else if (ISNA(z)) {
     z = com_compute_z(lambda, nu, log_error, maxit);
-  } else if (ISNA(z) && log) {
-    z = com_compute_log_z(lambda, nu, log_error, maxit);
-  }  
+  }
   
-  if (log) {
-    return ((x * std::log(lambda) - nu * (Rcpp::internal::lfactorial(x)) - z));
-  } else {
-    return (pow(lambda, x) * (pow(Rcpp::internal::factorial(x), -nu) / z));
+  NumericVector d(x.size());
+  
+  for (int i = 0; i < x.size(); ++i) {
+    if (x[i] < 0 || x[i] != floor(x[i])) {
+      d[i] = 0;
+    } else {
+      d[i] = dcom_single(x[i], lambda, nu, z);
+    }
   }
-}
-
-//' @rdname dcom
-//' @export
-// [[Rcpp::export]]
-double pcom(double q, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit=100) {
-  double prob = 0;
-  for (int i = 0; i <= q; ++i) {
-    
-    prob += dcom(i, lambda, nu, false, z, log_error, maxit);
-  }
+  
   if(log) {
-    
-    prob = std::log(prob);
+    d = Rcpp::log(d);
   }
-  return(prob);
+
+  return d;
+}
+
+double dcom_single(double x, double lambda, double nu, double z) {
+  return(pow(lambda, x) * pow(Rcpp::internal::factorial(x), -nu) / z);
+  }
+
+//' @rdname dcom
+//' @export
+// [[Rcpp::export]]
+NumericVector pcom(NumericVector q, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit=100) {
+
+  // Perform argument checking
+  if (lambda < 0 || nu < 0) {
+    Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
+  } else if (ISNA(z)) {
+    z = com_compute_z(lambda, nu, log_error, maxit);
+  }
+  
+  NumericVector p(q.size());
+  double prob;
+  
+  for (int j = 0; j < q.size(); ++j) {
+    prob = 0;
+    for (int i = 0; i <= q[j]; ++i) {
+      prob += dcom_single(i, lambda, nu, z);
+    }
+    p[j] = prob;
+  }
+  
+  if(log) {
+    p = Rcpp::log(p);
+  }
+  return(p);
 }
 
 //' @rdname dcom
 //' @export
 // [[Rcpp::export]]
-int qcom(double p, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit=100) {
+NumericVector qcom(NumericVector p, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit=100) {
   
-  double prob = 0;
-  int i = 0;
+  
+    // Perform argument checking
+  if (lambda < 0 || nu < 0) {
+    Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
+  } else if (ISNA(z)) {
+    z = com_compute_z(lambda, nu, log_error, maxit);
+  }
+
+  NumericVector q(p.size());
+  double prob;
+  int i;
   if (log) {
-    
-    p = exp(p);
-  }
-  while (prob < p) {
-    prob += dcom(i, lambda, nu, false, z, log_error, maxit);
-    i += 1;
+    p = Rcpp::exp(p);
   }
   
-  return (i - 1);
+  for (int j = 0; j < q.size(); ++j) {
+    if (p[j] == 0) {
+      q[j] = 0;
+      continue;
+    } else if (p[j] == 1) {
+      q[j] = R_PosInf;
+      continue;
+    }
+    prob = 0;
+    i = 0;
+    while (prob < p[j]) {
+      prob += dcom_single(i, lambda, nu, z);
+      i += 1;
+    }
+    q[j] = i - 1;
+  }
+  
+  return q;
 }
 
 //' @rdname dcom
 //' @export
 // [[Rcpp::export]]
 NumericVector rcom(int n, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit=100) {
-  
-  NumericVector vals(n);
-  for(int i = 0; i < n; ++i) {
-    vals[i] = qcom(as<double>(runif(1)), lambda, nu, log, z, log_error, maxit);
-  }
-  
-  return vals;
+    return(qcom(runif(n, 0, 1), lambda, nu, log, z, log_error, maxit));
 }

@@ -81,11 +81,11 @@ namespace compoisson {
         return Rcpp::as<double >(__result);
     }
 
-    inline double dcom(double x, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit = 100) {
+    inline NumericVector dcom(NumericVector x, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit = 100) {
         typedef SEXP(*Ptr_dcom)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_dcom p_dcom = NULL;
         if (p_dcom == NULL) {
-            validateSignature("double(*dcom)(double,double,double,bool,double,double,int)");
+            validateSignature("NumericVector(*dcom)(NumericVector,double,double,bool,double,double,int)");
             p_dcom = (Ptr_dcom)R_GetCCallable("compoisson", "compoisson_dcom");
         }
         RObject __result;
@@ -97,14 +97,14 @@ namespace compoisson {
             throw Rcpp::internal::InterruptedException();
         if (__result.inherits("try-error"))
             throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<double >(__result);
+        return Rcpp::as<NumericVector >(__result);
     }
 
-    inline double pcom(double q, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit = 100) {
+    inline NumericVector pcom(NumericVector q, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit = 100) {
         typedef SEXP(*Ptr_pcom)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_pcom p_pcom = NULL;
         if (p_pcom == NULL) {
-            validateSignature("double(*pcom)(double,double,double,bool,double,double,int)");
+            validateSignature("NumericVector(*pcom)(NumericVector,double,double,bool,double,double,int)");
             p_pcom = (Ptr_pcom)R_GetCCallable("compoisson", "compoisson_pcom");
         }
         RObject __result;
@@ -116,14 +116,14 @@ namespace compoisson {
             throw Rcpp::internal::InterruptedException();
         if (__result.inherits("try-error"))
             throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<double >(__result);
+        return Rcpp::as<NumericVector >(__result);
     }
 
-    inline int qcom(double p, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit = 100) {
+    inline NumericVector qcom(NumericVector p, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit = 100) {
         typedef SEXP(*Ptr_qcom)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_qcom p_qcom = NULL;
         if (p_qcom == NULL) {
-            validateSignature("int(*qcom)(double,double,double,bool,double,double,int)");
+            validateSignature("NumericVector(*qcom)(NumericVector,double,double,bool,double,double,int)");
             p_qcom = (Ptr_qcom)R_GetCCallable("compoisson", "compoisson_qcom");
         }
         RObject __result;
@@ -135,7 +135,7 @@ namespace compoisson {
             throw Rcpp::internal::InterruptedException();
         if (__result.inherits("try-error"))
             throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<int >(__result);
+        return Rcpp::as<NumericVector >(__result);
     }
 
     inline NumericVector rcom(int n, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit = 100) {

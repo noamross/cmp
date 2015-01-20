@@ -117,19 +117,19 @@ RcppExport SEXP compoisson_logsumexp(SEXP xSEXP) {
     return __result;
 }
 // dcom
-double dcom(double x, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit = 100);
+NumericVector dcom(NumericVector x, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit = 100);
 static SEXP compoisson_dcom_try(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP logSEXP, SEXP zSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
-        Rcpp::traits::input_parameter< double >::type x(xSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP );
         Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
         Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
         Rcpp::traits::input_parameter< bool >::type log(logSEXP );
         Rcpp::traits::input_parameter< double >::type z(zSEXP );
         Rcpp::traits::input_parameter< double >::type log_error(log_errorSEXP );
         Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP );
-        double __result = dcom(x, lambda, nu, log, z, log_error, maxit);
+        NumericVector __result = dcom(x, lambda, nu, log, z, log_error, maxit);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
@@ -157,19 +157,19 @@ RcppExport SEXP compoisson_dcom(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP l
     return __result;
 }
 // pcom
-double pcom(double q, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit = 100);
+NumericVector pcom(NumericVector q, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit = 100);
 static SEXP compoisson_pcom_try(SEXP qSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP logSEXP, SEXP zSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
-        Rcpp::traits::input_parameter< double >::type q(qSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type q(qSEXP );
         Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
         Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
         Rcpp::traits::input_parameter< bool >::type log(logSEXP );
         Rcpp::traits::input_parameter< double >::type z(zSEXP );
         Rcpp::traits::input_parameter< double >::type log_error(log_errorSEXP );
         Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP );
-        double __result = pcom(q, lambda, nu, log, z, log_error, maxit);
+        NumericVector __result = pcom(q, lambda, nu, log, z, log_error, maxit);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
@@ -197,19 +197,19 @@ RcppExport SEXP compoisson_pcom(SEXP qSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP l
     return __result;
 }
 // qcom
-int qcom(double p, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit = 100);
+NumericVector qcom(NumericVector p, double lambda, double nu, bool log = false, double z = NA_REAL, double log_error = 0.001, int maxit = 100);
 static SEXP compoisson_qcom_try(SEXP pSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP logSEXP, SEXP zSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
-        Rcpp::traits::input_parameter< double >::type p(pSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type p(pSEXP );
         Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
         Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
         Rcpp::traits::input_parameter< bool >::type log(logSEXP );
         Rcpp::traits::input_parameter< double >::type z(zSEXP );
         Rcpp::traits::input_parameter< double >::type log_error(log_errorSEXP );
         Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP );
-        int __result = qcom(p, lambda, nu, log, z, log_error, maxit);
+        NumericVector __result = qcom(p, lambda, nu, log, z, log_error, maxit);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
@@ -284,9 +284,9 @@ static int compoisson_RcppExport_validate(const char* sig) {
         signatures.insert("double(*com_compute_z)(double,double,double,int)");
         signatures.insert("double(*com_compute_log_z)(double,double,double,int)");
         signatures.insert("double(*logsumexp)(NumericVector)");
-        signatures.insert("double(*dcom)(double,double,double,bool,double,double,int)");
-        signatures.insert("double(*pcom)(double,double,double,bool,double,double,int)");
-        signatures.insert("int(*qcom)(double,double,double,bool,double,double,int)");
+        signatures.insert("NumericVector(*dcom)(NumericVector,double,double,bool,double,double,int)");
+        signatures.insert("NumericVector(*pcom)(NumericVector,double,double,bool,double,double,int)");
+        signatures.insert("NumericVector(*qcom)(NumericVector,double,double,bool,double,double,int)");
         signatures.insert("NumericVector(*rcom)(int,double,double,bool,double,double,int)");
     }
     return signatures.find(sig) != signatures.end();
