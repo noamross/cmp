@@ -37,32 +37,35 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 NumericVector dcom(NumericVector x, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit=1000) {
   
+  double log_z;
   // Perform argument checking
   if (lambda < 0 || nu < 0) {
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
   } else if (ISNA(z)) {
-    z = com_compute_z(lambda, nu, log_error, maxit);
+    log_z = com_compute_log_z(lambda, nu, log_error, maxit);
+  } else {
+    log_z = std::log(z);
   }
   
   NumericVector d(x.size());
   
-  for (int i = 0; i < x.size(); ++i) {
+  for (int i = 0; i < x.size(); ++i) {  
     if (x[i] < 0 || x[i] != floor(x[i])) {
-      d[i] = 0;
+      d[i] = R_NegInf;
     } else {
-      d[i] = dcom_single(x[i], lambda, nu, z);
+      d[i] = dcom_single(x[i], lambda, nu, log_z);
     }
   }
-  
-  if(log) {
-    d = Rcpp::log(d);
+
+  if(!log) {
+    d = Rcpp::exp(d);
   }
 
   return d;
 }
 
-double dcom_single(double x, double lambda, double nu, double z) {
-  return(pow(lambda, x) * pow(Rcpp::internal::factorial(x), -nu) / z);
+double dcom_single(double x, double lambda, double nu, double log_z) {
+  return(x * std::log(lambda) - nu * Rcpp::internal::lfactorial(x) - log_z);
   }
 
 //' @rdname dcom
@@ -70,11 +73,16 @@ double dcom_single(double x, double lambda, double nu, double z) {
 // [[Rcpp::export]]
 NumericVector pcom(NumericVector q, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit=1000) {
 
+  double log_z;
+
+  // Perform argument checking
   // Perform argument checking
   if (lambda < 0 || nu < 0) {
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
   } else if (ISNA(z)) {
-    z = com_compute_z(lambda, nu, log_error, maxit);
+    log_z = com_compute_log_z(lambda, nu, log_error, maxit);
+  } else {
+    log_z = std::log(z);
   }
   
   NumericVector p(q.size());
@@ -83,7 +91,7 @@ NumericVector pcom(NumericVector q, double lambda, double nu, double z = NA_REAL
   for (int j = 0; j < q.size(); ++j) {
     prob = 0;
     for (int i = 0; i <= q[j]; ++i) {
-      prob += dcom_single(i, lambda, nu, z);
+      prob += exp(dcom_single(i, lambda, nu, log_z));
     }
     p[j] = prob;
   }

@@ -15,4 +15,13 @@ test_that("Distribution Functions Match", {
         pcom(10, lambda = .(testvals$lambda[i]), nu = .(testvals$nu[i])), 
         sum(compoissonOld::dcom(0:10, lambda = .(testvals$lambda[i]), nu = .(testvals$nu[i]))))))
   }
+  
+  for(i in 1:nrow(testvals)) {
+    eval(bquote(
+      expect_equal(
+        com.log.density(0:10, lambda = .(testvals$lambda[i]), nu = .(testvals$nu[i])), 
+        compoissonOld::com.log.density(0:10, lambda = .(testvals$lambda[i]), nu = .(testvals$nu[i])))))
+  }
+  
 })
+
