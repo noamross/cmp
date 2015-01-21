@@ -11,7 +11,8 @@ Description: Provides routines for density and moments of the
         data.
 License: BSD
 Suggests: testthat,
-    knitr
+    knitr,
+    CMPControl
 LinkingTo: Rcpp
 Imports: Rcpp
 VignetteBuilder: knitr
