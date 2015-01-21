@@ -27,6 +27,7 @@ $$Z(\lambda, \nu) = \sum_{j=0}^\infty \frac{\lambda^j}{(j!)^\nu}$$
 
 Here is an interactive plot of the COM-Poisson distribution, where you can
 adjust $\lambda$ and $\nu$.  Note that the slider for $\nu$ is on a log scale.
+The mean ($E(X)$) is shown with a red line.
 
 ```{r plot_compois, echo = FALSE}
 inputPanel(
@@ -43,9 +44,8 @@ renderPlot({
                     Probability = dcom(0:input$max_x, lambda=input$lambda,
                                        nu=exp(input$nu)))
   meanval = com.mean(lambda = input$lambda, nu = exp(input$nu))
-  ggplot(data, aes(x=Value, y=Probability)) +
+  plot = ggplot(data, aes(x=Value, y=Probability)) +
     geom_bar(stat="identity") +
-    geom_vline(xintercept=meanval, col="red") + 
     scale_x_discrete(breaks=0:input$max_x, limits=c(0, input$max_x)) +
     annotation_custom(grob=textGrob(substitute(paste(lambda, ": ", LL, ", ",
                                                      nu, ": ", NN, ", ",
@@ -55,5 +55,10 @@ renderPlot({
                                                     MM = meanval)),
                                     x = 0.8, y= 0.8)) +
     theme_nr
+  
+  if(meanval < input$max_x) {
+    plot = plot + geom_vline(xintercept=meanval, col="red", lwd = 2)
+  }
+  plot
 })
 ```
