@@ -1,0 +1,3 @@
+CC=clang
+CXX=clang++
+CXXFLAGS += -stdlib=libc++ -std=c++11

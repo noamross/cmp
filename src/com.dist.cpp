@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 #include <math.h>
 #include "compoisson.h"
+#include "parallel-workers.h"
 
 using namespace Rcpp;
 
@@ -50,11 +51,7 @@ NumericVector dcom(NumericVector x, double lambda, double nu, double z = NA_REAL
   NumericVector d(x.size());
   
   for (int i = 0; i < x.size(); ++i) {  
-    if (x[i] < 0 || x[i] != floor(x[i])) {
-      d[i] = R_NegInf;
-    } else {
-      d[i] = dcom_single(x[i], lambda, nu, log_z);
-    }
+   d[i] = dcom_single(x[i], lambda, nu, log_z);
   }
 
   if(!log) {
@@ -65,7 +62,13 @@ NumericVector dcom(NumericVector x, double lambda, double nu, double z = NA_REAL
 }
 
 double dcom_single(double x, double lambda, double nu, double log_z) {
-  return(x * std::log(lambda) - nu * Rcpp::internal::lfactorial(x) - log_z);
+  double d;
+  if (x < 0 || x != floor(x)) {
+    d = R_NegInf; 
+  } else {
+    d = x * std::log(lambda) - nu * Rcpp::internal::lfactorial(x) - log_z;
+  }
+  return d;
   }
 
 //' @rdname dcom
