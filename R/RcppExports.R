@@ -45,6 +45,16 @@ com_compute_log_z <- function(lambda, nu, log_error = 0.001, maxit = 1000L) {
 }
 
 #' @export
+com_compute_log_z_2 <- function(lambda, nu, log_error = 0.001, maxit = 1000L) {
+    .Call('compoisson_com_compute_log_z_2', PACKAGE = 'compoisson', lambda, nu, log_error, maxit)
+}
+
+#' @export
+com_compute_log_z_approx <- function(lambda, nu) {
+    .Call('compoisson_com_compute_log_z_approx', PACKAGE = 'compoisson', lambda, nu)
+}
+
+#' @export
 logsumexp <- function(x) {
     .Call('compoisson_logsumexp', PACKAGE = 'compoisson', x)
 }
@@ -109,6 +119,17 @@ dcom_parallel <- function(x, lambda, nu, z = NA_real_, log = FALSE, log_error = 
 #' @export
 pcom_parallel <- function(q, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 1000L) {
     .Call('compoisson_pcom_parallel', PACKAGE = 'compoisson', q, lambda, nu, z, log, log_error, maxit)
+}
+
+#' @export
+qcom_parallel <- function(p, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 1000L) {
+    .Call('compoisson_qcom_parallel', PACKAGE = 'compoisson', p, lambda, nu, z, log, log_error, maxit)
+}
+
+#' @rdname dcom
+#' @export
+rcom_parallel <- function(n, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 1000L) {
+    .Call('compoisson_rcom_parallel', PACKAGE = 'compoisson', n, lambda, nu, z, log, log_error, maxit)
 }
 
 # Register entry points for exported C++ functions

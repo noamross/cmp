@@ -62,6 +62,44 @@ namespace compoisson {
         return Rcpp::as<double >(__result);
     }
 
+    inline double com_compute_log_z_2(double lambda, double nu, double log_error = 0.001, int maxit = 1000) {
+        typedef SEXP(*Ptr_com_compute_log_z_2)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_com_compute_log_z_2 p_com_compute_log_z_2 = NULL;
+        if (p_com_compute_log_z_2 == NULL) {
+            validateSignature("double(*com_compute_log_z_2)(double,double,double,int)");
+            p_com_compute_log_z_2 = (Ptr_com_compute_log_z_2)R_GetCCallable("compoisson", "compoisson_com_compute_log_z_2");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_com_compute_log_z_2(Rcpp::wrap(lambda), Rcpp::wrap(nu), Rcpp::wrap(log_error), Rcpp::wrap(maxit));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<double >(__result);
+    }
+
+    inline double com_compute_log_z_approx(double lambda, double nu) {
+        typedef SEXP(*Ptr_com_compute_log_z_approx)(SEXP,SEXP);
+        static Ptr_com_compute_log_z_approx p_com_compute_log_z_approx = NULL;
+        if (p_com_compute_log_z_approx == NULL) {
+            validateSignature("double(*com_compute_log_z_approx)(double,double)");
+            p_com_compute_log_z_approx = (Ptr_com_compute_log_z_approx)R_GetCCallable("compoisson", "compoisson_com_compute_log_z_approx");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_com_compute_log_z_approx(Rcpp::wrap(lambda), Rcpp::wrap(nu));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<double >(__result);
+    }
+
     inline double logsumexp(NumericVector x) {
         typedef SEXP(*Ptr_logsumexp)(SEXP);
         static Ptr_logsumexp p_logsumexp = NULL;
@@ -187,6 +225,44 @@ namespace compoisson {
         {
             RNGScope __rngScope;
             __result = p_pcom_parallel(Rcpp::wrap(q), Rcpp::wrap(lambda), Rcpp::wrap(nu), Rcpp::wrap(z), Rcpp::wrap(log), Rcpp::wrap(log_error), Rcpp::wrap(maxit));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<NumericVector >(__result);
+    }
+
+    inline NumericVector qcom_parallel(NumericVector p, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 1000) {
+        typedef SEXP(*Ptr_qcom_parallel)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_qcom_parallel p_qcom_parallel = NULL;
+        if (p_qcom_parallel == NULL) {
+            validateSignature("NumericVector(*qcom_parallel)(NumericVector,double,double,double,bool,double,int)");
+            p_qcom_parallel = (Ptr_qcom_parallel)R_GetCCallable("compoisson", "compoisson_qcom_parallel");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_qcom_parallel(Rcpp::wrap(p), Rcpp::wrap(lambda), Rcpp::wrap(nu), Rcpp::wrap(z), Rcpp::wrap(log), Rcpp::wrap(log_error), Rcpp::wrap(maxit));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<NumericVector >(__result);
+    }
+
+    inline NumericVector rcom_parallel(int n, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 1000) {
+        typedef SEXP(*Ptr_rcom_parallel)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_rcom_parallel p_rcom_parallel = NULL;
+        if (p_rcom_parallel == NULL) {
+            validateSignature("NumericVector(*rcom_parallel)(int,double,double,double,bool,double,int)");
+            p_rcom_parallel = (Ptr_rcom_parallel)R_GetCCallable("compoisson", "compoisson_rcom_parallel");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_rcom_parallel(Rcpp::wrap(n), Rcpp::wrap(lambda), Rcpp::wrap(nu), Rcpp::wrap(z), Rcpp::wrap(log), Rcpp::wrap(log_error), Rcpp::wrap(maxit));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
