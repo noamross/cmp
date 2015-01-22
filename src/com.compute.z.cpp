@@ -45,30 +45,9 @@ double com_compute_z(double lambda, double nu, double log_error = 0.001, int max
 }
 
 
-//' @rdname com_compute_z
 //' @export
 // [[Rcpp::export]]
-double com_compute_log_z(double lambda, double nu, double log_error = 0.001, int maxit=1000) {
-  // Perform argument checking
-  if (lambda < 0 || nu < 0) {
-    Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
-  }
-  
-  // Initialize values
-  double z = R_NegInf;
-  double z_last = 0;
-  int j = 0;
-  while ((std::abs(z - z_last) > log_error) && j <= maxit) {
-    z_last = z;
-    z = logsumexp(NumericVector::create(z, j * log(lambda) - nu * Rcpp::internal::lfactorial(j)));
-    j += 1;
-  }
-  return z;
-}
-
-//' @export
-// [[Rcpp::export]]
-double com_compute_log_z_2(double lambda, double nu, double log_error = 0.001, int maxit=1000) {  
+double com_compute_log_z(double lambda, double nu, double log_error = 0.001, int maxit=1000) {  
   // Perform argument checking
   if (lambda < 0 || nu < 0) {
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
@@ -133,4 +112,26 @@ double logdiffexp(double x, double y) {  // Only good for 2-length vectors
   }	else {
 		 return (NAN); 
   }
+}
+
+//-------------------
+
+//' @export
+// [[Rcpp::export]]
+double com_compute_log_z_old(double lambda, double nu, double log_error = 0.001, int maxit=1000) {
+  // Perform argument checking
+  if (lambda < 0 || nu < 0) {
+    Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
+  }
+  
+  // Initialize values
+  double z = R_NegInf;
+  double z_last = 0;
+  int j = 0;
+  while ((std::abs(z - z_last) > log_error) && j <= maxit) {
+    z_last = z;
+    z = logsumexp(NumericVector::create(z, j * log(lambda) - nu * Rcpp::internal::lfactorial(j)));
+    j += 1;
+  }
+  return z;
 }

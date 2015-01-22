@@ -38,15 +38,9 @@ com_compute_z <- function(lambda, nu, log_error = 0.001, maxit = 1000L) {
     .Call('compoisson_com_compute_z', PACKAGE = 'compoisson', lambda, nu, log_error, maxit)
 }
 
-#' @rdname com_compute_z
 #' @export
 com_compute_log_z <- function(lambda, nu, log_error = 0.001, maxit = 1000L) {
     .Call('compoisson_com_compute_log_z', PACKAGE = 'compoisson', lambda, nu, log_error, maxit)
-}
-
-#' @export
-com_compute_log_z_2 <- function(lambda, nu, log_error = 0.001, maxit = 1000L) {
-    .Call('compoisson_com_compute_log_z_2', PACKAGE = 'compoisson', lambda, nu, log_error, maxit)
 }
 
 #' @export
@@ -57,6 +51,11 @@ com_compute_log_z_approx <- function(lambda, nu) {
 #' @export
 logsumexp <- function(x) {
     .Call('compoisson_logsumexp', PACKAGE = 'compoisson', x)
+}
+
+#' @export
+com_compute_log_z_old <- function(lambda, nu, log_error = 0.001, maxit = 1000L) {
+    .Call('compoisson_com_compute_log_z_old', PACKAGE = 'compoisson', lambda, nu, log_error, maxit)
 }
 
 #' The COM-Poisson Distribution
