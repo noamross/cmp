@@ -19,4 +19,5 @@ extern NumericVector qcom_parallel(NumericVector p, double lambda, double nu, do
 extern double qcom_single(double p, double lambda, double nu, double z);
 
 extern NumericVector rcom(int n, double lambda, double nu, double z, bool log, double log_error, int maxit);
+extern NumericVector rcom_parallel(int n, double lambda, double nu, double z, bool log, double log_error, int maxit);
 #endif

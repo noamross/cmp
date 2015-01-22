@@ -130,3 +130,10 @@ double qcom_single(double p, double lambda, double nu, double log_z) {
   }
   return q;
 }
+
+//' @rdname dcom
+//' @export
+// [[Rcpp::export]]
+NumericVector rcom_parallel(int n, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit=1000) {
+    return(qcom_parallel(runif(n, 0, 1), lambda, nu, z, log, log_error, maxit));
+}
