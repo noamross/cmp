@@ -99,37 +99,16 @@ rcom <- function(n, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, ma
     .Call('compoisson_rcom', PACKAGE = 'compoisson', n, lambda, nu, z, log, log_error, maxit)
 }
 
-#' The COM-Poisson Distribution
-#'
-#' Probability mass function and random generation for the COM-Poisson
-#' distribution for given values of the parameters.
-#'
-#' Computes the probability mass function of the COM-Poisson distribution
-#' \deqn{ }{f(x) = (1/Z) (lambda^x)/(x!^nu).}\deqn{ f(x) =
-#' \frac{1}{Z(\lambda,\nu)}\frac{\lambda^x}{(x!)^\nu}. }{f(x) = (1/Z)
-#' (lambda^x)/(x!^nu).}\deqn{ }{f(x) = (1/Z) (lambda^x)/(x!^nu).}
-#'
-#' @aliases dcom pcom qcom rcom 
-#' @param x level to evaluate the PMF at
-#' @param lambda value of lambda parameter
-#' @param nu value of nu parameter
-#' @param z normalizing constant, computed if not specified
-#' @param n number of random values to return
-#' @param log.z natural log of z
-#' @return \code{dcom} gives the probability that a random COM-Poisson variable
-#' X takes value x.  \code{rcom} gives a vector of \code{n} random values
-#' sampled from the COM-Poisson distribution.
-#' @author Jeffrey Dunn
-#' @seealso \code{\link{com.loglikelihood}}, \code{\link{com.log.density}}
-#' @references Shmueli, G., Minka, T. P., Kadane, J. B., Borle, S. and
-#' Boatwright, P., \dQuote{A useful distribution for fitting discrete data:
-#' Revival of the Conway-Maxwell-Poisson distribution,} J. Royal Statist. Soc.,
-#' v54, pp. 127-142, 2005.
-#' @keywords models
 #' @import RcppParallel
 #' @export
 dcom_parallel <- function(x, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 1000L) {
     .Call('compoisson_dcom_parallel', PACKAGE = 'compoisson', x, lambda, nu, z, log, log_error, maxit)
+}
+
+#' @import RcppParallel
+#' @export
+pcom_parallel <- function(q, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 1000L) {
+    .Call('compoisson_pcom_parallel', PACKAGE = 'compoisson', q, lambda, nu, z, log, log_error, maxit)
 }
 
 # Register entry points for exported C++ functions

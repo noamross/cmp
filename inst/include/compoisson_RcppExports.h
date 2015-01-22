@@ -176,6 +176,25 @@ namespace compoisson {
         return Rcpp::as<NumericVector >(__result);
     }
 
+    inline NumericVector pcom_parallel(NumericVector q, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 1000) {
+        typedef SEXP(*Ptr_pcom_parallel)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_pcom_parallel p_pcom_parallel = NULL;
+        if (p_pcom_parallel == NULL) {
+            validateSignature("NumericVector(*pcom_parallel)(NumericVector,double,double,double,bool,double,int)");
+            p_pcom_parallel = (Ptr_pcom_parallel)R_GetCCallable("compoisson", "compoisson_pcom_parallel");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_pcom_parallel(Rcpp::wrap(q), Rcpp::wrap(lambda), Rcpp::wrap(nu), Rcpp::wrap(z), Rcpp::wrap(log), Rcpp::wrap(log_error), Rcpp::wrap(maxit));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<NumericVector >(__result);
+    }
+
 }
 
 #endif // __compoisson_RcppExports_h__
