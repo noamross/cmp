@@ -1,4 +1,5 @@
 #include <Rcpp.h>
+#include <math.h>
 #include "compoisson.h"
 
 using namespace Rcpp;
@@ -67,6 +68,69 @@ double com_compute_log_z(double lambda, double nu, double log_error = 0.001, int
 
 //' @export
 // [[Rcpp::export]]
+double com_compute_log_z_2(double lambda, double nu, double log_error = 0.001, int maxit=1000) {  
+  // Perform argument checking
+  if (lambda < 0 || nu < 0) {
+    Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
+  }
+  
+  double min_j = exp(log(lambda)/nu);  //Calculate the point at which the series will start to converte
+ 
+  if (min_j > maxit) return com_compute_log_z_approx(lambda, nu);  //Use approximation for long computations
+  
+  // Initialize values
+  double log_z = R_NegInf;
+  
+  int j = 0;
+  while(j <= min_j) {  //Don't bother checking for convergence before the turnpoint
+    log_z = logsumexp(log_z, j * log(lambda) - nu * Rcpp::internal::lfactorial(j));
+    j += 1;
+  }
+  double next_term;
+  double upper_bound = R_PosInf;
+  while ((upper_bound - log_z) > log_error) { //Check for convergence by comparing to geomentric series
+    next_term = j * log(lambda) - nu * Rcpp::internal::lfactorial(j);
+    upper_bound = logsumexp(log_z, next_term - log(1 - (lambda/pow(j,nu))));
+    log_z = logsumexp(log_z, next_term); 
+    j += 1;
+  }
+  return log_z;
+}
+
+//' @export
+// [[Rcpp::export]]
+double com_compute_log_z_approx(double lambda, double nu) {
+    return nu*pow(lambda, 1/nu) - ((nu-1)/(2*nu))*log(lambda) - ((nu - 1)/2)*log(2*M_PI) - 0.5*log(nu);
+  }
+
+//' @export
+// [[Rcpp::export]]
 double logsumexp(NumericVector x) {
   return(log(sum(exp(x - max(x)))) + max(x));
+}
+
+
+double logsumexp(double x, double y) {
+  if (x == R_NegInf) {
+    return (y); 
+  } else if (y == R_PosInf) {
+    return (x); 
+  } else if (x > y) {
+    return (x + log( 1 + exp(y - x) ) ); 
+  } else{
+    return (y + log( 1 + exp(x - y) ) ); 
+  }
+}
+
+
+double logdiffexp(double x, double y) {  // Only good for 2-length vectors
+  if (x == R_NegInf) {
+		 return (NAN); 
+  } else if (y == R_NegInf) {
+		 return (x); 
+  } else if (x > y) {
+		 return (x + log( 1 - exp(y - x) ) ); 
+  }	else {
+		 return (NAN); 
+  }
 }
