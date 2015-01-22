@@ -276,9 +276,9 @@ RcppExport SEXP compoisson_rcom(SEXP nSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP z
     UNPROTECT(1);
     return __result;
 }
-// dcom2
-NumericVector dcom2(NumericVector x, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 1000);
-static SEXP compoisson_dcom2_try(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP logSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
+// dcom_parallel
+NumericVector dcom_parallel(NumericVector x, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit = 1000);
+static SEXP compoisson_dcom_parallel_try(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP logSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
@@ -289,18 +289,18 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< bool >::type log(logSEXP );
         Rcpp::traits::input_parameter< double >::type log_error(log_errorSEXP );
         Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP );
-        NumericVector __result = dcom2(x, lambda, nu, z, log, log_error, maxit);
+        NumericVector __result = dcom_parallel(x, lambda, nu, z, log, log_error, maxit);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
     return __sexp_result;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP compoisson_dcom2(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP logSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
+RcppExport SEXP compoisson_dcom_parallel(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP logSEXP, SEXP log_errorSEXP, SEXP maxitSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(compoisson_dcom2_try(xSEXP, lambdaSEXP, nuSEXP, zSEXP, logSEXP, log_errorSEXP, maxitSEXP));
+        __result = PROTECT(compoisson_dcom_parallel_try(xSEXP, lambdaSEXP, nuSEXP, zSEXP, logSEXP, log_errorSEXP, maxitSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -328,7 +328,7 @@ static int compoisson_RcppExport_validate(const char* sig) {
         signatures.insert("NumericVector(*pcom)(NumericVector,double,double,double,bool,double,int)");
         signatures.insert("NumericVector(*qcom)(NumericVector,double,double,double,bool,double,int)");
         signatures.insert("NumericVector(*rcom)(int,double,double,double,bool,double,int)");
-        signatures.insert("NumericVector(*dcom2)(NumericVector,double,double,double,bool,double,int)");
+        signatures.insert("NumericVector(*dcom_parallel)(NumericVector,double,double,double,bool,double,int)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -342,7 +342,7 @@ RcppExport SEXP compoisson_RcppExport_registerCCallable() {
     R_RegisterCCallable("compoisson", "compoisson_pcom", (DL_FUNC)compoisson_pcom_try);
     R_RegisterCCallable("compoisson", "compoisson_qcom", (DL_FUNC)compoisson_qcom_try);
     R_RegisterCCallable("compoisson", "compoisson_rcom", (DL_FUNC)compoisson_rcom_try);
-    R_RegisterCCallable("compoisson", "compoisson_dcom2", (DL_FUNC)compoisson_dcom2_try);
+    R_RegisterCCallable("compoisson", "compoisson_dcom_parallel", (DL_FUNC)compoisson_dcom_parallel_try);
     R_RegisterCCallable("compoisson", "compoisson_RcppExport_validate", (DL_FUNC)compoisson_RcppExport_validate);
     return R_NilValue;
 }

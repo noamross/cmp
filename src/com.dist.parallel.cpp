@@ -41,7 +41,7 @@ using namespace RcppParallel;
 //' @import RcppParallel
 //' @export
 // [[Rcpp::export]]
-NumericVector dcom2(NumericVector x, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit=1000) {
+NumericVector dcom_parallel(NumericVector x, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit=1000) {
   
   // Perform argument checking
   if (lambda < 0 || nu < 0) {

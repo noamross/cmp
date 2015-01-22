@@ -128,8 +128,8 @@ rcom <- function(n, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, ma
 #' @keywords models
 #' @import RcppParallel
 #' @export
-dcom2 <- function(x, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 1000L) {
-    .Call('compoisson_dcom2', PACKAGE = 'compoisson', x, lambda, nu, z, log, log_error, maxit)
+dcom_parallel <- function(x, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 1000L) {
+    .Call('compoisson_dcom_parallel', PACKAGE = 'compoisson', x, lambda, nu, z, log, log_error, maxit)
 }
 
 # Register entry points for exported C++ functions

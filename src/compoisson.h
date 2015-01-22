@@ -6,7 +6,7 @@ extern double com_compute_log_z(double lambda, double nu, double log_error, int 
 extern double com_compute_z(double lambda, double nu, double log_error, int maxit);
 extern double logsumexp(NumericVector x);
 extern NumericVector dcom(NumericVector x, double lambda, double nu, double z, bool log, double log_error, int maxit);
-extern NumericVector dcom2(NumericVector x, double lambda, double nu, double z, bool log, double, int maxit);
+extern NumericVector dcom_parallel(NumericVector x, double lambda, double nu, double z, bool log, double, int maxit);
 extern double dcom_single(double x, double lambda, double nu, double z);
 extern NumericVector pcom(NumericVector q, double lambda, double nu, double z, bool log, double log_error, int maxit);
 extern NumericVector qcom(NumericVector p, double lambda, double nu, double z, bool log, double log_error, int maxit);
