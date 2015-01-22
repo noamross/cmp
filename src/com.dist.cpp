@@ -37,11 +37,13 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 NumericVector dcom(NumericVector x, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit=1000) {
   
-  double log_z;
-  // Perform argument checking
   if (lambda < 0 || nu < 0) {
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
-  } else if (ISNA(z)) {
+  } 
+  
+  double log_z;
+
+  if (ISNA(z)) {
     log_z = com_compute_log_z(lambda, nu, log_error, maxit);
   } else {
     log_z = std::log(z);
@@ -108,21 +110,26 @@ NumericVector pcom(NumericVector q, double lambda, double nu, double z = NA_REAL
 //' @export
 // [[Rcpp::export]]
 NumericVector qcom(NumericVector p, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit=1000) {
-  
-  
-    // Perform argument checking
+    
   if (lambda < 0 || nu < 0) {
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
-  } else if (ISNA(z)) {
-    z = com_compute_z(lambda, nu, log_error, maxit);
+  } 
+  
+  double log_z;
+
+  if (ISNA(z)) {
+    log_z = com_compute_log_z(lambda, nu, log_error, maxit);
+  } else {
+    log_z = std::log(z);
   }
 
-  NumericVector q(p.size());
-  double prob;
-  int i;
   if (log) {
     p = Rcpp::exp(p);
   }
+  
+  NumericVector q(p.size());
+  double prob;
+  int i;
   
   for (int j = 0; j < q.size(); ++j) {
     if (p[j] == 0) {
@@ -131,14 +138,15 @@ NumericVector qcom(NumericVector p, double lambda, double nu, double z = NA_REAL
     } else if (p[j] == 1) {
       q[j] = R_PosInf;
       continue;
-    }
+    } else {
     prob = 0;
     i = 0;
     while (prob < p[j]) {
-      prob += dcom_single(i, lambda, nu, z);
+      prob += exp(dcom_single(i, lambda, nu, log_z));
       i += 1;
     }
     q[j] = i - 1;
+    }
   }
   
   return q;
