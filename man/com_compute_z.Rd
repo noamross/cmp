@@ -7,11 +7,11 @@
 \alias{com_compute_z}
 \title{Compute COM-Poisson Normalizing Constant}
 \usage{
-com_compute_z(lambda, nu, log_error = 0.001, maxit = 1000L)
+com_compute_z(lambda, nu, log_error_z = 1e-06, maxit_z = 10000L)
 
-com.compute.z(lambda, nu, log_error = 0.001, maxit = 1000L)
+com.compute.z(lambda, nu, log_error_z = 1e-06, maxit_z = 10000L)
 
-com.compute.log.z(lambda, nu, log_error = 0.001, maxit = 1000L)
+com.compute.log.z(lambda, nu, log_error_z = 1e-06, maxit_z = 10000L)
 }
 \arguments{
 \item{lambda}{Lambda value in COM-Poisson distribution}

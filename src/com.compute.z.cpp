@@ -40,22 +40,22 @@ using namespace Rcpp;
 //'
 //' @export
 // [[Rcpp::export]]
-double com_compute_z(double lambda, double nu, double log_error = 0.001, int maxit=1000) {
-  return(exp(com_compute_log_z(lambda, nu, log_error, maxit)));
+double com_compute_z(double lambda, double nu, double log_error_z = 1e-6, int maxit_z = 10000) {
+  return(exp(com_compute_log_z(lambda, nu, log_error_z, maxit_z = 10000)));
 }
 
 
 //' @export
 // [[Rcpp::export]]
-double com_compute_log_z(double lambda, double nu, double log_error = 0.001, int maxit=1000) {  
+double com_compute_log_z(double lambda, double nu, double log_error_z = 1e-6, int maxit_z = 10000) {  
   // Perform argument checking
   if (lambda < 0 || nu < 0) {
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
   }
   
-  double min_j = exp(log(lambda)/nu);  //Calculate the point at which the series will start to converte
+  double min_j = exp(log(lambda)/nu);  //Calculate the point at which the series will start to converge
  
-  if (min_j > maxit) return com_compute_log_z_approx(lambda, nu);  //Use approximation for long computations
+  if (min_j > maxit_z) return com_compute_log_z_approx(lambda, nu);  //Use approximation for long computations
   
   // Initialize values
   double log_z = R_NegInf;
@@ -65,16 +65,17 @@ double com_compute_log_z(double lambda, double nu, double log_error = 0.001, int
     log_z = logsumexp(log_z, j * log(lambda) - nu * Rcpp::internal::lfactorial(j));
     j += 1;
   }
-  double next_term;
+  double next_term = R_PosInf;
   double upper_bound = R_PosInf;
-  while ((upper_bound - log_z) > log_error) { //Check for convergence by comparing to geomentric series
+  while ((upper_bound - log_z) > log_error_z) { //Check for convergence by comparing to geomentric series
     next_term = j * log(lambda) - nu * Rcpp::internal::lfactorial(j);
     upper_bound = logsumexp(log_z, next_term - log(1 - (lambda/pow(j,nu))));
     log_z = logsumexp(log_z, next_term); 
     j += 1;
   }
+
   return log_z;
-}
+  }
 
 //' @export
 // [[Rcpp::export]]
@@ -101,7 +102,8 @@ double logsumexp(double x, double y) {
   }
 }
 
-
+//' @export
+// [[Rcpp::export]]
 double logdiffexp(double x, double y) {  // Only good for 2-length vectors
   if (x == R_NegInf) {
 		 return (NAN); 
@@ -110,7 +112,7 @@ double logdiffexp(double x, double y) {  // Only good for 2-length vectors
   } else if (x > y) {
 		 return (x + log( 1 - exp(y - x) ) ); 
   }	else {
-		 return (NAN); 
+		 return (y + log( 1 - exp(x - y) ) );
   }
 }
 
@@ -118,7 +120,7 @@ double logdiffexp(double x, double y) {  // Only good for 2-length vectors
 
 //' @export
 // [[Rcpp::export]]
-double com_compute_log_z_old(double lambda, double nu, double log_error = 0.001, int maxit=1000) {
+double com_compute_log_z_old(double lambda, double nu, double log_error_z = 0.0001, int maxit_z = 10000) {
   // Perform argument checking
   if (lambda < 0 || nu < 0) {
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
@@ -128,10 +130,12 @@ double com_compute_log_z_old(double lambda, double nu, double log_error = 0.001,
   double z = R_NegInf;
   double z_last = 0;
   int j = 0;
-  while ((std::abs(z - z_last) > log_error) && j <= maxit) {
+  while ((std::abs(z - z_last) > log_error_z) && j <= maxit_z) {
     z_last = z;
     z = logsumexp(NumericVector::create(z, j * log(lambda) - nu * Rcpp::internal::lfactorial(j)));
     j += 1;
   }
+
   return z;
 }
+
