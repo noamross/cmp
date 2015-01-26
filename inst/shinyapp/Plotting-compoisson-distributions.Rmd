@@ -27,7 +27,7 @@ renderPlot({
   data = data.frame(Value = 0:max_x,
                     Probability = dcom(0:max_x, lambda=input$lambda,
                                        nu=input$nu))
-  meanval = com.mean(lambda = input$lambda, nu = input$nu)
+  meanval = com_mean(lambda = input$lambda, nu = input$nu)
   plot = ggplot(data, aes(x=Value, y=Probability)) +
     geom_bar(stat="identity", position="identity") +
     scale_x_discrete() +

@@ -214,6 +214,25 @@ namespace compoisson {
         return Rcpp::as<NumericVector >(__result);
     }
 
+    inline double com_mean(double lambda, double nu, double log_error = 1e-6, int maxit = 100, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
+        typedef SEXP(*Ptr_com_mean)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_com_mean p_com_mean = NULL;
+        if (p_com_mean == NULL) {
+            validateSignature("double(*com_mean)(double,double,double,int,double,double,int,bool)");
+            p_com_mean = (Ptr_com_mean)R_GetCCallable("compoisson", "compoisson_com_mean");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_com_mean(Rcpp::wrap(lambda), Rcpp::wrap(nu), Rcpp::wrap(log_error), Rcpp::wrap(maxit), Rcpp::wrap(z), Rcpp::wrap(log_error_z), Rcpp::wrap(maxit_z), Rcpp::wrap(parallel));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<double >(__result);
+    }
+
 }
 
 #endif // __compoisson_RcppExports_h__
