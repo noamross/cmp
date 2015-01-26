@@ -5,7 +5,7 @@ library(dplyr)
 library(tidyr)
 z_compute_errs = expand.grid(lambda=seq(0.1, 1.9, by=0.2), nu=seq(0.1, 1.9, by=0.2)) %>%
   group_by(lambda, nu) %>%
-  mutate(z_calc = exp(com_compute_log_z(lambda, nu, log_error = 0.0000001, maxit=1000000)),
+  mutate(z_calc = exp(com_compute_log_z(lambda, nu, log_error_z = 0.0000001, maxit_z=1000000)),
          z_approx = exp(com_compute_log_z_approx(lambda, nu)),
          err = (z_approx-z_calc)/z_calc)
 
@@ -18,7 +18,7 @@ z_errs_table = z_compute_errs %>%
 ```{r}
 z_compute_errs2 = expand.grid(lambda=seq(0.01, 2.91, by=0.1), nu=seq(0.01, 2.91, by=0.1)) %>%
   group_by(lambda, nu) %>%
-  mutate(log_z_calc = com_compute_log_z(lambda, nu, log_error = 0.0000001, maxit=1000000),
+  mutate(log_z_calc = com_compute_log_z(lambda, nu, log_error_z = 0.0000001, maxit_z=1000000),
          log_z_approx = com_compute_log_z_approx(lambda, nu),
          log_diff = logdiffexp(c(log_z_calc - log_z_approx)))
 
@@ -30,7 +30,7 @@ z_errs_table2 = z_compute_errs2 %>%
 ```{r}
 z_compute_errs3 = expand.grid(lambda=seq(0.01, 1.51, by=0.05), nu=seq(0.01, 1.51, by=0.05)) %>%
   group_by(lambda, nu) %>%
-  mutate(z_calc = exp(com_compute_log_z(lambda, nu, log_error=0.00000001, maxit=1000000)),
+  mutate(z_calc = exp(com_compute_log_z(lambda, nu, log_error_z=0.00000001, maxit_z=1000000)),
          z_approx = exp(com_compute_log_z_2(lambda, nu)),
          err = (z_approx-z_calc)/z_calc)
 
