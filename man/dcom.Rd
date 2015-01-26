@@ -9,19 +9,19 @@
 \alias{rcom_parallel}
 \title{The COM-Poisson Distribution}
 \usage{
-dcom(x, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001,
+dcom(x, lambda, nu, z = NA_real_, log = FALSE, log_error = 1e-06,
   maxit = 1000L)
 
-pcom(q, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001,
+pcom(q, lambda, nu, z = NA_real_, log = FALSE, log_error = 1e-06,
   maxit = 1000L)
 
-qcom(p, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001,
+qcom(p, lambda, nu, z = NA_real_, log = FALSE, log_error = 1e-06,
   maxit = 1000L)
 
-rcom(n, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001,
+rcom(n, lambda, nu, z = NA_real_, log = FALSE, log_error = 1e-06,
   maxit = 1000L)
 
-rcom_parallel(n, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001,
+rcom_parallel(n, lambda, nu, z = NA_real_, log = FALSE, log_error = 1e-06,
   maxit = 1000L)
 
 com.log.density(x, lambda, nu, log.z = NULL)

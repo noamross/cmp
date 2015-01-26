@@ -34,13 +34,13 @@
 #' z = com_compute_z(fit$lambda, fit$nu)
 #'
 #' @export
-com_compute_z <- function(lambda, nu, log_error = 0.001, maxit = 1000L) {
-    .Call('compoisson_com_compute_z', PACKAGE = 'compoisson', lambda, nu, log_error, maxit)
+com_compute_z <- function(lambda, nu, log_error_z = 1e-6, maxit_z = 10000L) {
+    .Call('compoisson_com_compute_z', PACKAGE = 'compoisson', lambda, nu, log_error_z, maxit_z)
 }
 
 #' @export
-com_compute_log_z <- function(lambda, nu, log_error = 0.001, maxit = 1000L) {
-    .Call('compoisson_com_compute_log_z', PACKAGE = 'compoisson', lambda, nu, log_error, maxit)
+com_compute_log_z <- function(lambda, nu, log_error_z = 1e-6, maxit_z = 10000L) {
+    .Call('compoisson_com_compute_log_z', PACKAGE = 'compoisson', lambda, nu, log_error_z, maxit_z)
 }
 
 #' @export
@@ -54,8 +54,13 @@ logsumexp <- function(x) {
 }
 
 #' @export
-com_compute_log_z_old <- function(lambda, nu, log_error = 0.001, maxit = 1000L) {
-    .Call('compoisson_com_compute_log_z_old', PACKAGE = 'compoisson', lambda, nu, log_error, maxit)
+logdiffexp <- function(x, y) {
+    .Call('compoisson_logdiffexp', PACKAGE = 'compoisson', x, y)
+}
+
+#' @export
+com_compute_log_z_old <- function(lambda, nu, log_error_z = 0.0001, maxit_z = 10000L) {
+    .Call('compoisson_com_compute_log_z_old', PACKAGE = 'compoisson', lambda, nu, log_error_z, maxit_z)
 }
 
 #' The COM-Poisson Distribution
@@ -86,49 +91,26 @@ com_compute_log_z_old <- function(lambda, nu, log_error = 0.001, maxit = 1000L) 
 #' v54, pp. 127-142, 2005.
 #' @keywords models
 #' @export
-dcom <- function(x, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 1000L) {
-    .Call('compoisson_dcom', PACKAGE = 'compoisson', x, lambda, nu, z, log, log_error, maxit)
+dcom <- function(x, lambda, nu, z = NA_real_, log_p = FALSE, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('compoisson_dcom', PACKAGE = 'compoisson', x, lambda, nu, z, log_p, log_error_z, maxit_z, parallel)
 }
 
 #' @rdname dcom
 #' @export
-pcom <- function(q, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 1000L) {
-    .Call('compoisson_pcom', PACKAGE = 'compoisson', q, lambda, nu, z, log, log_error, maxit)
+pcom <- function(q, lambda, nu, z = NA_real_, log_p = FALSE, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('compoisson_pcom', PACKAGE = 'compoisson', q, lambda, nu, z, log_p, log_error_z, maxit_z, parallel)
 }
 
 #' @rdname dcom
 #' @export
-qcom <- function(p, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 1000L) {
-    .Call('compoisson_qcom', PACKAGE = 'compoisson', p, lambda, nu, z, log, log_error, maxit)
+qcom <- function(p, lambda, nu, z = NA_real_, log_p = FALSE, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('compoisson_qcom', PACKAGE = 'compoisson', p, lambda, nu, z, log_p, log_error_z, maxit_z, parallel)
 }
 
 #' @rdname dcom
 #' @export
-rcom <- function(n, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 1000L) {
-    .Call('compoisson_rcom', PACKAGE = 'compoisson', n, lambda, nu, z, log, log_error, maxit)
-}
-
-#' @import RcppParallel
-#' @export
-dcom_parallel <- function(x, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 1000L) {
-    .Call('compoisson_dcom_parallel', PACKAGE = 'compoisson', x, lambda, nu, z, log, log_error, maxit)
-}
-
-#' @import RcppParallel
-#' @export
-pcom_parallel <- function(q, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 1000L) {
-    .Call('compoisson_pcom_parallel', PACKAGE = 'compoisson', q, lambda, nu, z, log, log_error, maxit)
-}
-
-#' @export
-qcom_parallel <- function(p, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 1000L) {
-    .Call('compoisson_qcom_parallel', PACKAGE = 'compoisson', p, lambda, nu, z, log, log_error, maxit)
-}
-
-#' @rdname dcom
-#' @export
-rcom_parallel <- function(n, lambda, nu, z = NA_real_, log = FALSE, log_error = 0.001, maxit = 1000L) {
-    .Call('compoisson_rcom_parallel', PACKAGE = 'compoisson', n, lambda, nu, z, log, log_error, maxit)
+rcom <- function(n, lambda, nu, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('compoisson_rcom', PACKAGE = 'compoisson', n, lambda, nu, z, log_error_z, maxit_z, parallel)
 }
 
 # Register entry points for exported C++ functions

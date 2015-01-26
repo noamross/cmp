@@ -1,10 +1,51 @@
 #include <Rcpp.h>
 #include <math.h>
 #include "compoisson.h"
+#include "parallel-workers.h"
 
 using namespace Rcpp;
 
 // [[Rcpp::interfaces(r, cpp)]]
+
+double dcom_single(double x, double lambda, double nu, double log_z) {
+  double d;
+  if (x < 0 || x != floor(x)) {
+    d = R_NegInf; 
+  } else {
+    d = x * std::log(lambda) - nu * Rcpp::internal::lfactorial(x) - log_z;
+  }
+  return d;
+  }
+
+double pcom_single(double q, double lambda, double nu, double log_z) {
+  double p = 0;
+    for (int i = 0; i <= q; ++i) {
+      p += exp(dcom_single(i, lambda, nu, log_z));
+    }
+  return p;
+  }
+
+double qcom_single(double p, double lambda, double nu, double log_z) {
+  double q;
+
+  if (p == 0) {
+    q = 0;
+  } else if (p==1) {
+    q = R_PosInf;
+  } else {
+    double prob = 0;
+    q = 0;
+    while (prob < p) {
+      prob += exp(dcom_single(q, lambda, nu, log_z));
+      q += 1;
+    }
+    q = q - 1;
+  }
+  return q;
+}
+
+
+
 
 //' The COM-Poisson Distribution
 //'
@@ -35,117 +76,103 @@ using namespace Rcpp;
 //' @keywords models
 //' @export
 // [[Rcpp::export]]
-NumericVector dcom(NumericVector x, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit=1000) {
+NumericVector dcom(NumericVector x, double lambda, double nu, double z = NA_REAL, bool log_p = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
   
   if (lambda < 0 || nu < 0) {
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
   } 
   
   double log_z;
-
+  
   if (ISNA(z)) {
-    log_z = com_compute_log_z(lambda, nu, log_error, maxit);
+    log_z = com_compute_log_z(lambda, nu, log_error_z, maxit_z);
   } else {
     log_z = std::log(z);
   }
   
   NumericVector d(x.size());
   
-  for (int i = 0; i < x.size(); ++i) {  
-   d[i] = dcom_single(x[i], lambda, nu, log_z);
+  if(parallel) {
+    Dcom ddcom(x, lambda, nu, log_z, d);
+    parallelFor(0, x.size(), ddcom);
+    
+  } else {
+    for (int i = 0; i < x.size(); ++i) {  
+      d[i] = dcom_single(x[i], lambda, nu, log_z);
+    }
   }
-
-  if(!log) {
+  
+  if(!log_p) {
     d = Rcpp::exp(d);
   }
-
+  
   return d;
 }
 
-double dcom_single(double x, double lambda, double nu, double log_z) {
-  double d;
-  if (x < 0 || x != floor(x)) {
-    d = R_NegInf; 
-  } else {
-    d = x * std::log(lambda) - nu * Rcpp::internal::lfactorial(x) - log_z;
-  }
-  return d;
-  }
 
 //' @rdname dcom
 //' @export
 // [[Rcpp::export]]
-NumericVector pcom(NumericVector q, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit=1000) {
-
-  double log_z;
-
-  // Perform argument checking
-  // Perform argument checking
-  if (lambda < 0 || nu < 0) {
-    Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
-  } else if (ISNA(z)) {
-    log_z = com_compute_log_z(lambda, nu, log_error, maxit);
-  } else {
-    log_z = std::log(z);
-  }
+NumericVector pcom(NumericVector q, double lambda, double nu, double z = NA_REAL, bool log_p = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
   
-  NumericVector p(q.size());
-  double prob;
-  
-  for (int j = 0; j < q.size(); ++j) {
-    prob = 0;
-    for (int i = 0; i <= q[j]; ++i) {
-      prob += exp(dcom_single(i, lambda, nu, log_z));
-    }
-    p[j] = prob;
-  }
-  
-  if(log) {
-    p = Rcpp::log(p);
-  }
-  return(p);
-}
-
-//' @rdname dcom
-//' @export
-// [[Rcpp::export]]
-NumericVector qcom(NumericVector p, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit=1000) {
-    
   if (lambda < 0 || nu < 0) {
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
   } 
   
   double log_z;
-
+  
   if (ISNA(z)) {
-    log_z = com_compute_log_z(lambda, nu, log_error, maxit);
+    log_z = com_compute_log_z(lambda, nu, log_error_z, maxit_z);
   } else {
     log_z = std::log(z);
   }
+  
+  NumericVector p(q.size());
+  
+  if(parallel) {
+    Pcom ppcom(q, lambda, nu, log_z, p);
+    parallelFor(0, q.size(), ppcom);  
+  } else {
+    for (int i = 0; i < q.size(); ++i) {
+      p[i] = pcom_single(q[i], lambda, nu, log_z);
+    }
+  }    
+  if(log_p) {
+    p = Rcpp::log(p);
+  }
+  return(p);
+}
 
-  if (log) {
+
+//' @rdname dcom
+//' @export
+// [[Rcpp::export]]
+NumericVector qcom(NumericVector p, double lambda, double nu, double z = NA_REAL, bool log_p = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
+  
+  if (lambda < 0 || nu < 0) {
+    Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
+  } 
+  
+  double log_z;
+  
+  if (ISNA(z)) {
+    log_z = com_compute_log_z(lambda, nu, log_error_z, maxit_z);
+  } else {
+    log_z = std::log(z);
+  }
+  
+  if (log_p) {
     p = Rcpp::exp(p);
   }
   
   NumericVector q(p.size());
-  double prob;
-  int i;
   
-  for (int j = 0; j < q.size(); ++j) {
-    if (p[j] == 0) {
-      q[j] = 0;
-      continue;
-    } else if (p[j] == 1) {
-      q[j] = R_PosInf;
-      continue;
-    } else {
-    prob = 0;
-    i = 0;
-    while (prob < p[j]) {
-      prob += exp(dcom_single(i, lambda, nu, log_z));
-      i += 1;
-    }
-    q[j] = i - 1;
+  if(parallel) {  
+    Qcom qqcom(p, lambda, nu, log_z, q);
+    parallelFor(0, p.size(), qqcom);
+  } else {
+    for (int i = 0; i < q.size(); ++i) {
+      q[i] = qcom_single(p[i], lambda, nu, log_z);
     }
   }
   
@@ -155,6 +182,6 @@ NumericVector qcom(NumericVector p, double lambda, double nu, double z = NA_REAL
 //' @rdname dcom
 //' @export
 // [[Rcpp::export]]
-NumericVector rcom(int n, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error = 0.001, int maxit=1000) {
-    return(qcom(runif(n, 0, 1), lambda, nu, z, log, log_error, maxit));
+NumericVector rcom(int n, double lambda, double nu, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
+    return(qcom(runif(n, 0, 1), lambda, nu, z, false, log_error_z, maxit_z, parallel));
 }
