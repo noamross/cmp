@@ -9,6 +9,10 @@
 
 using namespace RcppParallel;
 
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::depends(RcppParallel)]]
+
+
 struct Dcom : public Worker {   
    // source vector and parameters
    const RVector<double> input;

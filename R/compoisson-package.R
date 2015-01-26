@@ -51,4 +51,5 @@ NULL
 
 #' @useDynLib compoisson
 #' @importFrom Rcpp sourceCpp
+#' @import RcppParallel
 NULL

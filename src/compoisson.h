@@ -1,6 +1,9 @@
 #ifndef COMP
 #define COMP
 
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::depends(RcppParallel)]]
+
 using namespace Rcpp;
 
 extern double com_compute_z(double lambda, double nu, double log_error_z, int maxit_z);

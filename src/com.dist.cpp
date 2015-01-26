@@ -4,7 +4,10 @@
 #include "parallel-workers.h"
 
 using namespace Rcpp;
+using namespace RcppParallel;
 
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::depends(RcppParallel)]]
 // [[Rcpp::interfaces(r, cpp)]]
 
 double dcom_single(double x, double lambda, double nu, double log_z) {
