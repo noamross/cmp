@@ -134,7 +134,7 @@ rcom <- function(n, lambda, nu, z = NA_real_, log_error_z = 1e-6, maxit_z = 1000
 #' v54, pp. 127-142, 2005.
 #' @keywords models
 #' @export
-com_mean <- function(lambda, nu, log_error = 1e-6, maxit = 100L, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+com_mean <- function(lambda, nu, log_error = 1e-6, maxit = 1e6L, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
     .Call('compoisson_com_mean', PACKAGE = 'compoisson', lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel)
 }
 

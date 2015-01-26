@@ -214,7 +214,7 @@ namespace compoisson {
         return Rcpp::as<NumericVector >(__result);
     }
 
-    inline double com_mean(double lambda, double nu, double log_error = 1e-6, int maxit = 100, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
+    inline double com_mean(double lambda, double nu, double log_error = 1e-6, int maxit = 1e6, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
         typedef SEXP(*Ptr_com_mean)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_com_mean p_com_mean = NULL;
         if (p_com_mean == NULL) {

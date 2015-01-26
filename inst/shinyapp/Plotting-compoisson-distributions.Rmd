@@ -3,7 +3,7 @@ output: html_document
 runtime: shiny
 ---
 
-```{r setup, echo = FALSE}
+```{r setup, echo = FALSE, message=FALSE}
 #library(devtools)
 #install_github('noamross/noamtools')
 #install_github('noamross/compoisson')
@@ -28,17 +28,23 @@ renderPlot({
                     Probability = dcom(0:max_x, lambda=input$lambda,
                                        nu=input$nu))
   meanval = com_mean(lambda = input$lambda, nu = input$nu)
-  plot = ggplot(data, aes(x=Value, y=Probability)) +
-    geom_bar(stat="identity", position="identity") +
-    scale_x_discrete() +
-    annotation_custom(grob=textGrob(substitute(paste(lambda, ": ", LL, ", ",
+  plot = ggplot(data, aes(x=Value, y=Probability)) 
+    if(max_x <= 50) {
+    plot = plot + geom_bar(stat="identity", position="identity") +
+                  scale_x_discrete()
+    } else {
+      plot = plot + geom_area()
+    }
+  
+    plot = plot +  theme_nr +
+      annotation_custom(grob=textGrob(substitute(paste(lambda, ": ", LL, ", ",
                                                      nu, ": ", NN, ", ",
                                                      E(X), ": ", MM, ", "),
                                                list(LL = input$lambda,
                                                     NN = input$nu,
                                                     MM = meanval)),
-                                    x = 0.8, y= 0.8)) +
-    theme_nr
+                                    x = 0.8, y= 0.8))
+   
   
   if(meanval < max_x) {
     plot = plot + geom_vline(xintercept=meanval, col="red", lwd = 2)

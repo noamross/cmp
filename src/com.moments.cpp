@@ -33,7 +33,7 @@ using namespace RcppParallel;
 //' @export
 // [[Rcpp::export]]
 double com_mean(double lambda, double nu,
-                       double log_error = 1e-6, int maxit=100,
+                       double log_error = 1e-6, int maxit=1e6,
                        double z = NA_REAL, double log_error_z = 1e-6,
                        int maxit_z = 10000, bool parallel = false) {
   
@@ -41,6 +41,8 @@ double com_mean(double lambda, double nu,
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
   } 
   
+  if(exp(log(lambda)/nu) > maxit_z) return(pow(lambda, 1/nu) - (nu - 1)/(2*nu));
+    
   double log_z;
   
    if (ISNA(z)) {

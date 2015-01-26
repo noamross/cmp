@@ -387,7 +387,7 @@ RcppExport SEXP compoisson_rcom(SEXP nSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP z
     return __result;
 }
 // com_mean
-double com_mean(double lambda, double nu, double log_error = 1e-6, int maxit = 100, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false);
+double com_mean(double lambda, double nu, double log_error = 1e-6, int maxit = 1e6, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false);
 static SEXP compoisson_com_mean_try(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_errorSEXP, SEXP maxitSEXP, SEXP zSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
