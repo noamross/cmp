@@ -1,0 +1,234 @@
+---
+title: "High-Performance Calculation of the COM-Poisson Distribution"
+author: "Noam Ross"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_document
+---
+
+
+```{r setup, echo=FALSE, results='hide'}
+library(knitr)
+opts_knit$set(cache = TRUE)
+```
+
+For a project, I recently found that I needed to fit data to the [Conway-Maxwell-Poisson (CMP) distribution](http://en.wikipedia.org/wiki/Conway%E2%80%93Maxwell%E2%80%93Poisson_distribution).  This distibution has the form:
+
+$$P(X = x) = \frac{\lambda^x}{(x!)^\nu} \frac{1}{Z(\lambda, \nu)}$$
+
+where
+
+$$Z(\lambda, \nu) = \sum_{j=0}^\infty \frac{\lambda^j}{(j!)^\nu}$$
+
+As $Z$ is an infinite series with no closed form, there will always be a performance/accuracy tradeoff in calculaling COM-Poisson likelihoods. So I went looking for R Packages that implemented this calculation.  I found a few:
+
+-   **compoisson** ([CRAN](http://cran.r-project.org/web/packages/compoisson/), [Github](https://github.com/cran/compoisson)) tries to be a canonical package for the CMP distribution.  It implements calculation in pure R, truncating calculations when the difference between successive iterations of $log Z$ are less than an error term.
+-   **COMPoissonReg** ([CRAN](http://cran.r-project.org/web/packages/COMPoissonReg/), [Github](https://github.com/cran/COMPoissonReg)) implements GLM using CMP, calculating $Z$ in pure R with a fixed number of iterations, too, with 100 as the default.
+-  **CompGLM** ([CRAN](http://cran.r-project.org/web/packages/CompGLM/), [Github](https://github.com/cran/CompGLM)) also implements GLM using CMP, using C++ to calculate CMP values with the same strategy.
+-   **CMPControl** ([CRAN](http://cran.r-project.org/web/packages/CMPControl/), [Github](https://github.com/cran/CMPControl)) computes distributions internally using code from COMPoissonReg.
+- **degreenet** ([CRAN](http://cran.r-project.org/web/packages/degreenet/), [Github](https://github.com/cran/degreenet)) implements CMP for internal reasons using C, limiting calculation of Z to 100 iterations.
+
+For my own needs I needed to fit distributions that would take me towards the computationally intense region of parameter space where $\lambda$ is high and $\nu$ is low, where truncation strategies would lead to large errors. Thankfully, a number of strategies for efficient computation of $Z$ can be found in @Shmueli2005.  Here I detail how I've implemented these in a fork of the **compoisson** package, now written in terrifyingly fast Rcpp.
+
+We can estimate the computational intensity of finding $Z$, as @Shmueli2005 show that after $e^{\frac{\log \lambda}{\nu}}$ iterations, $Z$ begins to converge, at a rate that is always faster than a [geometric series](http://en.wikipedia.org/wiki/Geometric_series).  Here is a table of these turnpoints across various parameter values. 
+
+```{r itertable, echo=FALSE, message=FALSE}
+library(dplyr)
+library(tidyr)
+library(scales)
+library(compoisson)
+parmvals = expand.grid(lambda = c(seq(0.9, 1.9, by=0.025)), nu = signif(exp(seq(log(0.005), log(2), length.out = 20)), 2))
+itertable = parmvals %>%
+  group_by(lambda, nu) %>%
+  mutate(iterations = exp(log(lambda)/nu))
+table1 = spread(itertable, nu, iterations)
+table1 = table1[seq(1, nrow(table1), by=4), c(1, seq(2, ncol(table1), by=3))]
+knitr::kable(signif(table1, 2), caption = "Estimated iterations to compute Z", col.names=c("lambda/nu", colnames(table1)[-1]))
+```
+
+Obviously, for $\lambda > 1$ and small $\nu$, these are very large!
+Thankfully, there is an approximation to $Z$ that works best in this
+parameter space, which is:
+
+$$Z(\lambda, \nu) = \frac{exp(\nu\lambda^{1/\nu})}{\lambda^{(\nu -1)/2\nu} (2\pi)^{(\nu - 1)/2} \sqrt{\nu}} \left\{ 1 + O(\lambda^{-1/\nu})\right\}$$
+
+So it makes sense to use this approximation when the number of iterations is too large.
+
+**compoisson** limits error by calculating the difference between the logs of successive terms.  However, since we know that after $e^{\frac{\log \lambda}{\nu}}$ iterations, the series converges faster than a geometric distribution, we can use the geometric series as an absolute upper bound.  The difference between the closed form of a geometric series $(1 / (1-\lambda)$, and the truncated $Z$ measures the absolute error of truncation.  I implmeneted this as my stopping criterion, which lets us specify maximum error.
+
+Now, with an absolute error established, we can compare the truncated calculations to
+the approximation above.  Here I set absolute log error to `1e-6` and allow the maximum
+possible number of iterations (about `r format(as.numeric(.Machine$integer.max), scientific = TRUE, digits = 2)`)
+
+
+```{r}
+itertable2 = itertable %>%
+  group_by(lambda, nu) %>%
+  do({
+    if(.$iterations > (.Machine$integer.max - 1)) { 
+      log_z_calc = NA 
+      log_z_approx = NA
+    } else {
+      log_z_calc = com_compute_log_z(.$lambda, .$nu, log_error_z = 1e-6, 
+                                maxit_z=(.Machine$integer.max - 1))
+      log_z_approx = com_compute_log_z_approx(.$lambda, .$nu)
+    }
+    data_frame(iterations=.$iterations, log_z_calc = log_z_calc,
+               log_z_approx = log_z_approx)
+  })
+```
+
+
+
+```{r}
+itertable2 = itertable2 %>%
+  group_by(lambda, nu) %>%
+  mutate(rel_error = log_z_approx - log_z_calc,
+         rel_error2 = exp(log_z_approx - log_z_calc) - 1)        
+table2 = select(itertable2, lambda, nu, rel_error) %>% spread(nu, rel_error)
+table2 = table2[seq(1, nrow(table2), by=4), c(1, seq(2, ncol(table2), by=3))]
+knitr::kable(table2, caption = "Error from the Z approximation ", col.names=c("lambda/nu", colnames(table2)[-1]))
+```
+
+Just as in @Shmueli2005, we see that the approximation is highly accurate for
+large $\lambda$ and small $\nu$.  Conveniently, this is the computationally-intensive
+space.  To generate a rule of thumb of when to use the approximation, I plot
+the error of approximation against the number of iterations required for
+an inerative calculation:
+
+```{r}
+library(ggplot2)
+library(noamtools)
+itertable2 = itertable2 %>%
+  mutate(quadrant = ifelse((lambda >= 1 && nu < 1), "lambda >= 1, nu < 1", ifelse(
+                (lambda < 1 && nu < 1), "lambda < 1, nu < 1", ifelse(
+                (lambda >= 1 & nu >= 1), "lambda >= 1, nu >= 1",
+                "lambda < 1, nu >=1"))))
+         
+                
+ggplot(subset(itertable2, !is.na(log_z_calc)), aes(x=iterations, y=abs(rel_error2), col=quadrant)) + 
+  geom_point() +
+  scale_x_log10(breaks = 10^(-6:9)) +
+  scale_y_log10() +
+  ylab("Relative Error of Z Approximation (absolute value)")
+```
+
+The increase in error at the highest number of iterations appears to be due
+to the *actual* number of iterations (as opposed to the under-estimate based
+on turn-around time) exceeding machine limits.  In general, though,
+the approximation gets very good as the number of iterations needed increases.
+A reasonable selection seems to be to select 10^5^ as a maximum number of iterations,
+which will give us a relative error of no more than 10^-5^.
+
+With these defaults, we can compare performance across packages.  Not every package
+exposes their Z functions to the API, so I compare the time for performance of
+the `dcom()` function or it's equivalent 
+```{r}
+library(microbenchmark)
+library(CompGLM)
+times = itertable %>%
+  group_by(lambda, nu) %>%
+  do({microbenchmark(cmp = dcom(1, .$lambda, .$nu), CompGLM = dcomp(1, .$lambda, .$nu, sumTo=100))})
+```
+
+```{r}
+timestable = times %>%
+  group_by(lambda, nu, expr) %>%
+  summarize(time = mean(time)) %>%
+  group_by(lambda, nu) %>%
+  summarize(ratio = time[which(expr == "CompGLM")] / time[which(expr =="cmp")]) %>%
+  mutate(ratio = signif(ratio, 2)) %>%
+  select(lambda, nu, ratio) %>%
+  spread(nu, ratio)
+table3 = timestable[seq(1, nrow(timestable), by=4), c(1, seq(2, ncol(timestable), by=3))]
+knitr::kable(table3, caption="CompGLM / cmp runtime ratio for calculating COM-Poisson likelihood", col.names=c("lambda/nu", colnames(table3)[-1]))
+```
+
+This implementation just slightly slower than the other Rcpp version.
+
+It takes too long to calculate the whole table while comparing to the pure R version, so I compare for a small subset 
+
+```{r}
+times2 = itertable %>%
+  filter(nu %in% c(0.045, 0.12, .41, 1.1, 2) && lambda %in% c(0.9, 1, 1.1, 1.5, 1.6)) %>%
+  group_by(lambda, nu) %>%
+  do({microbenchmark(cmp = dcom(1, .$lambda, .$nu), compoisson = compoissonOld::dcom(1, .$lambda, .$nu), times=2)})   
+```
+
+```{r}
+timestable2 = times2 %>%
+  group_by(lambda, nu, expr) %>%
+  summarize(time = mean(time)) %>%
+  group_by(lambda, nu) %>%
+  summarize(ratio = time[which(expr == "compoisson")] / time[which(expr =="cmp")]) %>%
+  mutate(ratio = signif(ratio, 2)) %>%
+  select(lambda, nu, ratio) %>%
+  spread(nu, ratio)
+knitr::kable(timestable2, caption="compoisson / cmp runtime ratio for calculating COM-Poisson likelihood", col.names=c("lambda/nu", colnames(timestable2)[-1]))
+```
+Look at the bottom left. The second largest ratio shows `cmp` calculating likelihoods 1,800 times faster.  This is a case where both functions are using iterative methods.  The largest ratio shows `cmp` operating *190,000* times faster by using an approximation rather than iterative methods.  An approximation with less than 0.00001 relative error.
+
+We can also look at the relative accuracy of the two methods
+
+```{r}
+accuvals = itertable2 %>%
+  group_by(lambda, nu) %>%
+  do({data.frame(
+        iterations = .$iterations,
+        log_z_calc = .$log_z_calc,
+        log_z_approx = .$log_z_approx,
+        rel_error = .$rel_error,
+        cmp_z = com_compute_log_z(.$lambda, .$nu),
+        CompGLM_Z = log(CompGLM:::Z(.$lambda, .$nu, sumTo=100))
+#        compoisson_Z = compoissonOld::com.compute.log.z(.$lambda, .$nu)
+     )}) %>%
+  mutate(rel_error_cmp = log_z_calc - cmp_z,
+         rel_error_CompGLM = log_z_calc - CompGLM_Z,
+         diff = abs(rel_error_CompGLM) - abs(rel_error_cmp))
+        # rel_error_compoisson = log_z_calc - compoisson_Z)
+```
+
+```{r}
+accutable = accuvals %>%
+  mutate(rel_error_CompGLM = signif(rel_error_CompGLM, 2)) %>%
+  select(lambda, nu, rel_error_CompGLM) %>%
+  spread(nu, rel_error_CompGLM)
+table5 = accutable[seq(1, nrow(accutable), by=4), c(1, seq(2, ncol(accutable), by=3))]
+knitr::kable(table5, caption="CompGLM / cmp runtime ratio for calculating COM-Poisson likelihood", col.names=c("lambda/nu", colnames(table5)[-1]), digits=100)
+
+```
+
+As you can see, in the computational region, the error for **CompCMP**'s $Z$ function explodes.  In theory, `CompCMP` could be more accurate because it has allows the maximum
+number of iteration to vary with a `sumTo` parameter.  However, in practice this generally fails to numerical overflow, which is solved in **cmp** and **compoisson**
+by calculating in log-space.
+
+```{r}
+accuvals2 = itertable2 %>%
+  filter(nu %in% c(0.045, 0.12, .41, 1.1, 2) && lambda %in% c(0.9, 1, 1.1, 1.5, 1.6)) %>%
+  group_by(lambda, nu) %>%
+  do({data.frame(
+        iterations = .$iterations,
+        log_z_calc = .$log_z_calc,
+        log_z_approx = .$log_z_approx,
+        rel_error = .$rel_error,
+        cmp_z = com_compute_log_z(.$lambda, .$nu),
+#        CompGLM_Z = log(CompGLM:::Z(.$lambda, .$nu, sumTo=100))
+        compoisson_Z = compoissonOld::com.compute.log.z(.$lambda, .$nu)
+     )}) %>%
+  mutate(rel_error_cmp = log_z_calc - cmp_z,
+         rel_error_compoisson = log_z_calc - compoisson_Z,
+         diff  = abs(rel_error_compoisson) - abs(rel_error_cmp))
+        # rel_error_compoisson = log_z_calc - compoisson_Z)
+```
+
+```{r}
+accutable2 = accuvals2 %>%
+  mutate(rel_error_compoisson = signif(rel_error_compoisson, 2)) %>%
+  select(lambda, nu, rel_error_compoisson) %>%
+  spread(nu, rel_error_compoisson)
+
+knitr::kable(accutable2, caption="CompGLM / cmp runtime ratio for calculating COM-Poisson likelihood", col.names=c("lambda/nu", colnames(accutable2)[-1]), digits=100)
+
+```
+
+The errors in **compoisson** are more modest - they are due to the different stopping criterion.  However, they are up to `r max(accutable2[,-1], na.rm=TRUE)` of $Z$ in this
+context, and would be larger in more computationally-intesive space, which I didn't bother to calculate here due to the long computation time.
