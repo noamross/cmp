@@ -104,15 +104,17 @@ double logsumexp(double x, double y) {
 
 //' @export
 // [[Rcpp::export]]
-double logdiffexp(double x, double y) {  // Only good for 2-length vectors
+double logdiffexp(double x, double y) {
   if (x == R_NegInf) {
-		 return (NAN); 
+		 return NAN; 
   } else if (y == R_NegInf) {
 		 return (x); 
-  } else if (x > y) {
-		 return (x + log( 1 - exp(y - x) ) ); 
-  }	else {
-		 return (y + log( 1 - exp(x - y) ) );
+  } else if (x == y) {
+    return(R_NegInf);
+  } else if (y > x) {
+    return NAN;
+  }  else {
+		 return (x + log(1 - exp(y - x))); 
   }
 }
 
