@@ -19,8 +19,9 @@
 #' @keywords models
 #' @export com.loglikelihood
 com.loglikelihood = function(x, lambda, nu, ...) {
-  if (lambda < 0 || nu < 0)
-      return (-Inf)
-  log.z = com_compute_log_z(lambda, nu, ...)
-  return (x[,2] %*% ( x[,1] * log(lambda) - nu * lfactorial(x[,1]) - log.z ))
+  if (lambda < 0 || nu < 0) {
+    return (-Inf)
+  } else {
+    return(as.vector(x[,2] %*% (dcom(x[,1], lambda, nu, log_p = TRUE))))
+  }
 }
