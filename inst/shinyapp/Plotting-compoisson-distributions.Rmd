@@ -37,6 +37,7 @@ renderPlot({
     }
   
     plot = plot +  theme_nr +
+      geom_vline(xintercept=meanval, col="red", lwd = 2) +
       annotation_custom(grob=textGrob(substitute(paste(lambda, ": ", LL, ", ",
                                                      nu, ": ", NN, ", ",
                                                      E(X), ": ", MM, ", "),
@@ -45,10 +46,6 @@ renderPlot({
                                                     MM = meanval)),
                                     x = 0.8, y= 0.8))
    
-  
-  if(meanval < max_x) {
-    plot = plot + geom_vline(xintercept=meanval, col="red", lwd = 2)
-  }
-  plot
+    plot
 })
 ```

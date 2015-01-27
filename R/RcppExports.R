@@ -138,6 +138,11 @@ com_mean <- function(lambda, nu, log_error = 1e-6, maxit = 1e6L, z = NA_real_, l
     .Call('compoisson_com_mean', PACKAGE = 'compoisson', lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel)
 }
 
+#' @export
+com_var <- function(lambda, nu, log_error = 1e-6, maxit = 1e6L, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('compoisson_com_var', PACKAGE = 'compoisson', lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel)
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call('compoisson_RcppExport_registerCCallable', PACKAGE = 'compoisson')

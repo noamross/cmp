@@ -23,7 +23,7 @@ double dcom_single(double x, double lambda, double nu, double log_z) {
 double pcom_single(double q, double lambda, double nu, double log_z) {
   double p = 0;
     for (int i = 0; i <= q; ++i) {
-      p += exp(dcom_single(i, lambda, nu, log_z));
+      p = logsumexp(p, dcom_single(i, lambda, nu, log_z));
     }
   return p;
   }
@@ -31,15 +31,15 @@ double pcom_single(double q, double lambda, double nu, double log_z) {
 double qcom_single(double p, double lambda, double nu, double log_z) {
   double q;
 
-  if (p == 0) {
+  if (p == R_NegInf) {
     q = 0;
-  } else if (p==1) {
+  } else if (p==0) {
     q = R_PosInf;
   } else {
-    double prob = 0;
+    double prob = R_NegInf;
     q = 0;
     while (prob < p) {
-      prob += exp(dcom_single(q, lambda, nu, log_z));
+      prob = logsumexp(prob, dcom_single(q, lambda, nu, log_z));
       q += 1;
     }
     q = q - 1;
@@ -140,8 +140,8 @@ NumericVector pcom(NumericVector q, double lambda, double nu, double z = NA_REAL
       p[i] = pcom_single(q[i], lambda, nu, log_z);
     }
   }    
-  if(log_p) {
-    p = Rcpp::log(p);
+  if(!log_p) {
+    p = Rcpp::exp(p);
   }
   return(p);
 }
@@ -164,8 +164,8 @@ NumericVector qcom(NumericVector p, double lambda, double nu, double z = NA_REAL
     log_z = std::log(z);
   }
   
-  if (log_p) {
-    p = Rcpp::exp(p);
+  if (!log_p) {
+    p = log(p);
   }
   
   NumericVector q(p.size());

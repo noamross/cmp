@@ -25,6 +25,7 @@ extern double qcom_single(double p, double lambda, double nu, double z);
 extern NumericVector rcom(int n, double lambda, double nu, double z, double log_error_z, int maxit_z, bool parallel);
 
 extern double com_mean(double lambda, double nu, double log_error, int maxit, double z, double log_error_z, int maxit_z, bool parallel);
+extern double com_var(double lambda, double nu, double log_error, int maxit, double z, double log_error_z, int maxit_z, bool parallel);
 
 extern double com_compute_log_z_old(double lambda, double nu, double log_error_z, int maxit_z);
 
