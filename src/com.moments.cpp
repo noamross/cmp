@@ -32,7 +32,7 @@ using namespace RcppParallel;
 //' @keywords models
 //' @export
 // [[Rcpp::export]]
-double com_mean(double lambda, double nu,
+double com_log_mean(double lambda, double nu,
                        double log_error = 1e-6, int maxit=1e6,
                        double z = NA_REAL, double log_error_z = 1e-6,
                        int maxit_z = 10000, bool parallel = false) {
@@ -41,7 +41,7 @@ double com_mean(double lambda, double nu,
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
   } 
   
-  if(exp(log(lambda)/nu) > maxit_z) return(pow(lambda, 1/nu) - (nu - 1)/(2*nu));
+  
     
   double log_z;
   
@@ -50,7 +50,11 @@ double com_mean(double lambda, double nu,
   } else {
     log_z = std::log(z);
   }
-
+  
+  if((exp(log(lambda)/nu) > maxit_z) || isinf(log_z)) {
+    return com_log_mean_approx(lambda, nu);
+    }
+  
   int j = 1;
   double ex = log(j) + dcom_single(j, lambda, nu, log_z);
   double last_ex = 0;
@@ -61,14 +65,32 @@ double com_mean(double lambda, double nu,
     last_ex = ex;
     ex = logsumexp(ex, log(j) + dcom_single(j, lambda, nu, log_z));
     j += 1;
+
   }
   
-  return exp(ex);
+  return ex;
+}
+
+//' @export
+//  [[Rcpp::export]]
+double com_log_mean_approx(double lambda, double nu) {
+  return(log((pow(lambda, 1/nu) - (nu - 1)/(2*nu))));
+}
+
+
+//' @export
+// [[Rcpp::export]]
+double com_mean(double lambda, double nu,
+                       double log_error = 1e-6, int maxit=1e6,
+                       double z = NA_REAL, double log_error_z = 1e-6,
+                       int maxit_z = 10000, bool parallel = false) {
+  return(exp(com_log_mean(lambda, nu, log_error, maxit, z, log_error_z,
+                          maxit_z, parallel)));
 }
 
 //' @export
 // [[Rcpp::export]]
-double com_var(double lambda, double nu,
+double com_log_var(double lambda, double nu,
                        double log_error = 1e-6, int maxit=1e6,
                        double z = NA_REAL, double log_error_z = 1e-6,
                        int maxit_z = 10000, bool parallel = false) {
@@ -79,12 +101,17 @@ double com_var(double lambda, double nu,
       
   double log_z;
   
+  
    if (ISNA(z)) {
     log_z = com_compute_log_z(lambda, nu, log_error_z, maxit_z);
   } else {
     log_z = std::log(z);
   }
 
+  if((exp(log(lambda)/nu) > maxit_z) || isinf(log_z)) {
+    return com_log_var_approx(lambda, nu);
+    }
+  
   int j = 1;
   double ex = log(j) + dcom_single(j, lambda, nu, log_z);
   double last_ex = 0;
@@ -93,11 +120,34 @@ double com_var(double lambda, double nu,
   
   while ((std::abs(last_ex - ex) > log_error) && j <= maxit) {
     last_ex = ex;
-    ex = logsumexp(ex, log(pow(j,2)) + dcom_single(j, lambda, nu, log_z));
+    ex = logsumexp(ex, 2 * log(j) + dcom_single(j, lambda, nu, log_z));
     j += 1;
   }
-  
-  ex = exp(ex) - pow(com_mean(lambda, nu, log_error, maxit, exp(log_z), log_error_z, maxit_z, parallel), 2);
+
+  ex = logdiffexp(ex, 2 * com_log_mean(lambda, nu, log_error, maxit, exp(log_z), log_error_z, maxit_z, parallel));
   
   return ex;
+}
+
+
+//' @export
+// [[Rcpp::export]]
+double com_var(double lambda, double nu,
+                       double log_error = 1e-6, int maxit=1e6,
+                       double z = NA_REAL, double log_error_z = 1e-6,
+                       int maxit_z = 10000, bool parallel = false) {
+  return(exp(com_log_var(lambda, nu, log_error, maxit, z, log_error_z,
+                          maxit_z, parallel)));
+}
+
+//' @export
+// [[Rcpp::export]]
+double com_log_var_approx(double lambda, double nu) {
+  return(log(lambda)/nu - log(nu));
+}
+
+//' @export
+// [[Rcpp::export]]
+double com_var_approx(double lambda, double nu) {
+  return(exp(com_log_var_approx(lambda, nu)));
 }

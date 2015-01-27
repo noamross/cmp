@@ -134,13 +134,38 @@ rcom <- function(n, lambda, nu, z = NA_real_, log_error_z = 1e-6, maxit_z = 1000
 #' v54, pp. 127-142, 2005.
 #' @keywords models
 #' @export
+com_log_mean <- function(lambda, nu, log_error = 1e-6, maxit = 1e6L, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('compoisson_com_log_mean', PACKAGE = 'compoisson', lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel)
+}
+
+#' @export
+com_log_mean_approx <- function(lambda, nu) {
+    .Call('compoisson_com_log_mean_approx', PACKAGE = 'compoisson', lambda, nu)
+}
+
+#' @export
 com_mean <- function(lambda, nu, log_error = 1e-6, maxit = 1e6L, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
     .Call('compoisson_com_mean', PACKAGE = 'compoisson', lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel)
 }
 
 #' @export
+com_log_var <- function(lambda, nu, log_error = 1e-6, maxit = 1e6L, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('compoisson_com_log_var', PACKAGE = 'compoisson', lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel)
+}
+
+#' @export
 com_var <- function(lambda, nu, log_error = 1e-6, maxit = 1e6L, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
     .Call('compoisson_com_var', PACKAGE = 'compoisson', lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel)
+}
+
+#' @export
+com_log_var_approx <- function(lambda, nu) {
+    .Call('compoisson_com_log_var_approx', PACKAGE = 'compoisson', lambda, nu)
+}
+
+#' @export
+com_var_approx <- function(lambda, nu) {
+    .Call('compoisson_com_var_approx', PACKAGE = 'compoisson', lambda, nu)
 }
 
 # Register entry points for exported C++ functions

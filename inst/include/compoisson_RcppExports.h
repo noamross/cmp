@@ -214,6 +214,44 @@ namespace compoisson {
         return Rcpp::as<NumericVector >(__result);
     }
 
+    inline double com_log_mean(double lambda, double nu, double log_error = 1e-6, int maxit = 1e6, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
+        typedef SEXP(*Ptr_com_log_mean)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_com_log_mean p_com_log_mean = NULL;
+        if (p_com_log_mean == NULL) {
+            validateSignature("double(*com_log_mean)(double,double,double,int,double,double,int,bool)");
+            p_com_log_mean = (Ptr_com_log_mean)R_GetCCallable("compoisson", "compoisson_com_log_mean");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_com_log_mean(Rcpp::wrap(lambda), Rcpp::wrap(nu), Rcpp::wrap(log_error), Rcpp::wrap(maxit), Rcpp::wrap(z), Rcpp::wrap(log_error_z), Rcpp::wrap(maxit_z), Rcpp::wrap(parallel));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<double >(__result);
+    }
+
+    inline double com_log_mean_approx(double lambda, double nu) {
+        typedef SEXP(*Ptr_com_log_mean_approx)(SEXP,SEXP);
+        static Ptr_com_log_mean_approx p_com_log_mean_approx = NULL;
+        if (p_com_log_mean_approx == NULL) {
+            validateSignature("double(*com_log_mean_approx)(double,double)");
+            p_com_log_mean_approx = (Ptr_com_log_mean_approx)R_GetCCallable("compoisson", "compoisson_com_log_mean_approx");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_com_log_mean_approx(Rcpp::wrap(lambda), Rcpp::wrap(nu));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<double >(__result);
+    }
+
     inline double com_mean(double lambda, double nu, double log_error = 1e-6, int maxit = 1e6, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
         typedef SEXP(*Ptr_com_mean)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_com_mean p_com_mean = NULL;
@@ -233,6 +271,25 @@ namespace compoisson {
         return Rcpp::as<double >(__result);
     }
 
+    inline double com_log_var(double lambda, double nu, double log_error = 1e-6, int maxit = 1e6, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
+        typedef SEXP(*Ptr_com_log_var)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_com_log_var p_com_log_var = NULL;
+        if (p_com_log_var == NULL) {
+            validateSignature("double(*com_log_var)(double,double,double,int,double,double,int,bool)");
+            p_com_log_var = (Ptr_com_log_var)R_GetCCallable("compoisson", "compoisson_com_log_var");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_com_log_var(Rcpp::wrap(lambda), Rcpp::wrap(nu), Rcpp::wrap(log_error), Rcpp::wrap(maxit), Rcpp::wrap(z), Rcpp::wrap(log_error_z), Rcpp::wrap(maxit_z), Rcpp::wrap(parallel));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<double >(__result);
+    }
+
     inline double com_var(double lambda, double nu, double log_error = 1e-6, int maxit = 1e6, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
         typedef SEXP(*Ptr_com_var)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_com_var p_com_var = NULL;
@@ -244,6 +301,44 @@ namespace compoisson {
         {
             RNGScope __rngScope;
             __result = p_com_var(Rcpp::wrap(lambda), Rcpp::wrap(nu), Rcpp::wrap(log_error), Rcpp::wrap(maxit), Rcpp::wrap(z), Rcpp::wrap(log_error_z), Rcpp::wrap(maxit_z), Rcpp::wrap(parallel));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<double >(__result);
+    }
+
+    inline double com_log_var_approx(double lambda, double nu) {
+        typedef SEXP(*Ptr_com_log_var_approx)(SEXP,SEXP);
+        static Ptr_com_log_var_approx p_com_log_var_approx = NULL;
+        if (p_com_log_var_approx == NULL) {
+            validateSignature("double(*com_log_var_approx)(double,double)");
+            p_com_log_var_approx = (Ptr_com_log_var_approx)R_GetCCallable("compoisson", "compoisson_com_log_var_approx");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_com_log_var_approx(Rcpp::wrap(lambda), Rcpp::wrap(nu));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<double >(__result);
+    }
+
+    inline double com_var_approx(double lambda, double nu) {
+        typedef SEXP(*Ptr_com_var_approx)(SEXP,SEXP);
+        static Ptr_com_var_approx p_com_var_approx = NULL;
+        if (p_com_var_approx == NULL) {
+            validateSignature("double(*com_var_approx)(double,double)");
+            p_com_var_approx = (Ptr_com_var_approx)R_GetCCallable("compoisson", "compoisson_com_var_approx");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_com_var_approx(Rcpp::wrap(lambda), Rcpp::wrap(nu));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
