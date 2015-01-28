@@ -34,13 +34,13 @@ com.fit = function(x, par=NULL, ...) {
   }
 
   options(warn = -1)
-  result = optim(par,
-                 function(p) {return (-com.loglikelihood(x, p[1], p[2], ...))},
-                 method="L-BFGS-B", lower=c(1e-10,0))
+  result = optim(log(par),
+                 function(p) {return (-com.loglikelihood(x, exp(p[1]), exp(p[2]), ...))},
+                 )
   options(warn = 0)
 
-  lambda = result$par[1]
-  nu = result$par[2]
+  lambda = exp(result$par[1])
+  nu = exp(result$par[2])
   fit = list(lambda = lambda,
              nu = nu,
              z = com_compute_z(lambda, nu),
