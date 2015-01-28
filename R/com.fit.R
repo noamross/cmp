@@ -35,7 +35,7 @@ com.fit = function(x, par=NULL, ...) {
 
   options(warn = -1)
   result = optim(log(par),
-                 function(p) {return (-com.loglikelihood(x, exp(p[1]), exp(p[2]), ...))},
+                 function(p) {return (-com_loglik(x, exp(p[1]), exp(p[2])))},
                  )
   options(warn = 0)
 

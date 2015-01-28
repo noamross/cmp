@@ -22,6 +22,6 @@ com.loglikelihood = function(x, lambda, nu, ...) {
   if (lambda < 0 || nu < 0) {
     return (-Inf)
   } else {
-    return(as.vector(x[,2] %*% (dcom(x[,1], lambda, nu, log_p = TRUE))))
+    return(x[,2] %*% (dcom(x[,1], lambda, nu, log_p = TRUE)))
   }
 }

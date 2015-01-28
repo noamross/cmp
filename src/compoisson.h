@@ -34,6 +34,8 @@ extern double com_log_var(double lambda, double nu, double log_error, int maxit,
 extern double com_var_approx(double lambda, double nu);
 extern double com_log_var_approx(double lambda, double nu);
 
+double com_loglik(NumericVector x, double lambda, double nu, double z, double log_error_z, int maxit_z, bool parallel);
+
 extern double com_compute_log_z_old(double lambda, double nu, double log_error_z, int maxit_z);
 
 #endif

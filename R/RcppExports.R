@@ -113,6 +113,11 @@ rcom <- function(n, lambda, nu, z = NA_real_, log_error_z = 1e-6, maxit_z = 1000
     .Call('compoisson_rcom', PACKAGE = 'compoisson', n, lambda, nu, z, log_error_z, maxit_z, parallel)
 }
 
+#' @export
+com_loglik <- function(x, lambda, nu, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('compoisson_com_loglik', PACKAGE = 'compoisson', x, lambda, nu, z, log_error_z, maxit_z, parallel)
+}
+
 #' Computes Expectation of a Function of a COM-Poisson Random Variable
 #'
 #' Computes an expectation of a function of a COM-Poisson random variable.

@@ -13,6 +13,6 @@ License: BSD
 Suggests: testthat,
     knitr,
     CMPControl
-LinkingTo: Rcpp, RcppParallel, BH
-Imports: Rcpp, RcppParallel, BH
+LinkingTo: Rcpp, RcppParallel, BH, RcppArmadillo
+Imports: Rcpp, RcppParallel, BH, RcppArmadillo
 VignetteBuilder: knitr

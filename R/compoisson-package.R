@@ -52,4 +52,6 @@ NULL
 #' @useDynLib compoisson
 #' @importFrom Rcpp sourceCpp
 #' @import RcppParallel
+#' @import RcppArmadillo
+
 NULL

@@ -4,6 +4,7 @@
 #ifndef __compoisson_RcppExports_h__
 #define __compoisson_RcppExports_h__
 
+#include <RcppArmadillo.h>
 #include <Rcpp.h>
 
 namespace compoisson {
@@ -212,6 +213,25 @@ namespace compoisson {
         if (__result.inherits("try-error"))
             throw Rcpp::exception(as<std::string>(__result).c_str());
         return Rcpp::as<NumericVector >(__result);
+    }
+
+    inline double com_loglik(NumericMatrix x, double lambda, double nu, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
+        typedef SEXP(*Ptr_com_loglik)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_com_loglik p_com_loglik = NULL;
+        if (p_com_loglik == NULL) {
+            validateSignature("double(*com_loglik)(NumericMatrix,double,double,double,double,int,bool)");
+            p_com_loglik = (Ptr_com_loglik)R_GetCCallable("compoisson", "compoisson_com_loglik");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_com_loglik(Rcpp::wrap(x), Rcpp::wrap(lambda), Rcpp::wrap(nu), Rcpp::wrap(z), Rcpp::wrap(log_error_z), Rcpp::wrap(maxit_z), Rcpp::wrap(parallel));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<double >(__result);
     }
 
     inline double com_log_mean(double lambda, double nu, double log_error = 1e-6, int maxit = 1e6, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
