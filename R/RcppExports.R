@@ -118,6 +118,21 @@ com_loglik <- function(x, lambda, nu, z = NA_real_, log_error_z = 1e-6, maxit_z 
     .Call('compoisson_com_loglik', PACKAGE = 'compoisson', x, lambda, nu, z, log_error_z, maxit_z, parallel)
 }
 
+#' @export
+com_loglik2 <- function(x, lambda, nu, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('compoisson_com_loglik2', PACKAGE = 'compoisson', x, lambda, nu, z, log_error_z, maxit_z, parallel)
+}
+
+#'@export
+pois_loglik <- function(x, lambda) {
+    .Call('compoisson_pois_loglik', PACKAGE = 'compoisson', x, lambda)
+}
+
+#'@export
+nb_loglik <- function(x, mu, size) {
+    .Call('compoisson_nb_loglik', PACKAGE = 'compoisson', x, mu, size)
+}
+
 #' Computes Expectation of a Function of a COM-Poisson Random Variable
 #'
 #' Computes an expectation of a function of a COM-Poisson random variable.

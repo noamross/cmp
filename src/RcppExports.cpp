@@ -427,6 +427,117 @@ RcppExport SEXP compoisson_com_loglik(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, 
     UNPROTECT(1);
     return __result;
 }
+// com_loglik2
+IntegerVector com_loglik2(NumericVector x, double lambda, double nu, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false);
+static SEXP compoisson_com_loglik2_try(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP );
+        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
+        Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
+        Rcpp::traits::input_parameter< double >::type z(zSEXP );
+        Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP );
+        Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP );
+        Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP );
+        IntegerVector __result = com_loglik2(x, lambda, nu, z, log_error_z, maxit_z, parallel);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP compoisson_com_loglik2(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(compoisson_com_loglik2_try(xSEXP, lambdaSEXP, nuSEXP, zSEXP, log_error_zSEXP, maxit_zSEXP, parallelSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// pois_loglik
+double pois_loglik(NumericMatrix x, double lambda);
+static SEXP compoisson_pois_loglik_try(SEXP xSEXP, SEXP lambdaSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP );
+        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
+        double __result = pois_loglik(x, lambda);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP compoisson_pois_loglik(SEXP xSEXP, SEXP lambdaSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(compoisson_pois_loglik_try(xSEXP, lambdaSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// nb_loglik
+double nb_loglik(NumericMatrix x, double mu, double size);
+static SEXP compoisson_nb_loglik_try(SEXP xSEXP, SEXP muSEXP, SEXP sizeSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP );
+        Rcpp::traits::input_parameter< double >::type mu(muSEXP );
+        Rcpp::traits::input_parameter< double >::type size(sizeSEXP );
+        double __result = nb_loglik(x, mu, size);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP compoisson_nb_loglik(SEXP xSEXP, SEXP muSEXP, SEXP sizeSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(compoisson_nb_loglik_try(xSEXP, muSEXP, sizeSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
 // com_log_mean
 double com_log_mean(double lambda, double nu, double log_error = 1e-6, int maxit = 1e6, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false);
 static SEXP compoisson_com_log_mean_try(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_errorSEXP, SEXP maxitSEXP, SEXP zSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
@@ -712,6 +823,9 @@ static int compoisson_RcppExport_validate(const char* sig) {
         signatures.insert("NumericVector(*qcom)(NumericVector,double,double,double,bool,double,int,bool)");
         signatures.insert("NumericVector(*rcom)(int,double,double,double,double,int,bool)");
         signatures.insert("double(*com_loglik)(NumericMatrix,double,double,double,double,int,bool)");
+        signatures.insert("IntegerVector(*com_loglik2)(NumericVector,double,double,double,double,int,bool)");
+        signatures.insert("double(*pois_loglik)(NumericMatrix,double)");
+        signatures.insert("double(*nb_loglik)(NumericMatrix,double,double)");
         signatures.insert("double(*com_log_mean)(double,double,double,int,double,double,int,bool)");
         signatures.insert("double(*com_log_mean_approx)(double,double)");
         signatures.insert("double(*com_mean)(double,double,double,int,double,double,int,bool)");
@@ -736,6 +850,9 @@ RcppExport SEXP compoisson_RcppExport_registerCCallable() {
     R_RegisterCCallable("compoisson", "compoisson_qcom", (DL_FUNC)compoisson_qcom_try);
     R_RegisterCCallable("compoisson", "compoisson_rcom", (DL_FUNC)compoisson_rcom_try);
     R_RegisterCCallable("compoisson", "compoisson_com_loglik", (DL_FUNC)compoisson_com_loglik_try);
+    R_RegisterCCallable("compoisson", "compoisson_com_loglik2", (DL_FUNC)compoisson_com_loglik2_try);
+    R_RegisterCCallable("compoisson", "compoisson_pois_loglik", (DL_FUNC)compoisson_pois_loglik_try);
+    R_RegisterCCallable("compoisson", "compoisson_nb_loglik", (DL_FUNC)compoisson_nb_loglik_try);
     R_RegisterCCallable("compoisson", "compoisson_com_log_mean", (DL_FUNC)compoisson_com_log_mean_try);
     R_RegisterCCallable("compoisson", "compoisson_com_log_mean_approx", (DL_FUNC)compoisson_com_log_mean_approx_try);
     R_RegisterCCallable("compoisson", "compoisson_com_mean", (DL_FUNC)compoisson_com_mean_try);
