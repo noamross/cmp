@@ -4,7 +4,9 @@ runtime: shiny
 ---
 
 ```{r setup, echo = FALSE, message=FALSE}
-#library(devtools)
+library(devtools)
+#install.packages('ggplot2')
+#install.packages('gridExtra')
 #install_github('noamross/noamtools')
 #install_github('noamross/compoisson')
 library(compoisson)
@@ -13,39 +15,40 @@ library(gridExtra)
 library(noamtools)
 ```
 
-```{r plot_compois, echo = FALSE, message=FALSE}
+```{r inputs, echo = FALSE, message=FALSE}
 inputPanel(
   sliderInput("lambda", label = "Lambda:",
               min = 0, max = 3, value = 1, step = 0.1),
   sliderInput("nu", label = "Nu:",
               min = 0.05, max = 5, value = 1, step = 0.01)
-  )
+)
+```
 
-
+```{r makeplot, echo = FALSE, message = FALSE}
 renderPlot({
   max_x = qcom(0.99,input$lambda,input$nu)
   data = data.frame(Value = 0:max_x,
                     Probability = dcom(0:max_x, lambda=input$lambda,
-                                       nu=input$nu))
+                                       nu=input$nu))  
   meanval = com_mean(lambda = input$lambda, nu = input$nu)
-  plot = ggplot(data, aes(x=Value, y=Probability)) 
-    if(max_x <= 50) {
-    plot = plot + geom_bar(stat="identity", position="identity") +
-                  scale_x_discrete()
-    } else {
-      plot = plot + geom_area()
-    }
+  complot = ggplot(data, aes(x=Value, y=Probability)) 
+  if(max_x <= 50) {
+    complot = complot + geom_bar(stat="identity", position="identity") + scale_x_discrete(limits=0:max_x)
+    
+  } else {
+    complot = complot + geom_area()
+  }
   
-    plot = plot +  theme_nr +
-      geom_vline(xintercept=meanval, col="red", lwd = 2) +
-      annotation_custom(grob=textGrob(substitute(paste(lambda, ": ", LL, ", ",
+  complot = complot +  theme_nr +
+    geom_vline(xintercept=meanval, col="red", lwd = 2) +
+    annotation_custom(grob=textGrob(substitute(paste(lambda, ": ", LL, "\n",
                                                      nu, ": ", NN, ", ",
                                                      E(X), ": ", MM, ", "),
                                                list(LL = input$lambda,
                                                     NN = input$nu,
-                                                    MM = meanval)),
+                                                    MM = signif(meanval,3))),
                                     x = 0.8, y= 0.8))
-   
-    plot
-})
+  
+  complot
+})  
 ```
