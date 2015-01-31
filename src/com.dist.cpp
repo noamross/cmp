@@ -36,9 +36,10 @@ double qcom_single(double p, double lambda, double nu, double log_z) {
   } else if (p==0) {
     q = R_PosInf;
   } else {
-    double prob = R_NegInf;
+    double prob = -std::numeric_limits<double>::infinity();
     q = 0;
     while (prob < p) {
+     // Rcout << prob << std::endl;
       prob = logsumexp(prob, dcom_single(q, lambda, nu, log_z));
       q += 1;
     }
@@ -155,7 +156,7 @@ NumericVector qcom(NumericVector p, double lambda, double nu, double z = NA_REAL
   if (lambda < 0 || nu < 0) {
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
   } 
-  
+    
   double log_z;
   
   if (ISNA(z)) {
@@ -164,18 +165,21 @@ NumericVector qcom(NumericVector p, double lambda, double nu, double z = NA_REAL
     log_z = std::log(z);
   }
   
+  NumericVector lp;
   if (!log_p) {
-    p = log(p);
+    lp = log(p);
+  } else {
+    lp = p;
   }
-  
-  NumericVector q(p.size());
+
+  NumericVector q(lp.size());
   
   if(parallel) {  
     Qcom qqcom(p, lambda, nu, log_z, q);
     parallelFor(0, p.size(), qqcom);
   } else {
     for (int i = 0; i < q.size(); ++i) {
-      q[i] = qcom_single(p[i], lambda, nu, log_z);
+      q[i] = qcom_single(lp[i], lambda, nu, log_z);
     }
   }
   
