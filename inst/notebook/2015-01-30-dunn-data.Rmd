@@ -1,0 +1,73 @@
+First, a little data mani
+
+```{r setup}
+library(dplyr)
+library(tidyr)
+library(magrittr)
+library(ggplot2)
+library(compoisson)
+```
+
+```{r data_cleanup, eval=FALSE}
+dunn = read.csv('data/Dunn-oyster-data.csv')
+dunn_sizes = c(Granite=9.381, Marl=9.32, Concrete=9.091, Shell=9.302)
+dunn %<>%
+  mutate(oyster_count = as.integer(Oyster.Density/dunn_sizes[as.character(Material)]))
+names(dunn) = c("river", "site", "material", "sample_date", "oyster_density", "oyster_count")
+write.csv(dunn, "data/dunn_oyster_counts.csv")
+```
+
+```{r gatherdata}
+dunn = read.csv('../../data/dunn_oyster_counts.csv')
+freqdata = dunn %>%
+  group_by(material) %>%
+  do({freq = table(.$oyster_count)
+      count = as.integer(names(freq))
+      data_frame(freq, count)}) %>%
+  arrange(material, count)
+
+```{r plotfreqs}
+ggplot(freqdata, aes(x=count, y=freq)) +
+  geom_bar(stat="identity", position="identity") +
+  facet_wrap(~material)
+```
+
+```{r fitdists}
+fits = freqdata %>%
+  group_by(material) %>%
+  do({
+    N = sum(.$count * .$freq)
+    com = com.fit(cbind(.$count, .$freq))
+    pois = pois.fit(cbind(.$count, .$freq))
+    nb = nb.fit(cbind(.$count, .$freq))
+    data_frame(N, com_lambda = com$lambda, com_nu = com$nu, com_ll = com$log.likelihood,
+               pois_lambda = pois$lambda, pois_ll = pois$log.likelihood,
+               nb_mu = nb$mu, nb_size = nb$size, nb_ll = nb$log.likelihood)
+  })
+```
+
+```{r}
+max_val = max(freqdata$count)
+
+sims = fits %>%
+  group_by(material) %>%
+  do(data_frame(count = 0:max_val,
+                sim_com = dcom(0:max_val, .$com_lambda, .$com_nu),
+                sim_pois = dpois(0:max_val, .$pois_lambda),
+                sim_nb = dnbinom(0:max_val, mu = .$nb_mu, size=.$nb_size)))
+sims = full_join(sims, freqdata, by=c('material', 'count')) %>%
+  mutate(freq = replace(freq, is.na(freq), 0)/sum(freq, na.rm=TRUE))
+
+```
+
+```{r plotsims}
+sims2 = sims %>%
+  gather(origin, frequency, sim_com, sim_pois, sim_nb, freq)
+ggplot(sims) +
+  geom_bar(mapping = aes(x = count, y = frequency),
+           data = filter(sims2, origin=="freq"),
+           stat="identity", position="identity") +
+  geom_step(mapping = aes(x = count - 0.5, y = frequency, col=origin),
+            data = filter(sims2, origin!="freq")) + 
+  facet_wrap(~material, ncol=1)
+```
