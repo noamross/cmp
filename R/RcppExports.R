@@ -6,22 +6,22 @@
 #' Computes the normalizing constant in the COM-Poisson model for given values
 #' of the parameters.
 #'
-#' \code{com_compute_z} computes the COM-Poisson normalizing constant \deqn{
+#' \code{compute_z} computes the COM-Poisson normalizing constant \deqn{
 #' }{z = Sum (lambda^j)/(j!^nu) }\deqn{ z = \sum_{i=0}^\infty
 #' \frac{\lambda^j}{(j!)^\nu} }{z = Sum (lambda^j)/(j!^nu) }\deqn{ }{z = Sum
 #' (lambda^j)/(j!^nu) } to the specified precision. If no precision is
 #' specified, then the package default is used.
 #'
-#' \code{com_compute_log_z} is equivalent to \code{log(com_compute_z(lambda,
+#' \code{compute_log_z} is equivalent to \code{log(compute_z(lambda,
 #' nu))} but provudes additional precision.
 #'
-#' @aliases com_compute_z com_compute_log_z
+#' @aliases compute_z compute_log_z
 #' @param lambda Lambda value in COM-Poisson distribution
-#' @param nu Nu value in COM-Poisson distribution
+#' @param nu Nu value in CMP distribution
 #' @param log.error Precision in the log of the normalizing constant
 #' @return The normalizing constant as a real number with specified precision.
 #' @author Jeffrey Dunn
-#' @seealso \code{\link{com.fit}}
+#' @seealso \code{\link{com_fit}}
 #' @references Shmueli, G., Minka, T. P., Kadane, J. B., Borle, S. and
 #' Boatwright, P., \dQuote{A useful distribution for fitting discrete data:
 #' Revival of the Conway-Maxwell-Poisson distribution,} J. Royal Statist. Soc.,
@@ -30,114 +30,114 @@
 #' @examples
 #'
 #' data(insurance)
-#' fit = com.fit(Lemaire)
-#' z = com_compute_z(fit$lambda, fit$nu)
+#' fit = cmp_fit(Lemaire)
+#' z = compute_z(fit$lambda, fit$nu)
 #'
 #' @export
-com_compute_z <- function(lambda, nu, log_error_z = 1e-6, maxit_z = 10000L) {
-    .Call('compoisson_com_compute_z', PACKAGE = 'compoisson', lambda, nu, log_error_z, maxit_z)
+compute_z <- function(lambda, nu, log_error_z = 1e-6, maxit_z = 10000L) {
+    .Call('cmp_compute_z', PACKAGE = 'cmp', lambda, nu, log_error_z, maxit_z)
 }
 
 #' @export
-com_compute_log_z <- function(lambda, nu, log_error_z = 1e-6, maxit_z = 10000L) {
-    .Call('compoisson_com_compute_log_z', PACKAGE = 'compoisson', lambda, nu, log_error_z, maxit_z)
+compute_log_z <- function(lambda, nu, log_error_z = 1e-6, maxit_z = 10000L) {
+    .Call('cmp_compute_log_z', PACKAGE = 'cmp', lambda, nu, log_error_z, maxit_z)
 }
 
 #' @export
-com_compute_log_z_approx <- function(lambda, nu) {
-    .Call('compoisson_com_compute_log_z_approx', PACKAGE = 'compoisson', lambda, nu)
+compute_log_z_approx <- function(lambda, nu) {
+    .Call('cmp_compute_log_z_approx', PACKAGE = 'cmp', lambda, nu)
 }
 
 #' @export
 logsumexp <- function(x) {
-    .Call('compoisson_logsumexp', PACKAGE = 'compoisson', x)
+    .Call('cmp_logsumexp', PACKAGE = 'cmp', x)
 }
 
 #' @export
 logdiffexp <- function(x, y) {
-    .Call('compoisson_logdiffexp', PACKAGE = 'compoisson', x, y)
+    .Call('cmp_logdiffexp', PACKAGE = 'cmp', x, y)
 }
 
 #' @export
-com_compute_log_z_old <- function(lambda, nu, log_error_z = 0.0001, maxit_z = 10000L) {
-    .Call('compoisson_com_compute_log_z_old', PACKAGE = 'compoisson', lambda, nu, log_error_z, maxit_z)
+compute_log_z_old <- function(lambda, nu, log_error_z = 0.0001, maxit_z = 10000L) {
+    .Call('cmp_compute_log_z_old', PACKAGE = 'cmp', lambda, nu, log_error_z, maxit_z)
 }
 
-#' The COM-Poisson Distribution
+#' The Conway-Maxwell-Poisson Distribution
 #'
-#' Probability mass function and random generation for the COM-Poisson
-#' distribution for given values of the parameters.
+#' Probability mass function and random generation for the Conway-Maxwell-
+#' Poisson Distribution distribution for given values of the parameters.
 #'
-#' Computes the probability mass function of the COM-Poisson distribution
+#' Computes the probability mass function of the CMP distribution
 #' \deqn{ }{f(x) = (1/Z) (lambda^x)/(x!^nu).}\deqn{ f(x) =
 #' \frac{1}{Z(\lambda,\nu)}\frac{\lambda^x}{(x!)^\nu}. }{f(x) = (1/Z)
 #' (lambda^x)/(x!^nu).}\deqn{ }{f(x) = (1/Z) (lambda^x)/(x!^nu).}
 #'
-#' @aliases dcom pcom qcom rcom 
+#' @aliases dcmp pcmp qcmp rcmp 
 #' @param x level to evaluate the PMF at
 #' @param lambda value of lambda parameter
 #' @param nu value of nu parameter
 #' @param z normalizing constant, computed if not specified
 #' @param n number of random values to return
 #' @param log.z natural log of z
-#' @return \code{dcom} gives the probability that a random COM-Poisson variable
-#' X takes value x.  \code{rcom} gives a vector of \code{n} random values
-#' sampled from the COM-Poisson distribution.
+#' @return \code{dcmp} gives the probability that a random CMP variable
+#' X takes value x.  \code{rcmp} gives a vector of \code{n} random values
+#' sampled from the CMP distribution.
 #' @author Jeffrey Dunn
-#' @seealso \code{\link{com.loglikelihood}}, \code{\link{com.log.density}}
+#' @seealso \code{\link{cmp_loglikelihood}},
 #' @references Shmueli, G., Minka, T. P., Kadane, J. B., Borle, S. and
 #' Boatwright, P., \dQuote{A useful distribution for fitting discrete data:
 #' Revival of the Conway-Maxwell-Poisson distribution,} J. Royal Statist. Soc.,
 #' v54, pp. 127-142, 2005.
 #' @keywords models
 #' @export
-dcom <- function(x, lambda, nu, z = NA_real_, log_p = FALSE, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
-    .Call('compoisson_dcom', PACKAGE = 'compoisson', x, lambda, nu, z, log_p, log_error_z, maxit_z, parallel)
+dcmp <- function(x, lambda, nu, z = NA_real_, log_p = FALSE, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('cmp_dcmp', PACKAGE = 'cmp', x, lambda, nu, z, log_p, log_error_z, maxit_z, parallel)
 }
 
-#' @rdname dcom
+#' @rdname dcmp
 #' @export
-pcom <- function(q, lambda, nu, z = NA_real_, log_p = FALSE, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
-    .Call('compoisson_pcom', PACKAGE = 'compoisson', q, lambda, nu, z, log_p, log_error_z, maxit_z, parallel)
+pcmp <- function(q, lambda, nu, z = NA_real_, log_p = FALSE, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('cmp_pcmp', PACKAGE = 'cmp', q, lambda, nu, z, log_p, log_error_z, maxit_z, parallel)
 }
 
-#' @rdname dcom
+#' @rdname dcmp
 #' @export
-qcom <- function(p, lambda, nu, z = NA_real_, log_p = FALSE, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
-    .Call('compoisson_qcom', PACKAGE = 'compoisson', p, lambda, nu, z, log_p, log_error_z, maxit_z, parallel)
+qcmp <- function(p, lambda, nu, z = NA_real_, log_p = FALSE, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('cmp_qcmp', PACKAGE = 'cmp', p, lambda, nu, z, log_p, log_error_z, maxit_z, parallel)
 }
 
-#' @rdname dcom
+#' @rdname dcmp
 #' @export
-rcom <- function(n, lambda, nu, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
-    .Call('compoisson_rcom', PACKAGE = 'compoisson', n, lambda, nu, z, log_error_z, maxit_z, parallel)
-}
-
-#' @export
-com_loglik <- function(x, lambda, nu, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
-    .Call('compoisson_com_loglik', PACKAGE = 'compoisson', x, lambda, nu, z, log_error_z, maxit_z, parallel)
+rcmp <- function(n, lambda, nu, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('cmp_rcmp', PACKAGE = 'cmp', n, lambda, nu, z, log_error_z, maxit_z, parallel)
 }
 
 #' @export
-com_loglik2 <- function(x, lambda, nu, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
-    .Call('compoisson_com_loglik2', PACKAGE = 'compoisson', x, lambda, nu, z, log_error_z, maxit_z, parallel)
+cmp_loglik <- function(x, lambda, nu, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('cmp_cmp_loglik', PACKAGE = 'cmp', x, lambda, nu, z, log_error_z, maxit_z, parallel)
+}
+
+#' @export
+cmp_loglik2 <- function(x, lambda, nu, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('cmp_cmp_loglik2', PACKAGE = 'cmp', x, lambda, nu, z, log_error_z, maxit_z, parallel)
 }
 
 #'@export
 pois_loglik <- function(x, lambda) {
-    .Call('compoisson_pois_loglik', PACKAGE = 'compoisson', x, lambda)
+    .Call('cmp_pois_loglik', PACKAGE = 'cmp', x, lambda)
 }
 
 #'@export
 nb_loglik <- function(x, mu, size) {
-    .Call('compoisson_nb_loglik', PACKAGE = 'compoisson', x, mu, size)
+    .Call('cmp_nb_loglik', PACKAGE = 'cmp', x, mu, size)
 }
 
-#' Computes Expectation of a Function of a COM-Poisson Random Variable
+#' Computes Expectation of a Function of a CMP Random Variable
 #'
-#' Computes an expectation of a function of a COM-Poisson random variable.
+#' Computes an expectation of a function of a CMP random variable.
 #'
-#' Computes the expectation \eqn{E[f(X)]}{E[f(X)]} where X is a COM-Poisson
+#' Computes the expectation \eqn{E[f(X)]}{E[f(X)]} where X is a CMP
 #' random variable.
 #'
 #' @param f function taking as a single argument the value of x
@@ -146,49 +146,49 @@ nb_loglik <- function(x, mu, size) {
 #' @param log.error precision in the log of the expectation
 #' @return The expectation as a real number.
 #' @author Jeffrey Dunn
-#' @seealso \code{\link{com.mean}}, \code{\link{com.var}},
-#' \code{\link{com.fit}}
+#' @seealso \code{\link{cmp_mean}}, \code{\link{cmp_var}},
+#' \code{\link{cmp_fit}}
 #' @references Shmueli, G., Minka, T. P., Kadane, J. B., Borle, S. and
 #' Boatwright, P., \dQuote{A useful distribution for fitting discrete data:
 #' Revival of the Conway-Maxwell-Poisson distribution,} J. Royal Statist. Soc.,
 #' v54, pp. 127-142, 2005.
 #' @keywords models
 #' @export
-com_log_mean <- function(lambda, nu, log_error = 1e-6, maxit = 1e6L, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
-    .Call('compoisson_com_log_mean', PACKAGE = 'compoisson', lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel)
+cmp_log_mean <- function(lambda, nu, log_error = 1e-6, maxit = 1e6L, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('cmp_cmp_log_mean', PACKAGE = 'cmp', lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel)
 }
 
 #' @export
-com_log_mean_approx <- function(lambda, nu) {
-    .Call('compoisson_com_log_mean_approx', PACKAGE = 'compoisson', lambda, nu)
+cmp_log_mean_approx <- function(lambda, nu) {
+    .Call('cmp_cmp_log_mean_approx', PACKAGE = 'cmp', lambda, nu)
 }
 
 #' @export
-com_mean <- function(lambda, nu, log_error = 1e-6, maxit = 1e6L, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
-    .Call('compoisson_com_mean', PACKAGE = 'compoisson', lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel)
+cmp_mean <- function(lambda, nu, log_error = 1e-6, maxit = 1e6L, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('cmp_cmp_mean', PACKAGE = 'cmp', lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel)
 }
 
 #' @export
-com_log_var <- function(lambda, nu, log_error = 1e-6, maxit = 1e6L, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
-    .Call('compoisson_com_log_var', PACKAGE = 'compoisson', lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel)
+cmp_log_var <- function(lambda, nu, log_error = 1e-6, maxit = 1e6L, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('cmp_cmp_log_var', PACKAGE = 'cmp', lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel)
 }
 
 #' @export
-com_var <- function(lambda, nu, log_error = 1e-6, maxit = 1e6L, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
-    .Call('compoisson_com_var', PACKAGE = 'compoisson', lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel)
+cmp_var <- function(lambda, nu, log_error = 1e-6, maxit = 1e6L, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('cmp_cmp_var', PACKAGE = 'cmp', lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel)
 }
 
 #' @export
-com_log_var_approx <- function(lambda, nu) {
-    .Call('compoisson_com_log_var_approx', PACKAGE = 'compoisson', lambda, nu)
+cmp_log_var_approx <- function(lambda, nu) {
+    .Call('cmp_cmp_log_var_approx', PACKAGE = 'cmp', lambda, nu)
 }
 
 #' @export
-com_var_approx <- function(lambda, nu) {
-    .Call('compoisson_com_var_approx', PACKAGE = 'compoisson', lambda, nu)
+cmp_var_approx <- function(lambda, nu) {
+    .Call('cmp_cmp_var_approx', PACKAGE = 'cmp', lambda, nu)
 }
 
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
-    .Call('compoisson_RcppExport_registerCCallable', PACKAGE = 'compoisson')
+    .Call('cmp_RcppExport_registerCCallable', PACKAGE = 'cmp')
 })

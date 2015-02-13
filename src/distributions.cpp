@@ -1,6 +1,6 @@
 #include <Rcpp.h>
 #include <math.h>
-#include "compoisson.h"
+#include "cmp.h"
 #include "parallel-workers.h"
 
 using namespace Rcpp;
@@ -10,7 +10,7 @@ using namespace RcppParallel;
 // [[Rcpp::depends(RcppParallel)]]
 // [[Rcpp::interfaces(r, cpp)]]
 
-double dcom_single(double x, double lambda, double nu, double log_z) {
+double dcmp_single(double x, double lambda, double nu, double log_z) {
   double d;
   if (x < 0 || x != floor(x)) {
     d = R_NegInf; 
@@ -20,15 +20,15 @@ double dcom_single(double x, double lambda, double nu, double log_z) {
   return d;
   }
 
-double pcom_single(double q, double lambda, double nu, double log_z) {
+double pcmp_single(double q, double lambda, double nu, double log_z) {
   double p = 0;
     for (int i = 0; i <= q; ++i) {
-      p = logsumexp(p, dcom_single(i, lambda, nu, log_z));
+      p = logsumexp(p, dcmp_single(i, lambda, nu, log_z));
     }
   return p;
   }
 
-double qcom_single(double p, double lambda, double nu, double log_z) {
+double qcmp_single(double p, double lambda, double nu, double log_z) {
   double q;
 
   if (p == R_NegInf) {
@@ -40,7 +40,7 @@ double qcom_single(double p, double lambda, double nu, double log_z) {
     q = 0;
     while (prob < p) {
      // Rcout << prob << std::endl;
-      prob = logsumexp(prob, dcom_single(q, lambda, nu, log_z));
+      prob = logsumexp(prob, dcmp_single(q, lambda, nu, log_z));
       q += 1;
     }
     q = q - 1;
@@ -51,28 +51,28 @@ double qcom_single(double p, double lambda, double nu, double log_z) {
 
 
 
-//' The COM-Poisson Distribution
+//' The Conway-Maxwell-Poisson Distribution
 //'
-//' Probability mass function and random generation for the COM-Poisson
-//' distribution for given values of the parameters.
+//' Probability mass function and random generation for the Conway-Maxwell-
+//' Poisson Distribution distribution for given values of the parameters.
 //'
-//' Computes the probability mass function of the COM-Poisson distribution
+//' Computes the probability mass function of the CMP distribution
 //' \deqn{ }{f(x) = (1/Z) (lambda^x)/(x!^nu).}\deqn{ f(x) =
 //' \frac{1}{Z(\lambda,\nu)}\frac{\lambda^x}{(x!)^\nu}. }{f(x) = (1/Z)
 //' (lambda^x)/(x!^nu).}\deqn{ }{f(x) = (1/Z) (lambda^x)/(x!^nu).}
 //'
-//' @aliases dcom pcom qcom rcom 
+//' @aliases dcmp pcmp qcmp rcmp 
 //' @param x level to evaluate the PMF at
 //' @param lambda value of lambda parameter
 //' @param nu value of nu parameter
 //' @param z normalizing constant, computed if not specified
 //' @param n number of random values to return
 //' @param log.z natural log of z
-//' @return \code{dcom} gives the probability that a random COM-Poisson variable
-//' X takes value x.  \code{rcom} gives a vector of \code{n} random values
-//' sampled from the COM-Poisson distribution.
+//' @return \code{dcmp} gives the probability that a random CMP variable
+//' X takes value x.  \code{rcmp} gives a vector of \code{n} random values
+//' sampled from the CMP distribution.
 //' @author Jeffrey Dunn
-//' @seealso \code{\link{com.loglikelihood}}, \code{\link{com.log.density}}
+//' @seealso \code{\link{cmp_loglikelihood}},
 //' @references Shmueli, G., Minka, T. P., Kadane, J. B., Borle, S. and
 //' Boatwright, P., \dQuote{A useful distribution for fitting discrete data:
 //' Revival of the Conway-Maxwell-Poisson distribution,} J. Royal Statist. Soc.,
@@ -80,7 +80,7 @@ double qcom_single(double p, double lambda, double nu, double log_z) {
 //' @keywords models
 //' @export
 // [[Rcpp::export]]
-NumericVector dcom(NumericVector x, double lambda, double nu, double z = NA_REAL, bool log_p = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
+NumericVector dcmp(NumericVector x, double lambda, double nu, double z = NA_REAL, bool log_p = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
   
   if (lambda < 0 || nu < 0) {
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
@@ -89,7 +89,7 @@ NumericVector dcom(NumericVector x, double lambda, double nu, double z = NA_REAL
   double log_z;
   
   if (ISNA(z)) {
-    log_z = com_compute_log_z(lambda, nu, log_error_z, maxit_z);
+    log_z = compute_log_z(lambda, nu, log_error_z, maxit_z);
   } else {
     log_z = std::log(z);
   }
@@ -97,12 +97,12 @@ NumericVector dcom(NumericVector x, double lambda, double nu, double z = NA_REAL
   NumericVector d(x.size());
   
   if(parallel) {
-    Dcom ddcom(x, lambda, nu, log_z, d);
-    parallelFor(0, x.size(), ddcom);
+    Dcmp ddcmp(x, lambda, nu, log_z, d);
+    parallelFor(0, x.size(), ddcmp);
     
   } else {
     for (int i = 0; i < x.size(); ++i) {  
-      d[i] = dcom_single(x[i], lambda, nu, log_z);
+      d[i] = dcmp_single(x[i], lambda, nu, log_z);
     }
   }
   
@@ -114,10 +114,10 @@ NumericVector dcom(NumericVector x, double lambda, double nu, double z = NA_REAL
 }
 
 
-//' @rdname dcom
+//' @rdname dcmp
 //' @export
 // [[Rcpp::export]]
-NumericVector pcom(NumericVector q, double lambda, double nu, double z = NA_REAL, bool log_p = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
+NumericVector pcmp(NumericVector q, double lambda, double nu, double z = NA_REAL, bool log_p = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
   
   if (lambda < 0 || nu < 0) {
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
@@ -126,7 +126,7 @@ NumericVector pcom(NumericVector q, double lambda, double nu, double z = NA_REAL
   double log_z;
   
   if (ISNA(z)) {
-    log_z = com_compute_log_z(lambda, nu, log_error_z, maxit_z);
+    log_z = compute_log_z(lambda, nu, log_error_z, maxit_z);
   } else {
     log_z = std::log(z);
   }
@@ -134,11 +134,11 @@ NumericVector pcom(NumericVector q, double lambda, double nu, double z = NA_REAL
   NumericVector p(q.size());
   
   if(parallel) {
-    Pcom ppcom(q, lambda, nu, log_z, p);
-    parallelFor(0, q.size(), ppcom);  
+    Pcmp ppcmp(q, lambda, nu, log_z, p);
+    parallelFor(0, q.size(), ppcmp);  
   } else {
     for (int i = 0; i < q.size(); ++i) {
-      p[i] = pcom_single(q[i], lambda, nu, log_z);
+      p[i] = pcmp_single(q[i], lambda, nu, log_z);
     }
   }    
   if(!log_p) {
@@ -148,10 +148,10 @@ NumericVector pcom(NumericVector q, double lambda, double nu, double z = NA_REAL
 }
 
 
-//' @rdname dcom
+//' @rdname dcmp
 //' @export
 // [[Rcpp::export]]
-NumericVector qcom(NumericVector p, double lambda, double nu, double z = NA_REAL, bool log_p = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
+NumericVector qcmp(NumericVector p, double lambda, double nu, double z = NA_REAL, bool log_p = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
   
   if (lambda < 0 || nu < 0) {
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
@@ -160,7 +160,7 @@ NumericVector qcom(NumericVector p, double lambda, double nu, double z = NA_REAL
   double log_z;
   
   if (ISNA(z)) {
-    log_z = com_compute_log_z(lambda, nu, log_error_z, maxit_z);
+    log_z = compute_log_z(lambda, nu, log_error_z, maxit_z);
   } else {
     log_z = std::log(z);
   }
@@ -175,20 +175,20 @@ NumericVector qcom(NumericVector p, double lambda, double nu, double z = NA_REAL
   NumericVector q(lp.size());
   
   if(parallel) {  
-    Qcom qqcom(p, lambda, nu, log_z, q);
-    parallelFor(0, p.size(), qqcom);
+    Qcmp qqcmp(p, lambda, nu, log_z, q);
+    parallelFor(0, p.size(), qqcmp);
   } else {
     for (int i = 0; i < q.size(); ++i) {
-      q[i] = qcom_single(lp[i], lambda, nu, log_z);
+      q[i] = qcmp_single(lp[i], lambda, nu, log_z);
     }
   }
   
   return q;
 }
 
-//' @rdname dcom
+//' @rdname dcmp
 //' @export
 // [[Rcpp::export]]
-NumericVector rcom(int n, double lambda, double nu, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
-    return(qcom(runif(n, 0, 1), lambda, nu, z, false, log_error_z, maxit_z, parallel));
+NumericVector rcmp(int n, double lambda, double nu, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
+    return(qcmp(runif(n, 0, 1), lambda, nu, z, false, log_error_z, maxit_z, parallel));
 }

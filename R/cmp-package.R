@@ -3,17 +3,13 @@
 #' Provides routines for computing the density of the Conway-Maxwell Poisson
 #' distribution and fitting parameters to data.
 #'
-#' \tabular{ll}{ Package: \tab compoisson\cr Type: \tab Package\cr Version:
+#' \tabular{ll}{ Package: \tab cmp\ cr Type: \tab Package\cr Version:
 #' \tab 0.2\cr Date: \tab 2008-04-21\cr License: \tab BSD\cr }
 #'
-#' @name compoisson-package
-#' @aliases compoisson-package compoisson
+#' @name cmp-package
+#' @aliases cmp-package cmp
 #' @docType package
-#' @author Jeffrey Dunn
-#'
-#' Maintainer: Jeffrey Dunn <jsd115@@gmail.com>
-#' @seealso See \code{\link{dcom}} for calculating the pmf of the distribution,
-#' see \code{\link{com.fit}} for fitting parameters.
+#' @author Noam Ross
 #' @references Shmueli, G., Minka, T. P., Kadane, J. B., Borle, S. and
 #' Boatwright, P., \dQuote{A useful distribution for fitting discrete data:
 #' Revival of the Conway-Maxwell-Poisson distribution,} J. Royal Statist. Soc.,
@@ -29,7 +25,7 @@ NULL
 #' 1990's. The Buhlmann dataset originates from aggregate accident claims in
 #' 1961 for a class of auto insurance in Switzerland.
 #'
-#' @name compoisson-data
+#' @name cmp-data
 #' @aliases insurance Lemaire Buhlmann
 #' @docType data
 #' @format Each dataset is a matrix with two columns. The first column contains
@@ -49,7 +45,7 @@ NULL
 #'
 NULL
 
-#' @useDynLib compoisson
+#' @useDynLib cmp
 #' @importFrom Rcpp sourceCpp
 #' @import RcppParallel
 #' @import RcppArmadillo

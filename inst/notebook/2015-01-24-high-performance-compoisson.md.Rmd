@@ -151,7 +151,7 @@ It takes too long to calculate the whole table while comparing to the pure R ver
 times2 = itertable %>%
   filter(nu %in% c(0.045, 0.12, .41, 1.1, 2) && lambda %in% c(0.9, 1, 1.1, 1.5, 1.6)) %>%
   group_by(lambda, nu) %>%
-  do({microbenchmark(cmp = dcom(1, .$lambda, .$nu), compoisson = compoissonOld::dcom(1, .$lambda, .$nu), times=2)})   
+  do({microbenchmark(cmp = dcom(1, .$lambda, .$nu), compoisson = compoisson::dcom(1, .$lambda, .$nu), times=2)})   
 ```
 
 ```{r}
@@ -179,7 +179,7 @@ accuvals = itertable2 %>%
         rel_error = .$rel_error,
         cmp_z = com_compute_log_z(.$lambda, .$nu),
         CompGLM_Z = log(CompGLM:::Z(.$lambda, .$nu, sumTo=100))
-#        compoisson_Z = compoissonOld::com.compute.log.z(.$lambda, .$nu)
+#        compoisson_Z = compoisson::com.compute.log.z(.$lambda, .$nu)
      )}) %>%
   mutate(rel_error_cmp = log_z_calc - cmp_z,
          rel_error_CompGLM = log_z_calc - CompGLM_Z,
@@ -212,7 +212,7 @@ accuvals2 = itertable2 %>%
         rel_error = .$rel_error,
         cmp_z = com_compute_log_z(.$lambda, .$nu),
 #        CompGLM_Z = log(CompGLM:::Z(.$lambda, .$nu, sumTo=100))
-        compoisson_Z = compoissonOld::com.compute.log.z(.$lambda, .$nu)
+        compoisson_Z = compoisson::com.compute.log.z(.$lambda, .$nu)
      )}) %>%
   mutate(rel_error_cmp = log_z_calc - cmp_z,
          rel_error_compoisson = log_z_calc - compoisson_Z,

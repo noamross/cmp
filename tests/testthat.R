@@ -1,3 +1,3 @@
 library(testthat)
-library(compoisson)
-# test_check("compoisson")
+library(cmp)
+# test_check("cmp")

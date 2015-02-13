@@ -37,9 +37,9 @@ fits = freqdata %>%
   group_by(material) %>%
   do({
     N = sum(.$count * .$freq)
-    com = com.fit(cbind(.$count, .$freq))
-    pois = pois.fit(cbind(.$count, .$freq))
-    nb = nb.fit(cbind(.$count, .$freq))
+    com = cmp_fit(cbind(.$count, .$freq))
+    pois = pois_fit(cbind(.$count, .$freq))
+    nb = nb_fit(cbind(.$count, .$freq))
     data_frame(N, com_lambda = com$lambda, com_nu = com$nu, com_ll = com$log.likelihood,
                pois_lambda = pois$lambda, pois_ll = pois$log.likelihood,
                nb_mu = nb$mu, nb_size = nb$size, nb_ll = nb$log.likelihood)

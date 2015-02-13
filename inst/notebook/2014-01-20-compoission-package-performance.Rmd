@@ -30,13 +30,13 @@ library(scales)
 ```
 
 ```{r}
-fit_bench = microbenchmark(com.fit(Lemaire), compoissonOld::com.fit(Lemaire))
+fit_bench = microbenchmark(cmp_fitfit(Lemaire), compoisson::com.fit(Lemaire))
 
 dcom_compare = expand.grid(lambda = 1, nu = 10^c(-3:3)) %>%
                group_by(nu) %>%
                do({
                  microbenchmark(dcom(0:100, .$lambda, .$nu),
-                                compoissonOld::dcom(0:100,.$lambda,.$nu))
+                                compoisson::dcom(0:100,.$lambda,.$nu))
                  }) %>%
                 group_by(nu, expr) %>%
                 summarise(mean_time = mean(time))
@@ -49,7 +49,7 @@ rcom_compare = expand.grid(fn=c(dcom, rcom), pkg = c('new', 'old'), lambda = 1, 
                group_by(nu) %>%
                do({
                  microbenchmark(rcom(100, .$lambda, .$nu),
-                                compoissonOld::dcom(100,.$lambda,.$nu))
+                                compoisson::dcom(100,.$lambda,.$nu))
                  }) %>%
                 group_by(nu, expr) %>%
                 summarise(mean_time = mean(time)/1e6) %>%

@@ -1,6 +1,6 @@
-#' Computes COM-Poisson Regression
+#' Computes CMP Regression
 #'
-#' Computes the maximum likelihood estimates of the COM-Poisson model for given
+#' Computes the maximum likelihood estimates of the CMP model for given
 #' count data.
 #'
 #' The argument x should consist of a matrix where the first column is the
@@ -22,11 +22,11 @@
 #' @examples
 #'
 #'   data(insurance)
-#'   com.fit(Lemaire)
+#'   cmp_fit(Lemaire)
 #'
 #' @importFrom stats optim
-#' @export com.fit
-com.fit = function(x, par=NULL, ...) {
+#' @export cmp_fit
+cmp_fit = function(x, par=NULL, ...) {
 
   if (is.null(par)) {
     xbar = (x[,1] %*% x[,2]) / sum(x[,2])
@@ -35,7 +35,7 @@ com.fit = function(x, par=NULL, ...) {
 
   options(warn = -1)
   result = optim(log(par),
-                 function(p) {return (-com_loglik(x, exp(p[1]), exp(p[2])))},
+                 function(p) {return (-cmp_loglik(x, exp(p[1]), exp(p[2])))},
                  )
   options(warn = 0)
 
@@ -43,15 +43,15 @@ com.fit = function(x, par=NULL, ...) {
   nu = exp(result$par[2])
   fit = list(lambda = lambda,
              nu = nu,
-             z = com_compute_z(lambda, nu),
-             fitted.values = sum(x[,2]) * dcom(x[,1], lambda, nu),
-             log.likelihood = com_loglik(x, lambda, nu))
+             z = compute_z(lambda, nu),
+             fitted.values = sum(x[,2]) * dcmp(x[,1], lambda, nu),
+             log.likelihood = cmp_loglik(x, lambda, nu))
   return (fit)
 }
 
 #' @importFrom stats optim
 #' @export
-pois.fit = function(x, par=NULL) {
+pois_fit = function(x, par=NULL) {
 
   if (is.null(par)) {
     par = (x[,1] %*% x[,2]) / sum(x[,2])
@@ -76,8 +76,8 @@ pois.fit = function(x, par=NULL) {
 }
 
 #' @importFrom stats optim
-#' @export nb.fit
-nb.fit = function(x, par=NULL) {
+#' @export nb_fit
+nb_fit = function(x, par=NULL) {
 
   if (is.null(par)) {
     xbar = (x[,1] %*% x[,2]) / sum(x[,2])

@@ -1,6 +1,6 @@
 #include <Rcpp.h>
 #include <math.h>
-#include "compoisson.h"
+#include "cmp.h"
 
 using namespace Rcpp;
 
@@ -11,22 +11,22 @@ using namespace Rcpp;
 //' Computes the normalizing constant in the COM-Poisson model for given values
 //' of the parameters.
 //'
-//' \code{com_compute_z} computes the COM-Poisson normalizing constant \deqn{
+//' \code{compute_z} computes the COM-Poisson normalizing constant \deqn{
 //' }{z = Sum (lambda^j)/(j!^nu) }\deqn{ z = \sum_{i=0}^\infty
 //' \frac{\lambda^j}{(j!)^\nu} }{z = Sum (lambda^j)/(j!^nu) }\deqn{ }{z = Sum
 //' (lambda^j)/(j!^nu) } to the specified precision. If no precision is
 //' specified, then the package default is used.
 //'
-//' \code{com_compute_log_z} is equivalent to \code{log(com_compute_z(lambda,
+//' \code{compute_log_z} is equivalent to \code{log(compute_z(lambda,
 //' nu))} but provudes additional precision.
 //'
-//' @aliases com_compute_z com_compute_log_z
+//' @aliases compute_z compute_log_z
 //' @param lambda Lambda value in COM-Poisson distribution
-//' @param nu Nu value in COM-Poisson distribution
+//' @param nu Nu value in CMP distribution
 //' @param log.error Precision in the log of the normalizing constant
 //' @return The normalizing constant as a real number with specified precision.
 //' @author Jeffrey Dunn
-//' @seealso \code{\link{com.fit}}
+//' @seealso \code{\link{com_fit}}
 //' @references Shmueli, G., Minka, T. P., Kadane, J. B., Borle, S. and
 //' Boatwright, P., \dQuote{A useful distribution for fitting discrete data:
 //' Revival of the Conway-Maxwell-Poisson distribution,} J. Royal Statist. Soc.,
@@ -35,19 +35,19 @@ using namespace Rcpp;
 //' @examples
 //'
 //' data(insurance)
-//' fit = com.fit(Lemaire)
-//' z = com_compute_z(fit$lambda, fit$nu)
+//' fit = cmp_fit(Lemaire)
+//' z = compute_z(fit$lambda, fit$nu)
 //'
 //' @export
 // [[Rcpp::export]]
-double com_compute_z(double lambda, double nu, double log_error_z = 1e-6, int maxit_z = 10000) {
-  return(exp(com_compute_log_z(lambda, nu, log_error_z, maxit_z = 10000)));
+double compute_z(double lambda, double nu, double log_error_z = 1e-6, int maxit_z = 10000) {
+  return(exp(compute_log_z(lambda, nu, log_error_z, maxit_z = 10000)));
 }
 
 
 //' @export
 // [[Rcpp::export]]
-double com_compute_log_z(double lambda, double nu, double log_error_z = 1e-6, int maxit_z = 10000) {  
+double compute_log_z(double lambda, double nu, double log_error_z = 1e-6, int maxit_z = 10000) {  
   // Perform argument checking
   if (lambda < 0 || nu < 0) {
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
@@ -55,7 +55,7 @@ double com_compute_log_z(double lambda, double nu, double log_error_z = 1e-6, in
   
   double min_j = exp(log(lambda)/nu);  //Calculate the point at which the series will start to converge
  
-  if (min_j > maxit_z) return com_compute_log_z_approx(lambda, nu);  //Use approximation for long computations
+  if (min_j > maxit_z) return compute_log_z_approx(lambda, nu);  //Use approximation for long computations
   
   // Initialize values
   double log_z = R_NegInf;
@@ -79,7 +79,7 @@ double com_compute_log_z(double lambda, double nu, double log_error_z = 1e-6, in
 
 //' @export
 // [[Rcpp::export]]
-double com_compute_log_z_approx(double lambda, double nu) {
+double compute_log_z_approx(double lambda, double nu) {
     return nu*pow(lambda, 1/nu) - ((nu-1)/(2*nu))*log(lambda) - ((nu - 1)/2)*log(2*M_PI) - 0.5*log(nu);
   }
 
@@ -122,7 +122,7 @@ double logdiffexp(double x, double y) {
 
 //' @export
 // [[Rcpp::export]]
-double com_compute_log_z_old(double lambda, double nu, double log_error_z = 0.0001, int maxit_z = 10000) {
+double compute_log_z_old(double lambda, double nu, double log_error_z = 0.0001, int maxit_z = 10000) {
   // Perform argument checking
   if (lambda < 0 || nu < 0) {
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");

@@ -5,7 +5,7 @@
 #include <math.h>
 #include <RcppParallel.h>
 #include <boost/bind.hpp>
-#include "compoisson.h"
+#include "cmp.h"
 
 using namespace RcppParallel;
 
@@ -13,7 +13,7 @@ using namespace RcppParallel;
 // [[Rcpp::depends(RcppParallel)]]
 
 
-struct Dcom : public Worker {   
+struct Dcmp : public Worker {   
    // source vector and parameters
    const RVector<double> input;
    const double lambda;
@@ -24,7 +24,7 @@ struct Dcom : public Worker {
    RVector<double> output;
    
    // initialize with source and destination
-   Dcom(const NumericVector input, const double lambda, const double nu, const double log_z, NumericVector output) 
+   Dcmp(const NumericVector input, const double lambda, const double nu, const double log_z, NumericVector output) 
       : input(input), lambda(lambda), nu(nu), log_z(log_z), output(output) {}
    
    // take the square root of the range of elements requested
@@ -32,11 +32,11 @@ struct Dcom : public Worker {
       std::transform(input.begin() + begin, 
                      input.begin() + end, 
                      output.begin() + begin, 
-                     ::boost::bind(&dcom_single, _1, lambda, nu, log_z));
+                     ::boost::bind(&dcmp_single, _1, lambda, nu, log_z));
    }
 };
 
-struct Pcom : public Worker {   
+struct Pcmp : public Worker {   
    // source vector and parameters
    const RVector<double> input;
    const double lambda;
@@ -47,7 +47,7 @@ struct Pcom : public Worker {
    RVector<double> output;
    
    // initialize with source and destination
-   Pcom(const NumericVector input, const double lambda, const double nu, const double log_z, NumericVector output) 
+   Pcmp(const NumericVector input, const double lambda, const double nu, const double log_z, NumericVector output) 
       : input(input), lambda(lambda), nu(nu), log_z(log_z), output(output) {}
    
    // take the square root of the range of elements requested
@@ -55,11 +55,11 @@ struct Pcom : public Worker {
       std::transform(input.begin() + begin, 
                      input.begin() + end, 
                      output.begin() + begin, 
-                     ::boost::bind(&pcom_single, _1, lambda, nu, log_z));
+                     ::boost::bind(&pcmp_single, _1, lambda, nu, log_z));
    }
 };
 
-struct Qcom : public Worker {   
+struct Qcmp : public Worker {   
    // source vector and parameters
    const RVector<double> input;
    const double lambda;
@@ -70,7 +70,7 @@ struct Qcom : public Worker {
    RVector<double> output;
    
    // initialize with source and destination
-   Qcom(const NumericVector input, const double lambda, const double nu, const double log_z, NumericVector output) 
+   Qcmp(const NumericVector input, const double lambda, const double nu, const double log_z, NumericVector output) 
       : input(input), lambda(lambda), nu(nu), log_z(log_z), output(output) {}
    
    // take the square root of the range of elements requested
@@ -78,7 +78,7 @@ struct Qcom : public Worker {
       std::transform(input.begin() + begin, 
                      input.begin() + end, 
                      output.begin() + begin, 
-                     ::boost::bind(&qcom_single, _1, lambda, nu, log_z));
+                     ::boost::bind(&qcmp_single, _1, lambda, nu, log_z));
    }
 };
 

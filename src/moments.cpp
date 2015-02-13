@@ -1,6 +1,6 @@
 #include <Rcpp.h>
 #include <math.h>
-#include "compoisson.h"
+#include "cmp.h"
 #include "parallel-workers.h"
 
 using namespace Rcpp;
@@ -10,11 +10,11 @@ using namespace RcppParallel;
 // [[Rcpp::depends(RcppParallel)]]
 // [[Rcpp::interfaces(r, cpp)]]
 
-//' Computes Expectation of a Function of a COM-Poisson Random Variable
+//' Computes Expectation of a Function of a CMP Random Variable
 //'
-//' Computes an expectation of a function of a COM-Poisson random variable.
+//' Computes an expectation of a function of a CMP random variable.
 //'
-//' Computes the expectation \eqn{E[f(X)]}{E[f(X)]} where X is a COM-Poisson
+//' Computes the expectation \eqn{E[f(X)]}{E[f(X)]} where X is a CMP
 //' random variable.
 //'
 //' @param f function taking as a single argument the value of x
@@ -23,8 +23,8 @@ using namespace RcppParallel;
 //' @param log.error precision in the log of the expectation
 //' @return The expectation as a real number.
 //' @author Jeffrey Dunn
-//' @seealso \code{\link{com.mean}}, \code{\link{com.var}},
-//' \code{\link{com.fit}}
+//' @seealso \code{\link{cmp_mean}}, \code{\link{cmp_var}},
+//' \code{\link{cmp_fit}}
 //' @references Shmueli, G., Minka, T. P., Kadane, J. B., Borle, S. and
 //' Boatwright, P., \dQuote{A useful distribution for fitting discrete data:
 //' Revival of the Conway-Maxwell-Poisson distribution,} J. Royal Statist. Soc.,
@@ -32,7 +32,7 @@ using namespace RcppParallel;
 //' @keywords models
 //' @export
 // [[Rcpp::export]]
-double com_log_mean(double lambda, double nu,
+double cmp_log_mean(double lambda, double nu,
                        double log_error = 1e-6, int maxit=1e6,
                        double z = NA_REAL, double log_error_z = 1e-6,
                        int maxit_z = 10000, bool parallel = false) {
@@ -46,24 +46,24 @@ double com_log_mean(double lambda, double nu,
   double log_z;
   
    if (ISNA(z)) {
-    log_z = com_compute_log_z(lambda, nu, log_error_z, maxit_z);
+    log_z = compute_log_z(lambda, nu, log_error_z, maxit_z);
   } else {
     log_z = std::log(z);
   }
   
   if((exp(log(lambda)/nu) > maxit_z) || isinf(log_z)) {
-    return com_log_mean_approx(lambda, nu);
+    return cmp_log_mean_approx(lambda, nu);
     }
   
   int j = 1;
-  double ex = log(j) + dcom_single(j, lambda, nu, log_z);
+  double ex = log(j) + dcmp_single(j, lambda, nu, log_z);
   double last_ex = 0;
 
   j += 1; 
   
   while ((std::abs(last_ex - ex) > log_error) && j <= maxit) {
     last_ex = ex;
-    ex = logsumexp(ex, log(j) + dcom_single(j, lambda, nu, log_z));
+    ex = logsumexp(ex, log(j) + dcmp_single(j, lambda, nu, log_z));
     j += 1;
 
   }
@@ -73,24 +73,24 @@ double com_log_mean(double lambda, double nu,
 
 //' @export
 //  [[Rcpp::export]]
-double com_log_mean_approx(double lambda, double nu) {
+double cmp_log_mean_approx(double lambda, double nu) {
   return(log((pow(lambda, 1/nu) - (nu - 1)/(2*nu))));
 }
 
 
 //' @export
 // [[Rcpp::export]]
-double com_mean(double lambda, double nu,
+double cmp_mean(double lambda, double nu,
                        double log_error = 1e-6, int maxit=1e6,
                        double z = NA_REAL, double log_error_z = 1e-6,
                        int maxit_z = 10000, bool parallel = false) {
-  return(exp(com_log_mean(lambda, nu, log_error, maxit, z, log_error_z,
+  return(exp(cmp_log_mean(lambda, nu, log_error, maxit, z, log_error_z,
                           maxit_z, parallel)));
 }
 
 //' @export
 // [[Rcpp::export]]
-double com_log_var(double lambda, double nu,
+double cmp_log_var(double lambda, double nu,
                        double log_error = 1e-6, int maxit=1e6,
                        double z = NA_REAL, double log_error_z = 1e-6,
                        int maxit_z = 10000, bool parallel = false) {
@@ -103,28 +103,28 @@ double com_log_var(double lambda, double nu,
   
   
    if (ISNA(z)) {
-    log_z = com_compute_log_z(lambda, nu, log_error_z, maxit_z);
+    log_z = compute_log_z(lambda, nu, log_error_z, maxit_z);
   } else {
     log_z = std::log(z);
   }
 
   if((exp(log(lambda)/nu) > maxit_z) || isinf(log_z)) {
-    return com_log_var_approx(lambda, nu);
+    return cmp_log_var_approx(lambda, nu);
     }
   
   int j = 1;
-  double ex = log(j) + dcom_single(j, lambda, nu, log_z);
+  double ex = log(j) + dcmp_single(j, lambda, nu, log_z);
   double last_ex = 0;
 
   j += 1; 
   
   while ((std::abs(last_ex - ex) > log_error) && j <= maxit) {
     last_ex = ex;
-    ex = logsumexp(ex, 2 * log(j) + dcom_single(j, lambda, nu, log_z));
+    ex = logsumexp(ex, 2 * log(j) + dcmp_single(j, lambda, nu, log_z));
     j += 1;
   }
 
-  ex = logdiffexp(ex, 2 * com_log_mean(lambda, nu, log_error, maxit, exp(log_z), log_error_z, maxit_z, parallel));
+  ex = logdiffexp(ex, 2 * cmp_log_mean(lambda, nu, log_error, maxit, exp(log_z), log_error_z, maxit_z, parallel));
   
   return ex;
 }
@@ -132,22 +132,22 @@ double com_log_var(double lambda, double nu,
 
 //' @export
 // [[Rcpp::export]]
-double com_var(double lambda, double nu,
+double cmp_var(double lambda, double nu,
                        double log_error = 1e-6, int maxit=1e6,
                        double z = NA_REAL, double log_error_z = 1e-6,
                        int maxit_z = 10000, bool parallel = false) {
-  return(exp(com_log_var(lambda, nu, log_error, maxit, z, log_error_z,
+  return(exp(cmp_log_var(lambda, nu, log_error, maxit, z, log_error_z,
                           maxit_z, parallel)));
 }
 
 //' @export
 // [[Rcpp::export]]
-double com_log_var_approx(double lambda, double nu) {
+double cmp_log_var_approx(double lambda, double nu) {
   return(log(lambda)/nu - log(nu));
 }
 
 //' @export
 // [[Rcpp::export]]
-double com_var_approx(double lambda, double nu) {
-  return(exp(com_log_var_approx(lambda, nu)));
+double cmp_var_approx(double lambda, double nu) {
+  return(exp(cmp_log_var_approx(lambda, nu)));
 }
