@@ -8,7 +8,7 @@ This package implements distribution, likelihood, and fitting functions of the
 [Conway-Maxwell-Poisson (CMP) Distribution](http://en.wikipedia.org/wiki/Conway%E2%80%93Maxwell%E2%80%93Poisson_distribution),
 which is suitable for both under- and over-dispersed count data.
 
-For an explanation of the distribution see the [Shiny App].
+For an explanation of the distribution see the [Shiny App](https://noamross.shinyapps.io/compois/Plotting-compoisson-distributions.Rmd).
 
 Several other packages implement various approaches to the CMP distribution. This
 package aims to improve both speed and numerical accuracy by

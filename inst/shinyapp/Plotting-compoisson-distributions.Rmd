@@ -1,7 +1,7 @@
 ---
-title: A model for underdispersed counts, or looking for data!
-author: Noam Ross
-date: February 13, 2015
+title: "A model for underdispersed counts, or looking for data!"
+author: "Noam Ross"
+date: "February 13, 2015"
 output: html_document
 runtime: shiny
 ---
@@ -113,5 +113,5 @@ renderPlot({
   }
 
   cmpplot
-})  
+}, width=800, height=400)  
 ```
