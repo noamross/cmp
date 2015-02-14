@@ -1,4 +1,7 @@
 ---
+title: A model for underdispersed counts, or looking for data!
+author: Noam Ross
+date: February 13, 2015
 output: html_document
 runtime: shiny
 ---
@@ -8,38 +11,93 @@ library(devtools)
 #install.packages('ggplot2')
 #install.packages('gridExtra')
 #install_github('noamross/noamtools')
-#install_github('noamross/compoisson')
-library(compoisson)
+#install_github('noamross/cmp')
+library(cmp)
 library(ggplot2)
 library(gridExtra)
 library(noamtools)
 ```
 
+The Conway-Maxwell Poisson (CMP) distibution is a distribution that can be used
+to model discrete count data.  It has the form:
+
+$$P(X = x) = \frac{\lambda^x}{(x!)^\nu} \frac{1}{Z(\lambda, \nu)}$$
+
+where
+
+$$Z(\lambda, \nu) = \sum_{j=0}^\infty \frac{\lambda^j}{(j!)^\nu}$$
+
+Like the Poisson distribution, $\lambda$ is an encounter rate. Unlike the Poisson
+distribution, the $\nu$ term modifies it.  When $nu < 1$, the distribution is *overdispersed*; its tail extends
+out further, and its variance is greater than its mean. When $nu > 1$, the distribution
+is *underdispersed* - its tail is shortened, and its variance is less than
+its mean.  If $\nu = 1$, the CMP distribution is a Poisson distribution.  If $\nu = \infty$, the CMP distribution
+is the same as a Bernoulli distribution.[^1]
+
+[^1]: All this is in *Shmueli, G., Minka, T. P., Kadane, J. B., Borle, S. and Boatwright, P. (2005) A
+useful distribution for fitting discrete data: Revival of the 
+Conway-Maxwell-Poisson distribution.  J. Royal Statist. Soc. vol. 54, pp. 127-142, 2005.*
+
+***I'm looking for examples of data
+sets to fit with this distribution.*** I am testing a [draft R package](https://github.com/noamross/cmp) and need more ecological examples. Some ecological processes that might produce underdispersed count data are:
+
+-   ***Density dependence/competition*:** If you plants or benthic organisms
+    compete for space, counts of those organisms (in say, quadrats), can be under-dispersed.
+    
+-   ***Disease mortality*:** If parasites in an organism cause mortality, counts
+    of parasites in organisms may be underdispersed, because organisms with lots
+    of parasites will have died.
+    
+If you know of/have an ecological dataset that may have underdispersed counts, let me know! ([\@noamross](http://twitter.com/noamross), [noam.ross\@gmail.com](mailto:noam.ross@gmail.com)).
+
+## Look! Shiny buttons!
+
+To give you an idea of how the CMP distribution works, here's an interactive chart.
+Adjust the sliders to modify the $\lambda$ and $\nu$ values.  Checking the box
+will also show a Poisson distribution with an equivalent $\lambda$ value. The
+red vertical line shows the mean of the CMP distribution.
+
+You'll note that when $\lambda$ is big and $\nu$ is small, calculating the probability
+takes a little bit of time.
+
 ```{r inputs, echo = FALSE, message=FALSE}
 inputPanel(
   sliderInput("lambda", label = "Lambda:",
-              min = 0, max = 3, value = 1, step = 0.1),
+              min = 0, max = 2.5, value = 1, step = 0.1),
   sliderInput("nu", label = "Nu:",
-              min = 0.05, max = 5, value = 1, step = 0.01)
+              min = 0.1, max = 5, value = 1, step = 0.01),
+  checkboxInput("pois", "Show Poisson Distribution?", value=FALSE)
 )
 ```
 
 ```{r makeplot, echo = FALSE, message = FALSE}
 renderPlot({
-  max_x = qcom(0.99,input$lambda,input$nu)
+  max_x = max(qcmp(0.99,input$lambda,input$nu),
+              qpois(0.99, input$lambda))
   data = data.frame(Value = 0:max_x,
-                    Probability = dcom(0:max_x, lambda=input$lambda,
-                                       nu=input$nu))  
-  meanval = com_mean(lambda = input$lambda, nu = input$nu)
-  complot = ggplot(data, aes(x=Value, y=Probability)) 
+                    Probability = dcmp(0:max_x, lambda=input$lambda,
+                                       nu=input$nu),
+                    Distribution="CMP")
+  if(input$pois) {
+    data = rbind(data, data.frame(Value=0:max_x, 
+                                  Probability = dpois(0:max_x,
+                                                      lambda=input$lambda),
+                                  Distribution="Poisson"
+                                  ))
+  }
+  meanval = cmp_mean(lambda = input$lambda, nu = input$nu)
+  cmpplot = ggplot(data, aes(x=Value, y=Probability,
+                             fill=Distribution, linetype=Distribution,
+                             lwd=Distribution)) 
   if(max_x <= 50) {
-    complot = complot + geom_bar(stat="identity", position="identity") + scale_x_discrete(limits=0:max_x)
+    cmpplot = cmpplot + geom_bar(stat="identity", position="identity", alpha=0.5) + scale_x_discrete(limits=0:max_x)
     
   } else {
-    complot = complot + geom_area()
+    cmpplot = cmpplot + geom_area(alpha=0.5)
   }
-  
-  complot = complot +  theme_nr +
+
+    
+  cmpplot = cmpplot +  theme_nr +
     geom_vline(xintercept=meanval, col="red", lwd = 2) +
     annotation_custom(grob=textGrob(substitute(paste(lambda, ": ", LL, "\n",
                                                      nu, ": ", NN, ", ",
@@ -49,6 +107,11 @@ renderPlot({
                                                     MM = signif(meanval,3))),
                                     x = 0.8, y= 0.8))
   
-  complot
+  if(input$pois) {
+    cmpplot = cmpplot +
+      scale_linetype_manual(values=c(0,2))
+  }
+
+  cmpplot
 })  
 ```
