@@ -56,9 +56,10 @@ these reasons or others let me know! ([\@noamross](http://twitter.com/noamross),
 ## Look! Shiny buttons!
 
 To give you an idea of how the CMP distribution works, here's an interactive chart.
-Adjust the sliders to modify the $\lambda$ and $\nu$ values.  Checking the box
-will also show a Poisson distribution with an equivalent $\lambda$ value. The
+Adjust the sliders to modify the $\lambda$ and $\nu$ values. The
 red vertical line shows the mean of the CMP distribution.
+The radio buttons allow you to also plot a distribution of equivalent $\lambda$ value or mean value at the CMP
+distribution..
 
 You'll note that when $\lambda$ is big and $\nu$ is small, calculating the probability
 takes a little bit of time.
@@ -69,26 +70,30 @@ inputPanel(
               min = 0, max = 2.5, value = 1, step = 0.1),
   sliderInput("nu", label = "Nu:",
               min = 0.1, max = 5, value = 1, step = 0.01),
-  checkboxInput("pois", "Show Poisson Distribution?", value=FALSE)
+  radioButtons("pois", "Show Poisson Distribution?", list("No"=1, "Equal Lambdas"=2, "Equal Means"=3))
 )
 ```
 
 ```{r makeplot, echo = FALSE, message = FALSE}
 renderPlot({
-  max_x = max(qcmp(0.99,input$lambda,input$nu),
-              qpois(0.99, input$lambda))
-  data = data.frame(Value = 0:max_x,
-                    Probability = dcmp(0:max_x, lambda=input$lambda,
-                                       nu=input$nu),
-                    Distribution="CMP")
-  if(input$pois) {
-    data = rbind(data, data.frame(Value=0:max_x, 
-                                  Probability = dpois(0:max_x,
-                                                      lambda=input$lambda),
-                                  Distribution="Poisson"
-                                  ))
-  }
   meanval = cmp_mean(lambda = input$lambda, nu = input$nu)
+  max_x = max(qcmp(0.99,input$lambda,input$nu),
+              qpois(0.99, input$lambda),
+  qpois(0.99, meanval))
+data = data.frame(Value = 0:max_x,
+                  Probability = dcmp(0:max_x, lambda=input$lambda,
+                                     nu=input$nu),
+Distribution="CMP")
+  if(input$pois == 2) {
+    data = rbind(data, data.frame(Value=0:max_x, 
+                                  Probability = dpois(0:max_x,lambda=input$lambda),
+                                  Distribution="Poisson"))
+  } else if(input$pois == 3) {
+    data = rbind(data, data.frame(Value=0:max_x, 
+                                  Probability = dpois(0:max_x,lambda=meanval),
+                                  Distribution="Poisson"))
+  }
+
   cmpplot = ggplot(data, aes(x=Value, y=Probability,
                              fill=Distribution, linetype=Distribution,
                              lwd=Distribution)) 
@@ -110,10 +115,6 @@ renderPlot({
                                                     MM = signif(meanval,3))),
                                     x = 0.8, y= 0.8))
   
-  if(input$pois) {
-    cmpplot = cmpplot +
-      scale_linetype_manual(values=c(0,2))
-  }
 
   cmpplot
 }, width=800, height=400)  
