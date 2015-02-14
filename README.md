@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/noamross/compoisson.png?branch=master)](https://travis-ci.org/noamross/compoisson)
 [![Coverage Status](https://coveralls.io/repos/noamross/compoisson/badge.png?style=flat)](https://coveralls.io/r/noamross/compoisson)
 
-This package implements distribution, likelihood, and fitting functions of the
+This in-development package implements distribution, likelihood, and fitting functions of the
 [Conway-Maxwell-Poisson (CMP) Distribution](http://en.wikipedia.org/wiki/Conway%E2%80%93Maxwell%E2%80%93Poisson_distribution),
 which is suitable for both under- and over-dispersed count data.
 
@@ -38,12 +38,5 @@ To install in R, run
 library(devtools) # If you don't have it, run install.packages('devtools')
 install_github('noamross/cmp')
 ```
-
-##
-
-Several other R packages implement 
-
-This is a re-write of , which
-implements distribution and fitting functions for the
 
 

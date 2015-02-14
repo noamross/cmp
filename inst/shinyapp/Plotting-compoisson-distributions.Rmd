@@ -42,13 +42,16 @@ Conway-Maxwell-Poisson distribution.  J. Royal Statist. Soc. vol. 54, pp. 127-14
 sets to fit with this distribution.*** I am testing a [draft R package](https://github.com/noamross/cmp) and need more ecological examples. Some ecological processes that might produce underdispersed count data are:
 
 -   ***Density dependence/competition*:** If you plants or benthic organisms
-    compete for space, counts of those organisms (in say, quadrats), can be under-dispersed.
+    compete for space, counts of those organisms (in say, quadrats), can be under-dispersed
+    because even if they arrive randomly at a location, thinning makes
+    locations with population densities rate.
     
 -   ***Disease mortality*:** If parasites in an organism cause mortality, counts
     of parasites in organisms may be underdispersed, because organisms with lots
     of parasites will have died.
     
-If you know of/have an ecological dataset that may have underdispersed counts, let me know! ([\@noamross](http://twitter.com/noamross), [noam.ross\@gmail.com](mailto:noam.ross@gmail.com)).
+If you know of/have an ecological dataset that may have underdispersed counts, for
+these reasons or others let me know! ([\@noamross](http://twitter.com/noamross), [noam.ross\@gmail.com](mailto:noam.ross@gmail.com)).
 
 ## Look! Shiny buttons!
 
