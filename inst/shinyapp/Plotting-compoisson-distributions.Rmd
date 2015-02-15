@@ -27,9 +27,9 @@ where
 
 $$Z(\lambda, \nu) = \sum_{j=0}^\infty \frac{\lambda^j}{(j!)^\nu}$$
 
-Like the Poisson distribution, $\lambda$ is an encounter rate. Unlike the Poisson
-distribution, the $\nu$ term modifies it.  When $nu < 1$, the distribution is *overdispersed*; its tail extends
-out further, and its variance is greater than its mean. When $nu > 1$, the distribution
+Like ibn the Poisson distribution, $\lambda$ is an encounter rate. Unlike the Poisson
+distribution, the $\nu$ term modifies it.  When $\nu < 1$, the distribution is *overdispersed*; its tail extends
+out further than in a Poisson, and its variance is greater than its mean. When $\nu > 1$, the distribution
 is *underdispersed* - its tail is shortened, and its variance is less than
 its mean.  If $\nu = 1$, the CMP distribution is a Poisson distribution.  If $\nu = \infty$, the CMP distribution
 is the same as a Bernoulli distribution.[^1]
@@ -38,11 +38,11 @@ is the same as a Bernoulli distribution.[^1]
 useful distribution for fitting discrete data: Revival of the 
 Conway-Maxwell-Poisson distribution.  J. Royal Statist. Soc. vol. 54, pp. 127-142, 2005.*
 
-***I'm looking for examples of data
+***I'm looking for examples of underdispersed data
 sets to fit with this distribution.*** I am testing a [draft R package](https://github.com/noamross/cmp) and need more ecological examples. Some ecological processes that might produce underdispersed count data are:
 
 -   ***Density dependence/competition*:** If you plants or benthic organisms
-    compete for space, counts of those organisms (in say, quadrats), can be under-dispersed
+    compete for space, counts of those organisms (in say, quadrats), can be underdispersed
     because even if they arrive randomly at a location, thinning makes
     locations with population densities rate.
     
@@ -58,8 +58,8 @@ these reasons or others let me know! ([\@noamross](http://twitter.com/noamross),
 To give you an idea of how the CMP distribution works, here's an interactive chart.
 Adjust the sliders to modify the $\lambda$ and $\nu$ values. The
 red vertical line shows the mean of the CMP distribution.
-The radio buttons allow you to also plot a distribution of equivalent $\lambda$ value or mean value at the CMP
-distribution..
+The radio buttons allow you to also plot a Poisson distribution with the same $\lambda$ value or mean value as the CMP
+distribution.
 
 You'll note that when $\lambda$ is big and $\nu$ is small, calculating the probability
 takes a little bit of time.
