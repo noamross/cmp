@@ -1,0 +1,43 @@
+---
+title: "Exploring VegBank Data Counts"
+author: "Noam Ross"
+date: "2/18/2015"
+output: html_document
+---
+
+The kind folks at [VegBank](vegbank.org), via the the help of [Matt Jones](http://twitter.com/metamattj)
+provided me with a complete dump of the VegBank database to explore.
+
+The [VegBank database structure](http://vegbank.org/vegdocs/design/erd/vegbank_erd.pdf) is complex.
+
+First, I need to create the database out of the ~10 GB dump provided.
+
+PostgreSQL is required for this (and the subsequent operations that I do in R)
+
+```{r createdb, engine='bash', eval=FALSE}
+createdb -T template0 vegbank #create an empty database
+psql vegbank < infile
+```
+
+OK, now that we have that, let's get some basic info on this database:
+
+```{r db_info}
+library(DBI)
+library(RPostgreSQL)
+veg_db = dbConnect(dbDriver("PostgreSQL"), dbname="vegbank")
+dbListTables(veg_db)
+```
+
+```{r}
+dbDisconnect(veg_db) #disconnect, because now we'll manage this with dplyr
+rm(veg_db)
+```
+
+```{r}
+library(dplyr)
+veg_db = src_postgres("vegbank")
+stemCount = tbl(veg_db, "stemCount")
+```
+
+
+
