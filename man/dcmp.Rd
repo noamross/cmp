@@ -7,13 +7,13 @@
 \alias{rcmp}
 \title{The Conway-Maxwell-Poisson Distribution}
 \usage{
-dcmp(x, lambda, nu, z = NA_real_, log_p = FALSE, log_error_z = 1e-06,
+dcmp(x, lambda, nu, z = NA_real_, log = FALSE, log_error_z = 1e-06,
   maxit_z = 10000L, parallel = FALSE)
 
-pcmp(q, lambda, nu, z = NA_real_, log_p = FALSE, log_error_z = 1e-06,
+pcmp(q, lambda, nu, z = NA_real_, log = FALSE, log_error_z = 1e-06,
   maxit_z = 10000L, parallel = FALSE)
 
-qcmp(p, lambda, nu, z = NA_real_, log_p = FALSE, log_error_z = 1e-06,
+qcmp(p, lambda, nu, z = NA_real_, log = FALSE, log_error_z = 1e-06,
   maxit_z = 10000L, parallel = FALSE)
 
 rcmp(n, lambda, nu, z = NA_real_, log_error_z = 1e-06, maxit_z = 10000L,

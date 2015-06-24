@@ -91,20 +91,20 @@ compute_log_z_old <- function(lambda, nu, log_error_z = 0.0001, maxit_z = 10000L
 #' v54, pp. 127-142, 2005.
 #' @keywords models
 #' @export
-dcmp <- function(x, lambda, nu, z = NA_real_, log_p = FALSE, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
-    .Call('cmp_dcmp', PACKAGE = 'cmp', x, lambda, nu, z, log_p, log_error_z, maxit_z, parallel)
+dcmp <- function(x, lambda, nu, z = NA_real_, log = FALSE, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('cmp_dcmp', PACKAGE = 'cmp', x, lambda, nu, z, log, log_error_z, maxit_z, parallel)
 }
 
 #' @rdname dcmp
 #' @export
-pcmp <- function(q, lambda, nu, z = NA_real_, log_p = FALSE, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
-    .Call('cmp_pcmp', PACKAGE = 'cmp', q, lambda, nu, z, log_p, log_error_z, maxit_z, parallel)
+pcmp <- function(q, lambda, nu, z = NA_real_, log = FALSE, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('cmp_pcmp', PACKAGE = 'cmp', q, lambda, nu, z, log, log_error_z, maxit_z, parallel)
 }
 
 #' @rdname dcmp
 #' @export
-qcmp <- function(p, lambda, nu, z = NA_real_, log_p = FALSE, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
-    .Call('cmp_qcmp', PACKAGE = 'cmp', p, lambda, nu, z, log_p, log_error_z, maxit_z, parallel)
+qcmp <- function(p, lambda, nu, z = NA_real_, log = FALSE, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
+    .Call('cmp_qcmp', PACKAGE = 'cmp', p, lambda, nu, z, log, log_error_z, maxit_z, parallel)
 }
 
 #' @rdname dcmp

@@ -82,7 +82,7 @@ double qcmp_single(double p, double lambda, double nu, double log_z) {
 //' @keywords models
 //' @export
 // [[Rcpp::export]]
-NumericVector dcmp(NumericVector x, double lambda, double nu, double z = NA_REAL, bool log_p = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
+NumericVector dcmp(NumericVector x, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
   
   if (lambda < 0 || nu < 0) {
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
@@ -108,7 +108,7 @@ NumericVector dcmp(NumericVector x, double lambda, double nu, double z = NA_REAL
     }
   }
   
-  if(!log_p) {
+  if(!log) {
     d = Rcpp::exp(d);
   }
   
@@ -119,7 +119,7 @@ NumericVector dcmp(NumericVector x, double lambda, double nu, double z = NA_REAL
 //' @rdname dcmp
 //' @export
 // [[Rcpp::export]]
-NumericVector pcmp(NumericVector q, double lambda, double nu, double z = NA_REAL, bool log_p = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
+NumericVector pcmp(NumericVector q, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
   
   if (lambda < 0 || nu < 0) {
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
@@ -143,7 +143,7 @@ NumericVector pcmp(NumericVector q, double lambda, double nu, double z = NA_REAL
       p[i] = pcmp_single(q[i], lambda, nu, log_z);
     }
   }    
-  if(!log_p) {
+  if(!log) {
     p = Rcpp::exp(p);
   }
   return(p);
@@ -153,7 +153,7 @@ NumericVector pcmp(NumericVector q, double lambda, double nu, double z = NA_REAL
 //' @rdname dcmp
 //' @export
 // [[Rcpp::export]]
-NumericVector qcmp(NumericVector p, double lambda, double nu, double z = NA_REAL, bool log_p = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
+NumericVector qcmp(NumericVector p, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
   
   if (lambda < 0 || nu < 0) {
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
@@ -168,8 +168,8 @@ NumericVector qcmp(NumericVector p, double lambda, double nu, double z = NA_REAL
   }
   
   NumericVector lp;
-  if (!log_p) {
-    lp = log(p);
+  if (!log) {
+    lp = Rcpp::log(p);
   } else {
     lp = p;
   }
