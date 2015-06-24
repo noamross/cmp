@@ -25,6 +25,7 @@
 #'   cmp_fit(Lemaire)
 #'
 #' @importFrom stats optim
+#' @importFrom nloptr nloptr
 #' @export cmp_fit
 cmp_fit = function(x, par=NULL, ...) {
 
@@ -34,18 +35,22 @@ cmp_fit = function(x, par=NULL, ...) {
   }
 
   options(warn = -1)
-  result = optim(log(par),
-                 function(p) {return (-cmp_loglik(x, exp(p[1]), exp(p[2])))},
+  result = nloptr(x0 = par,
+                 eval_f = function(p) {return (-cmp_loglik(x, p[1], p[2]))},
+                 lb = c(0, 0),
+                 ub = c(Inf, Inf),
+                 opts = list(algorithm = "NLOPT_LN_NELDERMEAD", maxeval=1e4)
                  )
   options(warn = 0)
 
-  lambda = exp(result$par[1])
-  nu = exp(result$par[2])
+  lambda = result$solution[1]
+  nu = result$solution[2]
   fit = list(lambda = lambda,
              nu = nu,
              z = compute_z(lambda, nu),
              fitted.values = sum(x[,2]) * dcmp(x[,1], lambda, nu),
-             log.likelihood = cmp_loglik(x, lambda, nu))
+             log.likelihood = -result$objective,
+             message = result$message)
   return (fit)
 }
 
@@ -61,17 +66,21 @@ pois_fit = function(x, par=NULL) {
     lambda = 0
   } else {
     options(warn = -1)
-    result = optim(log(par),
-                   function(p) {return (-pois_loglik(x, exp(p[1])))},
-    )
+  result = nloptr(x0 = par,
+                 eval_f = function(p) {return (-pois_loglik(x, p))},
+                 lb = 0,
+                 ub = Inf,
+                 opts = list(algorithm = "NLOPT_LN_NELDERMEAD", maxeval=1e4)
+                 )
     options(warn = 0)
     
-    lambda = exp(result$par[1])
+    lambda = result$solution
   }
   
   fit = list(lambda = lambda,
              fitted.values = sum(x[,2]) * dpois(x[,1], lambda),
-             log.likelihood = pois_loglik(x, lambda))
+             log.likelihood = -result$objective,
+             message = result$message)
   return (fit)
 }
 
@@ -90,18 +99,22 @@ nb_fit = function(x, par=NULL) {
   } else {
     
     options(warn = -1)
-    result = optim(log(par),
-                   function(p) {return (-nb_loglik(x, exp(p[1]), exp(p[2])))},
-    )
+  result = nloptr(x0 = par,
+                 eval_f = function(p) {return (-nb_loglik(x, p[1], p[2]))},
+                 lb = c(0, 0),
+                 ub = c(Inf, Inf),
+                 opts = list(algorithm = "NLOPT_LN_NELDERMEAD", maxeval=1e4)
+                 )
     options(warn = 0)
     
-    mu = exp(result$par[1])
-    size = exp(result$par[2])
+    mu = result$solution[1]
+    size = result$solution[2]
   }
   fit = list(mu = mu,
              size = size,
              fitted.values = sum(x[,2]) * dnbinom(x = x[,1], mu=mu, size=size),
-             log.likelihood = nb_loglik(x, mu, size))
+             log.likelihood = -result$objective,
+             message = result$message)
   return (fit)
 }
 

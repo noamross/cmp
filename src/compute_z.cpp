@@ -53,6 +53,10 @@ double compute_log_z(double lambda, double nu, double log_error_z = 1e-6, int ma
     Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
   }
   
+  if (lambda == 0) {
+    return 0;
+  }
+  
   double min_j = exp(log(lambda)/nu);  //Calculate the point at which the series will start to converge
  
   if (min_j > maxit_z) return compute_log_z_approx(lambda, nu);  //Use approximation for long computations

@@ -10,20 +10,16 @@
 using namespace Rcpp;
 
 // compute_z
-double compute_z(double lambda, double nu, double log_error_z = 1e-6, int maxit_z = 10000);
+double compute_z(double lambda, double nu, double log_error_z, int maxit_z);
 static SEXP cmp_compute_z_try(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
-        Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP );
-        Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP );
-        double __result = compute_z(lambda, nu, log_error_z, maxit_z);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP);
+    __result = Rcpp::wrap(compute_z(lambda, nu, log_error_z, maxit_z));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_compute_z(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP) {
@@ -47,20 +43,16 @@ RcppExport SEXP cmp_compute_z(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_error_zSEXP
     return __result;
 }
 // compute_log_z
-double compute_log_z(double lambda, double nu, double log_error_z = 1e-6, int maxit_z = 10000);
+double compute_log_z(double lambda, double nu, double log_error_z, int maxit_z);
 static SEXP cmp_compute_log_z_try(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
-        Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP );
-        Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP );
-        double __result = compute_log_z(lambda, nu, log_error_z, maxit_z);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP);
+    __result = Rcpp::wrap(compute_log_z(lambda, nu, log_error_z, maxit_z));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_compute_log_z(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP) {
@@ -87,15 +79,11 @@ RcppExport SEXP cmp_compute_log_z(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_error_z
 double compute_log_z_approx(double lambda, double nu);
 static SEXP cmp_compute_log_z_approx_try(SEXP lambdaSEXP, SEXP nuSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
-        Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        double __result = compute_log_z_approx(lambda, nu);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    __result = Rcpp::wrap(compute_log_z_approx(lambda, nu));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_compute_log_z_approx(SEXP lambdaSEXP, SEXP nuSEXP) {
@@ -122,14 +110,10 @@ RcppExport SEXP cmp_compute_log_z_approx(SEXP lambdaSEXP, SEXP nuSEXP) {
 double logsumexp(NumericVector x);
 static SEXP cmp_logsumexp_try(SEXP xSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP );
-        double __result = logsumexp(x);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    __result = Rcpp::wrap(logsumexp(x));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_logsumexp(SEXP xSEXP) {
@@ -156,15 +140,11 @@ RcppExport SEXP cmp_logsumexp(SEXP xSEXP) {
 double logdiffexp(double x, double y);
 static SEXP cmp_logdiffexp_try(SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< double >::type x(xSEXP );
-        Rcpp::traits::input_parameter< double >::type y(ySEXP );
-        double __result = logdiffexp(x, y);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type y(ySEXP);
+    __result = Rcpp::wrap(logdiffexp(x, y));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_logdiffexp(SEXP xSEXP, SEXP ySEXP) {
@@ -188,20 +168,16 @@ RcppExport SEXP cmp_logdiffexp(SEXP xSEXP, SEXP ySEXP) {
     return __result;
 }
 // compute_log_z_old
-double compute_log_z_old(double lambda, double nu, double log_error_z = 0.0001, int maxit_z = 10000);
+double compute_log_z_old(double lambda, double nu, double log_error_z, int maxit_z);
 static SEXP cmp_compute_log_z_old_try(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
-        Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP );
-        Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP );
-        double __result = compute_log_z_old(lambda, nu, log_error_z, maxit_z);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP);
+    __result = Rcpp::wrap(compute_log_z_old(lambda, nu, log_error_z, maxit_z));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_compute_log_z_old(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP) {
@@ -225,24 +201,20 @@ RcppExport SEXP cmp_compute_log_z_old(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_err
     return __result;
 }
 // dcmp
-NumericVector dcmp(NumericVector x, double lambda, double nu, double z = NA_REAL, bool log_p = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false);
+NumericVector dcmp(NumericVector x, double lambda, double nu, double z, bool log_p, double log_error_z, int maxit_z, bool parallel);
 static SEXP cmp_dcmp_try(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP log_pSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP );
-        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
-        Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        Rcpp::traits::input_parameter< double >::type z(zSEXP );
-        Rcpp::traits::input_parameter< bool >::type log_p(log_pSEXP );
-        Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP );
-        Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP );
-        Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP );
-        NumericVector __result = dcmp(x, lambda, nu, z, log_p, log_error_z, maxit_z, parallel);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< double >::type z(zSEXP);
+    Rcpp::traits::input_parameter< bool >::type log_p(log_pSEXP);
+    Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP);
+    Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP);
+    __result = Rcpp::wrap(dcmp(x, lambda, nu, z, log_p, log_error_z, maxit_z, parallel));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_dcmp(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP log_pSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
@@ -266,24 +238,20 @@ RcppExport SEXP cmp_dcmp(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, S
     return __result;
 }
 // pcmp
-NumericVector pcmp(NumericVector q, double lambda, double nu, double z = NA_REAL, bool log_p = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false);
+NumericVector pcmp(NumericVector q, double lambda, double nu, double z, bool log_p, double log_error_z, int maxit_z, bool parallel);
 static SEXP cmp_pcmp_try(SEXP qSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP log_pSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< NumericVector >::type q(qSEXP );
-        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
-        Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        Rcpp::traits::input_parameter< double >::type z(zSEXP );
-        Rcpp::traits::input_parameter< bool >::type log_p(log_pSEXP );
-        Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP );
-        Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP );
-        Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP );
-        NumericVector __result = pcmp(q, lambda, nu, z, log_p, log_error_z, maxit_z, parallel);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< NumericVector >::type q(qSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< double >::type z(zSEXP);
+    Rcpp::traits::input_parameter< bool >::type log_p(log_pSEXP);
+    Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP);
+    Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP);
+    __result = Rcpp::wrap(pcmp(q, lambda, nu, z, log_p, log_error_z, maxit_z, parallel));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_pcmp(SEXP qSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP log_pSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
@@ -307,24 +275,20 @@ RcppExport SEXP cmp_pcmp(SEXP qSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, S
     return __result;
 }
 // qcmp
-NumericVector qcmp(NumericVector p, double lambda, double nu, double z = NA_REAL, bool log_p = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false);
+NumericVector qcmp(NumericVector p, double lambda, double nu, double z, bool log_p, double log_error_z, int maxit_z, bool parallel);
 static SEXP cmp_qcmp_try(SEXP pSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP log_pSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< NumericVector >::type p(pSEXP );
-        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
-        Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        Rcpp::traits::input_parameter< double >::type z(zSEXP );
-        Rcpp::traits::input_parameter< bool >::type log_p(log_pSEXP );
-        Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP );
-        Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP );
-        Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP );
-        NumericVector __result = qcmp(p, lambda, nu, z, log_p, log_error_z, maxit_z, parallel);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< NumericVector >::type p(pSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< double >::type z(zSEXP);
+    Rcpp::traits::input_parameter< bool >::type log_p(log_pSEXP);
+    Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP);
+    Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP);
+    __result = Rcpp::wrap(qcmp(p, lambda, nu, z, log_p, log_error_z, maxit_z, parallel));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_qcmp(SEXP pSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP log_pSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
@@ -348,23 +312,19 @@ RcppExport SEXP cmp_qcmp(SEXP pSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, S
     return __result;
 }
 // rcmp
-NumericVector rcmp(int n, double lambda, double nu, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false);
+NumericVector rcmp(int n, double lambda, double nu, double z, double log_error_z, int maxit_z, bool parallel);
 static SEXP cmp_rcmp_try(SEXP nSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< int >::type n(nSEXP );
-        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
-        Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        Rcpp::traits::input_parameter< double >::type z(zSEXP );
-        Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP );
-        Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP );
-        Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP );
-        NumericVector __result = rcmp(n, lambda, nu, z, log_error_z, maxit_z, parallel);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< double >::type z(zSEXP);
+    Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP);
+    Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP);
+    __result = Rcpp::wrap(rcmp(n, lambda, nu, z, log_error_z, maxit_z, parallel));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_rcmp(SEXP nSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
@@ -388,23 +348,19 @@ RcppExport SEXP cmp_rcmp(SEXP nSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, S
     return __result;
 }
 // cmp_loglik
-double cmp_loglik(NumericMatrix x, double lambda, double nu, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false);
+double cmp_loglik(NumericMatrix x, double lambda, double nu, double z, double log_error_z, int maxit_z, bool parallel);
 static SEXP cmp_cmp_loglik_try(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP );
-        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
-        Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        Rcpp::traits::input_parameter< double >::type z(zSEXP );
-        Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP );
-        Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP );
-        Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP );
-        double __result = cmp_loglik(x, lambda, nu, z, log_error_z, maxit_z, parallel);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< double >::type z(zSEXP);
+    Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP);
+    Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP);
+    __result = Rcpp::wrap(cmp_loglik(x, lambda, nu, z, log_error_z, maxit_z, parallel));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_cmp_loglik(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
@@ -428,23 +384,19 @@ RcppExport SEXP cmp_cmp_loglik(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zS
     return __result;
 }
 // cmp_loglik2
-IntegerVector cmp_loglik2(NumericVector x, double lambda, double nu, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false);
+IntegerVector cmp_loglik2(NumericVector x, double lambda, double nu, double z, double log_error_z, int maxit_z, bool parallel);
 static SEXP cmp_cmp_loglik2_try(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP );
-        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
-        Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        Rcpp::traits::input_parameter< double >::type z(zSEXP );
-        Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP );
-        Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP );
-        Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP );
-        IntegerVector __result = cmp_loglik2(x, lambda, nu, z, log_error_z, maxit_z, parallel);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< double >::type z(zSEXP);
+    Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP);
+    Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP);
+    __result = Rcpp::wrap(cmp_loglik2(x, lambda, nu, z, log_error_z, maxit_z, parallel));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_cmp_loglik2(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP zSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
@@ -471,15 +423,11 @@ RcppExport SEXP cmp_cmp_loglik2(SEXP xSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP z
 double pois_loglik(NumericMatrix x, double lambda);
 static SEXP cmp_pois_loglik_try(SEXP xSEXP, SEXP lambdaSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP );
-        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
-        double __result = pois_loglik(x, lambda);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    __result = Rcpp::wrap(pois_loglik(x, lambda));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_pois_loglik(SEXP xSEXP, SEXP lambdaSEXP) {
@@ -506,16 +454,12 @@ RcppExport SEXP cmp_pois_loglik(SEXP xSEXP, SEXP lambdaSEXP) {
 double nb_loglik(NumericMatrix x, double mu, double size);
 static SEXP cmp_nb_loglik_try(SEXP xSEXP, SEXP muSEXP, SEXP sizeSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP );
-        Rcpp::traits::input_parameter< double >::type mu(muSEXP );
-        Rcpp::traits::input_parameter< double >::type size(sizeSEXP );
-        double __result = nb_loglik(x, mu, size);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type size(sizeSEXP);
+    __result = Rcpp::wrap(nb_loglik(x, mu, size));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_nb_loglik(SEXP xSEXP, SEXP muSEXP, SEXP sizeSEXP) {
@@ -539,24 +483,20 @@ RcppExport SEXP cmp_nb_loglik(SEXP xSEXP, SEXP muSEXP, SEXP sizeSEXP) {
     return __result;
 }
 // cmp_log_mean
-double cmp_log_mean(double lambda, double nu, double log_error = 1e-6, int maxit = 1e6, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false);
+double cmp_log_mean(double lambda, double nu, double log_error, int maxit, double z, double log_error_z, int maxit_z, bool parallel);
 static SEXP cmp_cmp_log_mean_try(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_errorSEXP, SEXP maxitSEXP, SEXP zSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
-        Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        Rcpp::traits::input_parameter< double >::type log_error(log_errorSEXP );
-        Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP );
-        Rcpp::traits::input_parameter< double >::type z(zSEXP );
-        Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP );
-        Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP );
-        Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP );
-        double __result = cmp_log_mean(lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< double >::type log_error(log_errorSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP);
+    Rcpp::traits::input_parameter< double >::type z(zSEXP);
+    Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP);
+    Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP);
+    __result = Rcpp::wrap(cmp_log_mean(lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_cmp_log_mean(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_errorSEXP, SEXP maxitSEXP, SEXP zSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
@@ -583,15 +523,11 @@ RcppExport SEXP cmp_cmp_log_mean(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_errorSEX
 double cmp_log_mean_approx(double lambda, double nu);
 static SEXP cmp_cmp_log_mean_approx_try(SEXP lambdaSEXP, SEXP nuSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
-        Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        double __result = cmp_log_mean_approx(lambda, nu);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    __result = Rcpp::wrap(cmp_log_mean_approx(lambda, nu));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_cmp_log_mean_approx(SEXP lambdaSEXP, SEXP nuSEXP) {
@@ -615,24 +551,20 @@ RcppExport SEXP cmp_cmp_log_mean_approx(SEXP lambdaSEXP, SEXP nuSEXP) {
     return __result;
 }
 // cmp_mean
-double cmp_mean(double lambda, double nu, double log_error = 1e-6, int maxit = 1e6, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false);
+double cmp_mean(double lambda, double nu, double log_error, int maxit, double z, double log_error_z, int maxit_z, bool parallel);
 static SEXP cmp_cmp_mean_try(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_errorSEXP, SEXP maxitSEXP, SEXP zSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
-        Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        Rcpp::traits::input_parameter< double >::type log_error(log_errorSEXP );
-        Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP );
-        Rcpp::traits::input_parameter< double >::type z(zSEXP );
-        Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP );
-        Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP );
-        Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP );
-        double __result = cmp_mean(lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< double >::type log_error(log_errorSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP);
+    Rcpp::traits::input_parameter< double >::type z(zSEXP);
+    Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP);
+    Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP);
+    __result = Rcpp::wrap(cmp_mean(lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_cmp_mean(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_errorSEXP, SEXP maxitSEXP, SEXP zSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
@@ -656,24 +588,20 @@ RcppExport SEXP cmp_cmp_mean(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_errorSEXP, S
     return __result;
 }
 // cmp_log_var
-double cmp_log_var(double lambda, double nu, double log_error = 1e-6, int maxit = 1e6, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false);
+double cmp_log_var(double lambda, double nu, double log_error, int maxit, double z, double log_error_z, int maxit_z, bool parallel);
 static SEXP cmp_cmp_log_var_try(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_errorSEXP, SEXP maxitSEXP, SEXP zSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
-        Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        Rcpp::traits::input_parameter< double >::type log_error(log_errorSEXP );
-        Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP );
-        Rcpp::traits::input_parameter< double >::type z(zSEXP );
-        Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP );
-        Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP );
-        Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP );
-        double __result = cmp_log_var(lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< double >::type log_error(log_errorSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP);
+    Rcpp::traits::input_parameter< double >::type z(zSEXP);
+    Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP);
+    Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP);
+    __result = Rcpp::wrap(cmp_log_var(lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_cmp_log_var(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_errorSEXP, SEXP maxitSEXP, SEXP zSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
@@ -697,24 +625,20 @@ RcppExport SEXP cmp_cmp_log_var(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_errorSEXP
     return __result;
 }
 // cmp_var
-double cmp_var(double lambda, double nu, double log_error = 1e-6, int maxit = 1e6, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false);
+double cmp_var(double lambda, double nu, double log_error, int maxit, double z, double log_error_z, int maxit_z, bool parallel);
 static SEXP cmp_cmp_var_try(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_errorSEXP, SEXP maxitSEXP, SEXP zSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
-        Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        Rcpp::traits::input_parameter< double >::type log_error(log_errorSEXP );
-        Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP );
-        Rcpp::traits::input_parameter< double >::type z(zSEXP );
-        Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP );
-        Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP );
-        Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP );
-        double __result = cmp_var(lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< double >::type log_error(log_errorSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP);
+    Rcpp::traits::input_parameter< double >::type z(zSEXP);
+    Rcpp::traits::input_parameter< double >::type log_error_z(log_error_zSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit_z(maxit_zSEXP);
+    Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP);
+    __result = Rcpp::wrap(cmp_var(lambda, nu, log_error, maxit, z, log_error_z, maxit_z, parallel));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_cmp_var(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_errorSEXP, SEXP maxitSEXP, SEXP zSEXP, SEXP log_error_zSEXP, SEXP maxit_zSEXP, SEXP parallelSEXP) {
@@ -741,15 +665,11 @@ RcppExport SEXP cmp_cmp_var(SEXP lambdaSEXP, SEXP nuSEXP, SEXP log_errorSEXP, SE
 double cmp_log_var_approx(double lambda, double nu);
 static SEXP cmp_cmp_log_var_approx_try(SEXP lambdaSEXP, SEXP nuSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
-        Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        double __result = cmp_log_var_approx(lambda, nu);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    __result = Rcpp::wrap(cmp_log_var_approx(lambda, nu));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_cmp_log_var_approx(SEXP lambdaSEXP, SEXP nuSEXP) {
@@ -776,15 +696,11 @@ RcppExport SEXP cmp_cmp_log_var_approx(SEXP lambdaSEXP, SEXP nuSEXP) {
 double cmp_var_approx(double lambda, double nu);
 static SEXP cmp_cmp_var_approx_try(SEXP lambdaSEXP, SEXP nuSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
-        Rcpp::traits::input_parameter< double >::type nu(nuSEXP );
-        double __result = cmp_var_approx(lambda, nu);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    __result = Rcpp::wrap(cmp_var_approx(lambda, nu));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
 RcppExport SEXP cmp_cmp_var_approx(SEXP lambdaSEXP, SEXP nuSEXP) {

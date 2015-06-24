@@ -14,6 +14,8 @@ double dcmp_single(double x, double lambda, double nu, double log_z) {
   double d;
   if (x < 0 || x != floor(x)) {
     d = R_NegInf; 
+  } else if (x == 0 && lambda == 0) {
+    d = 0;
   } else {
     d = x * std::log(lambda) - nu * Rcpp::internal::lfactorial(x) - log_z;
   }
