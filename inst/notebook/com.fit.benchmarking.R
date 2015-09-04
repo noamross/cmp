@@ -1,4 +1,4 @@
-library("microbenchmark")
+delibrary("microbenchmark")
 library("compoisson")
 library("dplyr")
 

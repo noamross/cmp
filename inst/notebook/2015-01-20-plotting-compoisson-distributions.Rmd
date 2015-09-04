@@ -10,7 +10,7 @@ runtime: shiny
 #library(devtools)
 #install_github('noamross/noamtools')
 #install_github('noamross/compoisson')
-library(compoisson)
+library(cmp)
 library(ggplot2)
 library(gridExtra)
 library(noamtools)

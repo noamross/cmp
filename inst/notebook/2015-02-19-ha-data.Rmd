@@ -1,0 +1,136 @@
+---
+title: "Examining Eelgrass Data"
+author: "Noam Ross"
+date: "February 17, 2015"
+output: html_document
+---
+
+[Grace Ha](http://www.researchgate.net/profile/Grace_Ha) kindly provided data on seagrass
+density and epiphytes to examine for underdispersion with the [cmp package](https://github.com/noamross/cmp),
+wich fits distributions to the [Conway-Maxell-Poisson] distribution.  This is
+a quick spin through the data.
+
+```{r libraries, message=FALSE}
+library(cmp) #get with devtools::install_github('noamross/cmp') if needed
+library(dplyr)
+library(tidyr)
+library(magrittr)
+library(ggplot2)
+library(knitr)
+opts_chunk$set(cache=TRUE)
+```
+
+Let's load and take a look at the data.
+
+```{r loaddata, message=FALSE}
+ha_data = as.tbl(read.csv('../../data/Bodega-Harbor-Abundance-Data-02182015.csv'))
+```
+
+```{r grassplot, message=FALSE, warn=FALSE}
+seagrass_counts = ha_data %>%
+  filter(site !="Channel") %>%
+  mutate(date = as.Date(paste(year, substr(month,1,3), "01"), "%Y %b %d")) %>%
+  select(date, site, quadrat, shootdensity) %>%
+  distinct(date, site, quadrat)
+  
+
+ggplot(seagrass_counts, aes(x = shootdensity)) +
+  geom_bar() +
+  xlab("Seagrass shoots per quadrat") +
+  theme(legend.position="none") +
+  ylab("Frequency") +
+  facet_grid(date~site)
+```
+
+```{r}
+seagrass_stats = seagrass_counts %>%
+  group_by(date, site) %>%
+  summarize(mean_dens = mean(shootdensity), var_dens = var(shootdensity),
+            var_mean_ratio = var_dens/mean_dens, samples = n()) %>%
+  group_by() %>%
+  arrange(site, date)
+kable(seagrass_stats, digits = 2)
+```
+
+OK, seagrass density is generally highly overdispersed - all the the
+variance/mean ratios are over 1.  Let's look at ratios for invertebrates
+on leaves:
+
+```{r}
+invert_counts = ha_data %>%
+  mutate(date = as.Date(paste(year, substr(month,1,3), "01"), "%Y %b %d")) %>%
+  gather("invert", "invert_count",  13:67)
+
+invert_stats = invert_counts %>%
+  group_by(invert) %>%
+  summarize(samples = sum(!is.na(invert_count)),
+            nonzeros = sum(na.omit(invert_count) > 0),
+            mean_count = mean(invert_count, na.rm=TRUE),
+            var_count = var(invert_count, na.rm=TRUE),
+            var_mean_ratio = var_count/mean_count) %>%
+  group_by() %>%
+  arrange(var_mean_ratio)
+
+kable(invert_stats)
+```
+
+Most of the invertebrate counts are overdispersed, or have a variance/mean
+ratio very close to one.  However, this is when we look at distributions
+across all sites and times.  Let's try breaking up by location and date.
+In this case, I'll filter to only those that we have more than 1 observation, and
+look at only those cases where a species has at least on case where the ratio
+is less than one.
+
+```{r}
+invert_stats_2 = invert_counts %>%
+  group_by(invert, date, site) %>%
+    summarize(samples = sum(!is.na(invert_count)),
+            nonzeros = sum(na.omit(invert_count) > 0),
+            mean_count = mean(invert_count, na.rm=TRUE),
+            var_count = var(invert_count, na.rm=TRUE),
+            var_mean_ratio = var_count/mean_count) %>%
+  group_by(invert, site) %>%
+  mutate(mean_ratio = mean(var_mean_ratio, na.rm=TRUE)) %>%
+  filter(nonzeros > 1) %>%
+  filter(any(var_mean_ratio < 1)) %>%
+  group_by() %>%
+  arrange(mean_ratio, as.character(invert), site) %>%
+  select(-mean_ratio)
+
+kable(invert_stats_2, digits=2)
+```
+
+So this table summarizes invertebrate/site/date combinations at the plot level,
+showing only those cases where at least one of the invertebrate/site combination
+has a variance/mean ratio of less than one.  For the most part, it's hard to see
+anything that is consistently underdispersed.
+
+But we don't need to guess!  I'm going to use my `cmp` package to fit a distribution
+to each of these
+
+```{r}
+invert_fits = invert_counts %>%
+  filter(!is.na(invert_count)) %>%
+  group_by(invert, date, site) %>%
+  filter(any(invert_count > 0)) %>%
+  do({
+    invert_dist = table(.$invert_count)
+    invert_dist = cbind(as.numeric(names(invert_dist)), invert_dist)
+    cmp = cmp_fit(invert_dist)
+    pois = pois_fit(invert_dist)
+    nb = nb_fit(invert_dist)
+    data_frame(samples = sum(!is.na(.$invert_count)),
+            nonzeros = sum(na.omit(.$invert_count) > 0),
+            mean_count = mean(.$invert_count, na.rm=TRUE),
+            var_count = var(.$invert_count, na.rm=TRUE),
+            var_mean_ratio = var(.$invert_count, na.rm=TRUE)/mean(.$invert_count, na.rm=TRUE),
+            cmp_lambda = cmp$lambda, cmp_nu = cmp$nu, cmp_ll = cmp$log.likelihood,
+               pois_lambda = pois$lambda, pois_ll = pois$log.likelihood,
+               nb_mu = nb$mu, nb_size = nb$size, nb_ll = nb$log.likelihood)
+  }) %>%
+  group_by() %>%
+  arrange(desc(cmp_nu))
+
+kable(invert_fits)
+```
+

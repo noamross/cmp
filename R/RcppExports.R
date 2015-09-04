@@ -91,8 +91,8 @@ compute_log_z_old <- function(lambda, nu, log_error_z = 0.0001, maxit_z = 10000L
 #' v54, pp. 127-142, 2005.
 #' @keywords models
 #' @export
-dcmp <- function(x, lambda, nu, z = NA_real_, log = FALSE, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
-    .Call('cmp_dcmp', PACKAGE = 'cmp', x, lambda, nu, z, log, log_error_z, maxit_z, parallel)
+dcmp <- function(x, lambda, nu, z = as.numeric( c(NA)), log = FALSE, log_error_z = 1e-6, maxit_z = 10000L) {
+    .Call('cmp_dcmp', PACKAGE = 'cmp', x, lambda, nu, z, log, log_error_z, maxit_z)
 }
 
 #' @rdname dcmp
@@ -114,13 +114,8 @@ rcmp <- function(n, lambda, nu, z = NA_real_, log_error_z = 1e-6, maxit_z = 1000
 }
 
 #' @export
-cmp_loglik <- function(x, lambda, nu, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
-    .Call('cmp_cmp_loglik', PACKAGE = 'cmp', x, lambda, nu, z, log_error_z, maxit_z, parallel)
-}
-
-#' @export
-cmp_loglik2 <- function(x, lambda, nu, z = NA_real_, log_error_z = 1e-6, maxit_z = 10000L, parallel = FALSE) {
-    .Call('cmp_cmp_loglik2', PACKAGE = 'cmp', x, lambda, nu, z, log_error_z, maxit_z, parallel)
+cmp_loglik <- function(x, lambda, nu, z = as.numeric( c(NA)), log_error_z = 1e-6, maxit_z = 10000L) {
+    .Call('cmp_cmp_loglik', PACKAGE = 'cmp', x, lambda, nu, z, log_error_z, maxit_z)
 }
 
 #'@export
@@ -131,6 +126,26 @@ pois_loglik <- function(x, lambda) {
 #'@export
 nb_loglik <- function(x, mu, size) {
     .Call('cmp_nb_loglik', PACKAGE = 'cmp', x, mu, size)
+}
+
+#'@export
+pb_loglik <- function(x, size, prob) {
+    .Call('cmp_pb_loglik', PACKAGE = 'cmp', x, size, prob)
+}
+
+#' @export
+cmp_kld <- function(x, lambda, nu, z = as.numeric( c(NA)), log_error_z = 1e-6, maxit_z = 10000L) {
+    .Call('cmp_cmp_kld', PACKAGE = 'cmp', x, lambda, nu, z, log_error_z, maxit_z)
+}
+
+#'@export
+pois_kld <- function(x, lambda) {
+    .Call('cmp_pois_kld', PACKAGE = 'cmp', x, lambda)
+}
+
+#'@export
+nb_kld <- function(x, mu, size) {
+    .Call('cmp_nb_kld', PACKAGE = 'cmp', x, mu, size)
 }
 
 #' Computes Expectation of a Function of a CMP Random Variable

@@ -50,7 +50,7 @@ double compute_z(double lambda, double nu, double log_error_z = 1e-6, int maxit_
 double compute_log_z(double lambda, double nu, double log_error_z = 1e-6, int maxit_z = 10000) {  
   // Perform argument checking
   if (lambda < 0 || nu < 0) {
-    Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
+    return NAN;
   }
   
   if (lambda == 0) {
@@ -129,7 +129,7 @@ double logdiffexp(double x, double y) {
 double compute_log_z_old(double lambda, double nu, double log_error_z = 0.0001, int maxit_z = 10000) {
   // Perform argument checking
   if (lambda < 0 || nu < 0) {
-    Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
+    return NAN;
   }
   
   // Initialize values

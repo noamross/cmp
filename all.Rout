@@ -1,0 +1,439 @@
+..........
+./R/com_compute_z.R:32:5: style: Use <-, not =, for assignment.
+fit = com.fit(Lemaire)
+    ^
+./R/com_compute_z.R:34:3: style: Use <-, not =, for assignment.
+z = com_compute_z(fit$lambda, fit$nu)
+  ^
+./R/com_compute_z.R:37:15: style: Use <-, not =, for assignment.
+com_compute_z = function(lambda, nu, log.error = 0.001, ...) {
+              ^
+./R/com_compute_z.R:43:19: style: Use <-, not =, for assignment.
+com_compute_log_z = function(lambda, nu, log.error = 0.001, maxit=100) {
+                  ^
+./R/com_compute_z.R:51:5: style: Use <-, not =, for assignment.
+  z = -Inf
+    ^
+./R/com_compute_z.R:52:10: style: Use <-, not =, for assignment.
+  z.last = 0
+         ^
+./R/com_compute_z.R:53:5: style: Use <-, not =, for assignment.
+  j = 0
+    ^
+./R/com_compute_z.R:57:12: style: Use <-, not =, for assignment.
+    z.last = z
+           ^
+./R/com_compute_z.R:58:7: style: Use <-, not =, for assignment.
+    z = logSumExp(c(z, j * log(lambda) - nu * lfactorial(j)))
+      ^
+./R/com_compute_z.R:58:9: style: Variable and function names should be all lowercase.
+    z = logSumExp(c(z, j * log(lambda) - nu * lfactorial(j)))
+        ^~~~~~~~~
+./R/com_compute_z.R:59:7: style: Use <-, not =, for assignment.
+    j = j + 1
+      ^
+./R/com.confint.R:20:13: style: Use <-, not =, for assignment.
+com.confint = function(data, level=0.95, B=1000, n=1000) {
+            ^
+./R/com.confint.R:31:15: style: Use <-, not =, for assignment.
+  boot.lambda = matrix(0,B,1)
+              ^
+./R/com.confint.R:32:11: style: Use <-, not =, for assignment.
+  boot.nu = matrix(0,B,1)
+          ^
+./R/com.confint.R:32:19: style: Do not place spaces around code in parentheses or square brackets.
+    sample = cbind( sample[,1] - 1, sample[,2] )
+                  ^
+./R/com.confint.R:35:13: style: Use <-, not =, for assignment.
+  COMobject = com.fit(data)
+            ^
+./R/com.confint.R:36:14: style: Use <-, not =, for assignment.
+  lambda.mle = COMobject$lambda
+             ^
+./R/com.confint.R:37:10: style: Use <-, not =, for assignment.
+  nu.mle = COMobject$nu
+         ^
+./R/com.confint.R:40:12: style: Use <-, not =, for assignment.
+  fulldata = matrix(0,sum(data[,2]),1)
+           ^
+./R/com.confint.R:41:9: style: Use <-, not =, for assignment.
+  index = 0
+        ^
+./R/com.confint.R:43:12: style: Use <-, not =, for assignment.
+    index2 = index + data[i,2]
+           ^
+./R/com.confint.R:44:14: style: Place a space before left parenthesis, except in a function call.
+    fulldata[(index+1):index2] = data[i,1]
+             ^
+./R/com.confint.R:44:20: style: Put spaces around all infix operators.
+    fulldata[(index+1):index2] = data[i,1]
+                  ~^~
+./R/com.confint.R:44:32: style: Use <-, not =, for assignment.
+    fulldata[(index+1):index2] = data[i,1]
+                               ^
+./R/com.confint.R:49:5: style: Variable and function names should be all lowercase.
+    samplewR = sample(fulldata, n, replace=TRUE)
+    ^~~~~~~~
+./R/com.confint.R:49:14: style: Use <-, not =, for assignment.
+    samplewR = sample(fulldata, n, replace=TRUE)
+             ^
+./R/com.confint.R:50:12: style: Use <-, not =, for assignment.
+    sample = data.matrix( as.data.frame(table(samplewR)) )
+           ^
+./R/com.confint.R:50:47: style: Variable and function names should be all lowercase.
+    sample = data.matrix( as.data.frame(table(samplewR)) )
+                                              ^~~~~~~~
+./R/com.confint.R:51:12: style: Use <-, not =, for assignment.
+    sample = cbind( sample[,1] - 1, sample[,2] )
+           ^
+./R/com.confint.R:52:21: style: Use <-, not =, for assignment.
+    COMsampleobject = com.fit(sample)
+                    ^
+./R/com.confint.R:53:20: style: Use <-, not =, for assignment.
+    boot.lambda[i] = COMsampleobject$lambda
+                   ^
+./R/com.confint.R:54:16: style: Use <-, not =, for assignment.
+    boot.nu[i] = COMsampleobject$nu
+               ^
+./R/com.confint.R:55:12: style: Variable and function names should be all lowercase.
+    remove(samplewR)
+           ^~~~~~~~
+./R/com.confint.R:59:15: style: Use <-, not =, for assignment.
+  boot.lambda = sort(boot.lambda)
+              ^
+./R/com.confint.R:60:11: style: Use <-, not =, for assignment.
+  boot.nu = sort(boot.nu)
+          ^
+./R/com.confint.R:61:15: style: Use <-, not =, for assignment.
+  lower.bound = (1 - level) / 2
+              ^
+./R/com.confint.R:62:15: style: Use <-, not =, for assignment.
+  upper.bound = 1 - lower.bound
+              ^
+./R/com.confint.R:63:15: style: Use <-, not =, for assignment.
+  lower.index = floor(lower.bound * B)+1
+              ^
+./R/com.confint.R:63:39: style: Put spaces around all infix operators.
+  lower.index = floor(lower.bound * B)+1
+                                     ~^~
+./R/com.confint.R:64:15: style: Use <-, not =, for assignment.
+  upper.index = floor(upper.bound * B)
+              ^
+./R/com.confint.R:65:14: style: Use <-, not =, for assignment.
+  pivotal.ci = matrix(0,2,2)
+             ^
+./R/com.confint.R:66:19: style: Use <-, not =, for assignment.
+  pivotal.ci[1,1] = max(0, 2*lambda.mle - boot.lambda[upper.index])
+                  ^
+./R/com.confint.R:66:29: style: Put spaces around all infix operators.
+  pivotal.ci[1,1] = max(0, 2*lambda.mle - boot.lambda[upper.index])
+                           ~^~
+./R/com.confint.R:67:19: style: Use <-, not =, for assignment.
+  pivotal.ci[1,2] = 2*lambda.mle - boot.lambda[lower.index]
+                  ^
+./R/com.confint.R:67:22: style: Put spaces around all infix operators.
+  pivotal.ci[1,2] = 2*lambda.mle - boot.lambda[lower.index]
+                    ~^~
+./R/com.confint.R:68:19: style: Use <-, not =, for assignment.
+  pivotal.ci[2,1] = max(0, 2*nu.mle - boot.nu[upper.index])
+                  ^
+./R/com.confint.R:68:29: style: Put spaces around all infix operators.
+  pivotal.ci[2,1] = max(0, 2*nu.mle - boot.nu[upper.index])
+                           ~^~
+./R/com.confint.R:69:19: style: Use <-, not =, for assignment.
+  pivotal.ci[2,2] = 2*nu.mle - boot.nu[lower.index]
+                  ^
+./R/com.confint.R:69:22: style: Put spaces around all infix operators.
+  pivotal.ci[2,2] = 2*nu.mle - boot.nu[lower.index]
+                    ~^~
+./R/com.confint.R:70:24: style: Use <-, not =, for assignment.
+  rownames(pivotal.ci) = c("lambda", "nu")
+                       ^
+./R/com.confint.R:71:24: style: Use <-, not =, for assignment.
+  colnames(pivotal.ci) = c(lower.bound, upper.bound)
+                       ^
+./R/com.dist.R:33:5: style: Use <-, not =, for assignment.
+fit = com.fit(Lemaire)
+    ^
+./R/com.dist.R:37:3: style: Use <-, not =, for assignment.
+r = rcom(10, fit$lambda, fit$nu)
+  ^
+./R/com.dist.R:40:6: style: Use <-, not =, for assignment.
+dcom = function(x, lambda, nu, z = NULL)
+     ^
+./R/com.dist.R:41:1: style: Opening curly braces should never go on their own line and should always be followed by a new line.
+{
+^
+./R/com.dist.R:58:3: style: Use <-, not =, for assignment.
+z = com_compute_z(lambda, nu)
+  ^
+./R/com.dist.R:64:9: style: Place a space before left parenthesis, except in a function call.
+return ((lambda ^ x) * ((factorial(x)) ^ -nu) / z)
+        ^
+./R/com.dist.R:68:6: style: Use <-, not =, for assignment.
+rcom = function(n, lambda, nu, log.z = NULL)
+     ^
+./R/com.dist.R:69:1: style: Opening curly braces should never go on their own line and should always be followed by a new line.
+{
+^
+./R/com.dist.R:80:7: style: Use <-, not =, for assignment.
+log.z = com_compute_log_z(lambda, nu)
+      ^
+./R/com.dist.R:83:3: style: Use <-, not =, for assignment.
+r = NULL
+  ^
+./R/com.dist.R:89:1: style: Opening curly braces should never go on their own line and should always be followed by a new line.
+{
+^
+./R/com.dist.R:98:10: style: Use <-, not =, for assignment.
+log.prob = log(runif(1))
+         ^
+./R/com.dist.R:101:3: style: Use <-, not =, for assignment.
+j = 0
+  ^
+./R/com.dist.R:107:1: style: Opening curly braces should never go on their own line and should always be followed by a new line.
+{
+^
+./R/com.dist.R:111:1: style: lines should not be more than 80 characters.
+new.log.prob = com.log.difference( log.prob, com.log.density(j, lambda, nu, log.z) )
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./R/com.dist.R:111:1: style: Words within variable and function names should be separated by '_' rather than '.'.
+new.log.prob = com.log.difference( log.prob, com.log.density(j, lambda, nu, log.z) )
+^~~~~~~~~~~~
+./R/com.dist.R:111:14: style: Use <-, not =, for assignment.
+new.log.prob = com.log.difference( log.prob, com.log.density(j, lambda, nu, log.z) )
+             ^
+./R/com.dist.R:115:12: style: Words within variable and function names should be separated by '_' rather than '.'.
+if (is.nan(new.log.prob))
+           ^~~~~~~~~~~~
+./R/com.dist.R:125:10: style: Use <-, not =, for assignment.
+log.prob = new.log.prob
+         ^
+./R/com.dist.R:125:12: style: Words within variable and function names should be separated by '_' rather than '.'.
+log.prob = new.log.prob
+           ^~~~~~~~~~~~
+./R/com.dist.R:129:3: style: Use <-, not =, for assignment.
+j = j + 1
+  ^
+./R/com.dist.R:136:3: style: Use <-, not =, for assignment.
+r = c(r, j)
+  ^
+./R/com.dist.R:174:5: style: Use <-, not =, for assignment.
+fit = com.fit(Lemaire)
+    ^
+./R/com.dist.R:179:17: style: Use <-, not =, for assignment.
+com.log.density = function(x, lambda, nu, log.z = NULL)
+                ^
+./R/com.dist.R:180:1: style: Opening curly braces should never go on their own line and should always be followed by a new line.
+{
+^
+./R/com.dist.R:194:21: style: Opening curly braces should never go on their own line and should always be followed by a new line.
+if (is.null(log.z)) { log.z = com_compute_log_z(lambda, nu) }
+                    ^
+./R/com.dist.R:194:29: style: Use <-, not =, for assignment.
+if (is.null(log.z)) { log.z = com_compute_log_z(lambda, nu) }
+                            ^
+./R/com.dist.R:194:61: style: Closing curly-braces should always be on their own line, unless it's followed by an else.
+if (is.null(log.z)) { log.z = com_compute_log_z(lambda, nu) }
+                                                            ^
+./R/com.fit.R:29:9: style: Use <-, not =, for assignment.
+com.fit = function(x, par=NULL, ...) {
+        ^
+./R/com.fit.R:32:10: style: Use <-, not =, for assignment.
+    xbar = (x[,1] %*% x[,2]) / sum(x[,2])
+         ^
+./R/com.fit.R:33:9: style: Use <-, not =, for assignment.
+    par = c(xbar, 1)
+        ^
+./R/com.fit.R:37:10: style: Use <-, not =, for assignment.
+  result = optim(par,
+         ^
+./R/com.fit.R:38:30: style: Opening curly braces should never go on their own line and should always be followed by a new line.
+                 function(p) {return (-com.loglikelihood(x, p[1], p[2], ...))},
+                             ^
+./R/com.fit.R:38:78: style: Closing curly-braces should always be on their own line, unless it's followed by an else.
+                 function(p) {return (-com.loglikelihood(x, p[1], p[2], ...))},
+                                                                             ^
+./R/com.fit.R:42:10: style: Use <-, not =, for assignment.
+  lambda = result$par[1]
+         ^
+./R/com.fit.R:43:6: style: Use <-, not =, for assignment.
+  nu = result$par[2]
+     ^
+./R/com.fit.R:44:7: style: Use <-, not =, for assignment.
+  fit = list(lambda = lambda,
+      ^
+./R/com.loglikelihood.R:21:19: style: Use <-, not =, for assignment.
+com.loglikelihood = function(x, lambda, nu, ...) {
+                  ^
+./R/com.loglikelihood.R:24:9: style: Use <-, not =, for assignment.
+  log.z = com_compute_log_z(lambda, nu, ...)
+        ^
+./R/com.moments.R:23:1: style: lines should not be more than 80 characters.
+com.expectation = function(f, lambda, nu, log.error = 0.001, maxit=100, z=NULL) {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./R/com.moments.R:23:17: style: Use <-, not =, for assignment.
+com.expectation = function(f, lambda, nu, log.error = 0.001, maxit=100, z=NULL) {
+                ^
+./R/com.moments.R:26:11: style: Use <-, not =, for assignment.
+    log.z = com_compute_log_z(lambda, nu)
+          ^
+./R/com.moments.R:28:11: style: Use <-, not =, for assignment.
+    log.z = log(z)
+          ^
+./R/com.moments.R:32:6: style: Use <-, not =, for assignment.
+  ex = -.Machine$double.xmax
+     ^
+./R/com.moments.R:33:11: style: Use <-, not =, for assignment.
+  ex.last = 0
+          ^
+./R/com.moments.R:34:5: style: Use <-, not =, for assignment.
+  j = 0
+    ^
+./R/com.moments.R:37:11: style: Place a space before left parenthesis, except in a function call.
+  while (((ex == -.Machine$double.xmax && ex.last == -.Machine$double.xmax) ||
+          ^
+./R/com.moments.R:39:13: style: Use <-, not =, for assignment.
+    ex.last = ex
+            ^
+./R/com.moments.R:40:8: style: Use <-, not =, for assignment.
+    ex = logSumExp(c(ex, log(f(j)) + com.log.density(j, lambda, nu, log.z)))
+       ^
+./R/com.moments.R:40:10: style: Variable and function names should be all lowercase.
+    ex = logSumExp(c(ex, log(f(j)) + com.log.density(j, lambda, nu, log.z)))
+         ^~~~~~~~~
+./R/com.moments.R:41:7: style: Use <-, not =, for assignment.
+    j = j + 1
+      ^
+./R/com.moments.R:72:10: style: Use <-, not =, for assignment.
+com.mean = function(lambda, nu, ...) {
+         ^
+./R/com.moments.R:73:41: style: Opening curly braces should never go on their own line and should always be followed by a new line.
+  return ( com.expectation(function (x) {x}, lambda, nu, ...))
+                                        ^
+./R/com.moments.R:73:43: style: Closing curly-braces should always be on their own line, unless it's followed by an else.
+  return ( com.expectation(function (x) {x}, lambda, nu, ...))
+                                          ^
+./R/com.moments.R:102:9: style: Use <-, not =, for assignment.
+com.var = function(lambda, nu, ...) {
+        ^
+./R/com.moments.R:103:1: style: lines should not be more than 80 characters.
+  return ( com.expectation(function(x) {x^2}, lambda, nu, ...) - (com.mean(lambda,nu, ...))^2 )
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./R/com.moments.R:103:40: style: Opening curly braces should never go on their own line and should always be followed by a new line.
+  return ( com.expectation(function(x) {x^2}, lambda, nu, ...) - (com.mean(lambda,nu, ...))^2 )
+                                       ^
+./R/com.moments.R:103:42: style: Put spaces around all infix operators.
+  return ( com.expectation(function(x) {x^2}, lambda, nu, ...) - (com.mean(lambda,nu, ...))^2 )
+                                        ~^~
+./R/com.moments.R:103:44: style: Closing curly-braces should always be on their own line, unless it's followed by an else.
+  return ( com.expectation(function(x) {x^2}, lambda, nu, ...) - (com.mean(lambda,nu, ...))^2 )
+                                           ^
+./R/com.moments.R:103:92: style: Put spaces around all infix operators.
+  return ( com.expectation(function(x) {x^2}, lambda, nu, ...) - (com.mean(lambda,nu, ...))^2 )
+                                                                                          ~^~
+./R/log.space.R:21:20: style: Use <-, not =, for assignment.
+com.log.difference = function(x,y) { # log.difference(x,y) = log(exp(x)- xp(y))
+                   ^
+./R/log.space.R:21:36: style: Opening curly braces should never go on their own line and should always be followed by a new line.
+com.log.difference = function(x,y) { # log.difference(x,y) = log(exp(x)- xp(y))
+                                   ^
+./R/RcppExports.R:5:11: style: Use <-, not =, for assignment.
+compute_z = function(lambda, nu, log_error = 0.001, maxit = 100L) {
+          ^
+./R/RcppExports.R:6:1: style: lines should not be more than 80 characters.
+    .Call('compoisson_compute_z', PACKAGE = 'compoisson', lambda, nu, log_error, maxit)
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./R/RcppExports.R:6:11: style: Only use double-quotes.
+    .Call('compoisson_compute_z', PACKAGE = 'compoisson', lambda, nu, log_error, maxit)
+          ^~~~~~~~~~~~~~~~~~~~~~
+./R/RcppExports.R:6:45: style: Only use double-quotes.
+    .Call('compoisson_compute_z', PACKAGE = 'compoisson', lambda, nu, log_error, maxit)
+                                            ^~~~~~~~~~~~
+./R/RcppExports.R:10:15: style: Use <-, not =, for assignment.
+compute_log_z = function(lambda, nu, log_error = 0.001, maxit = 100L) {
+              ^
+./R/RcppExports.R:11:1: style: lines should not be more than 80 characters.
+    .Call('compoisson_compute_log_z', PACKAGE = 'compoisson', lambda, nu, log_error, maxit)
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./R/RcppExports.R:11:11: style: Only use double-quotes.
+    .Call('compoisson_compute_log_z', PACKAGE = 'compoisson', lambda, nu, log_error, maxit)
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+./R/RcppExports.R:11:49: style: Only use double-quotes.
+    .Call('compoisson_compute_log_z', PACKAGE = 'compoisson', lambda, nu, log_error, maxit)
+                                                ^~~~~~~~~~~~
+./R/RcppExports.R:15:11: style: Use <-, not =, for assignment.
+logsumexp = function(x) {
+          ^
+./R/RcppExports.R:16:11: style: Only use double-quotes.
+    .Call('compoisson_logsumexp', PACKAGE = 'compoisson', x)
+          ^~~~~~~~~~~~~~~~~~~~~~
+./R/RcppExports.R:16:45: style: Only use double-quotes.
+    .Call('compoisson_logsumexp', PACKAGE = 'compoisson', x)
+                                            ^~~~~~~~~~~~
+./R/RcppExports.R:20:1: style: lines should not be more than 80 characters.
+d_com = function(x, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./R/RcppExports.R:20:7: style: Use <-, not =, for assignment.
+d_com = function(x, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
+      ^
+./R/RcppExports.R:21:1: style: lines should not be more than 80 characters.
+    .Call('compoisson_d_com', PACKAGE = 'compoisson', x, lambda, nu, log, z, log_error, maxit)
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./R/RcppExports.R:21:11: style: Only use double-quotes.
+    .Call('compoisson_d_com', PACKAGE = 'compoisson', x, lambda, nu, log, z, log_error, maxit)
+          ^~~~~~~~~~~~~~~~~~
+./R/RcppExports.R:21:41: style: Only use double-quotes.
+    .Call('compoisson_d_com', PACKAGE = 'compoisson', x, lambda, nu, log, z, log_error, maxit)
+                                        ^~~~~~~~~~~~
+./R/RcppExports.R:25:1: style: lines should not be more than 80 characters.
+p_com = function(q, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./R/RcppExports.R:25:7: style: Use <-, not =, for assignment.
+p_com = function(q, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
+      ^
+./R/RcppExports.R:26:1: style: lines should not be more than 80 characters.
+    .Call('compoisson_p_com', PACKAGE = 'compoisson', q, lambda, nu, log, z, log_error, maxit)
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./R/RcppExports.R:26:11: style: Only use double-quotes.
+    .Call('compoisson_p_com', PACKAGE = 'compoisson', q, lambda, nu, log, z, log_error, maxit)
+          ^~~~~~~~~~~~~~~~~~
+./R/RcppExports.R:26:41: style: Only use double-quotes.
+    .Call('compoisson_p_com', PACKAGE = 'compoisson', q, lambda, nu, log, z, log_error, maxit)
+                                        ^~~~~~~~~~~~
+./R/RcppExports.R:30:1: style: lines should not be more than 80 characters.
+q_com = function(p, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./R/RcppExports.R:30:7: style: Use <-, not =, for assignment.
+q_com = function(p, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
+      ^
+./R/RcppExports.R:31:1: style: lines should not be more than 80 characters.
+    .Call('compoisson_q_com', PACKAGE = 'compoisson', p, lambda, nu, log, z, log_error, maxit)
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./R/RcppExports.R:31:11: style: Only use double-quotes.
+    .Call('compoisson_q_com', PACKAGE = 'compoisson', p, lambda, nu, log, z, log_error, maxit)
+          ^~~~~~~~~~~~~~~~~~
+./R/RcppExports.R:31:41: style: Only use double-quotes.
+    .Call('compoisson_q_com', PACKAGE = 'compoisson', p, lambda, nu, log, z, log_error, maxit)
+                                        ^~~~~~~~~~~~
+./R/RcppExports.R:35:1: style: lines should not be more than 80 characters.
+r_com = function(n, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./R/RcppExports.R:35:7: style: Use <-, not =, for assignment.
+r_com = function(n, lambda, nu, log = FALSE, z = NA_real_, log_error = 0.001, maxit = 100L) {
+      ^
+./R/RcppExports.R:36:1: style: lines should not be more than 80 characters.
+    .Call('compoisson_r_com', PACKAGE = 'compoisson', n, lambda, nu, log, z, log_error, maxit)
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./R/RcppExports.R:36:11: style: Only use double-quotes.
+    .Call('compoisson_r_com', PACKAGE = 'compoisson', n, lambda, nu, log, z, log_error, maxit)
+          ^~~~~~~~~~~~~~~~~~
+./R/RcppExports.R:36:41: style: Only use double-quotes.
+    .Call('compoisson_r_com', PACKAGE = 'compoisson', n, lambda, nu, log, z, log_error, maxit)
+                                        ^~~~~~~~~~~~
+./R/RcppExports.R:41:11: style: Only use double-quotes.
+    .Call('compoisson_RcppExport_registerCCallable', PACKAGE = 'compoisson')
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./R/RcppExports.R:41:64: style: Only use double-quotes.
+    .Call('compoisson_RcppExport_registerCCallable', PACKAGE = 'compoisson')
+                                                               ^~~~~~~~~~~~

@@ -13,7 +13,7 @@ extern double logsumexp(NumericVector x);
 extern double logsumexp(double x, double y);
 extern double logdiffexp(double x, double y);
 
-extern NumericVector dcmp(NumericVector x, double lambda, double nu, double z, bool log_p, double log_error_z, int maxit_z, bool parallel);
+extern NumericVector dcmp(NumericVector x, NumericVector lambda, NumericVector nu, NumericVector z, bool log_p, double log_error_z, int maxit_z); //, bool parallel);
 extern double dcmp_single(double x, double lambda, double nu, double z);
 
 extern NumericVector pcmp(NumericVector q, double lambda, double nu, double z, bool log_p, double log_error_z, int maxit_z, bool parallel);
@@ -34,9 +34,11 @@ extern double cmp_log_var(double lambda, double nu, double log_error, int maxit,
 extern double cmp_var_approx(double lambda, double nu);
 extern double cmp_log_var_approx(double lambda, double nu);
 
-extern double cmp_loglik(NumericVector x, double lambda, double nu, double z, double log_error_z, int maxit_z, bool parallel);
+extern double cmp_loglik(NumericVector x, NumericVector lambda, NumericVector nu, NumericVector z, double log_error_z, int maxit_z); //, bool parallel);
 extern double pois_loglik(NumericMatrix x, double lambda);
 extern double nb_loglik(NumericMatrix x, double prob, double mu);  
+
+extern double cmp_kld(NumericVector x, NumericVector lambda, NumericVector nu, NumericVector z, double log_error_z, int maxit_z); //, bool parallel);
 
 extern double compute_log_z_old(double lambda, double nu, double log_error_z, int maxit_z);
 

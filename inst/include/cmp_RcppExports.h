@@ -139,17 +139,17 @@ namespace cmp {
         return Rcpp::as<double >(__result);
     }
 
-    inline NumericVector dcmp(NumericVector x, double lambda, double nu, double z = NA_REAL, bool log_p = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
-        typedef SEXP(*Ptr_dcmp)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
+    inline NumericVector dcmp(NumericVector x, NumericVector lambda, NumericVector nu, NumericVector z = NumericVector::create(NA), bool log = false, double log_error_z = 1e-6, int maxit_z = 10000) {
+        typedef SEXP(*Ptr_dcmp)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_dcmp p_dcmp = NULL;
         if (p_dcmp == NULL) {
-            validateSignature("NumericVector(*dcmp)(NumericVector,double,double,double,bool,double,int,bool)");
+            validateSignature("NumericVector(*dcmp)(NumericVector,NumericVector,NumericVector,NumericVector,bool,double,int)");
             p_dcmp = (Ptr_dcmp)R_GetCCallable("cmp", "cmp_dcmp");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_dcmp(Rcpp::wrap(x), Rcpp::wrap(lambda), Rcpp::wrap(nu), Rcpp::wrap(z), Rcpp::wrap(log_p), Rcpp::wrap(log_error_z), Rcpp::wrap(maxit_z), Rcpp::wrap(parallel));
+            __result = p_dcmp(Rcpp::wrap(x), Rcpp::wrap(lambda), Rcpp::wrap(nu), Rcpp::wrap(z), Rcpp::wrap(log), Rcpp::wrap(log_error_z), Rcpp::wrap(maxit_z));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -158,7 +158,7 @@ namespace cmp {
         return Rcpp::as<NumericVector >(__result);
     }
 
-    inline NumericVector pcmp(NumericVector q, double lambda, double nu, double z = NA_REAL, bool log_p = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
+    inline NumericVector pcmp(NumericVector q, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
         typedef SEXP(*Ptr_pcmp)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_pcmp p_pcmp = NULL;
         if (p_pcmp == NULL) {
@@ -168,7 +168,7 @@ namespace cmp {
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_pcmp(Rcpp::wrap(q), Rcpp::wrap(lambda), Rcpp::wrap(nu), Rcpp::wrap(z), Rcpp::wrap(log_p), Rcpp::wrap(log_error_z), Rcpp::wrap(maxit_z), Rcpp::wrap(parallel));
+            __result = p_pcmp(Rcpp::wrap(q), Rcpp::wrap(lambda), Rcpp::wrap(nu), Rcpp::wrap(z), Rcpp::wrap(log), Rcpp::wrap(log_error_z), Rcpp::wrap(maxit_z), Rcpp::wrap(parallel));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -177,7 +177,7 @@ namespace cmp {
         return Rcpp::as<NumericVector >(__result);
     }
 
-    inline NumericVector qcmp(NumericVector p, double lambda, double nu, double z = NA_REAL, bool log_p = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
+    inline NumericVector qcmp(NumericVector p, double lambda, double nu, double z = NA_REAL, bool log = false, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
         typedef SEXP(*Ptr_qcmp)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_qcmp p_qcmp = NULL;
         if (p_qcmp == NULL) {
@@ -187,7 +187,7 @@ namespace cmp {
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_qcmp(Rcpp::wrap(p), Rcpp::wrap(lambda), Rcpp::wrap(nu), Rcpp::wrap(z), Rcpp::wrap(log_p), Rcpp::wrap(log_error_z), Rcpp::wrap(maxit_z), Rcpp::wrap(parallel));
+            __result = p_qcmp(Rcpp::wrap(p), Rcpp::wrap(lambda), Rcpp::wrap(nu), Rcpp::wrap(z), Rcpp::wrap(log), Rcpp::wrap(log_error_z), Rcpp::wrap(maxit_z), Rcpp::wrap(parallel));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -215,42 +215,23 @@ namespace cmp {
         return Rcpp::as<NumericVector >(__result);
     }
 
-    inline double cmp_loglik(NumericMatrix x, double lambda, double nu, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
-        typedef SEXP(*Ptr_cmp_loglik)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
+    inline double cmp_loglik(NumericMatrix x, NumericVector lambda, NumericVector nu, NumericVector z = NumericVector::create(NA), double log_error_z = 1e-6, int maxit_z = 10000) {
+        typedef SEXP(*Ptr_cmp_loglik)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_cmp_loglik p_cmp_loglik = NULL;
         if (p_cmp_loglik == NULL) {
-            validateSignature("double(*cmp_loglik)(NumericMatrix,double,double,double,double,int,bool)");
+            validateSignature("double(*cmp_loglik)(NumericMatrix,NumericVector,NumericVector,NumericVector,double,int)");
             p_cmp_loglik = (Ptr_cmp_loglik)R_GetCCallable("cmp", "cmp_cmp_loglik");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_cmp_loglik(Rcpp::wrap(x), Rcpp::wrap(lambda), Rcpp::wrap(nu), Rcpp::wrap(z), Rcpp::wrap(log_error_z), Rcpp::wrap(maxit_z), Rcpp::wrap(parallel));
+            __result = p_cmp_loglik(Rcpp::wrap(x), Rcpp::wrap(lambda), Rcpp::wrap(nu), Rcpp::wrap(z), Rcpp::wrap(log_error_z), Rcpp::wrap(maxit_z));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (__result.inherits("try-error"))
             throw Rcpp::exception(as<std::string>(__result).c_str());
         return Rcpp::as<double >(__result);
-    }
-
-    inline IntegerVector cmp_loglik2(NumericVector x, double lambda, double nu, double z = NA_REAL, double log_error_z = 1e-6, int maxit_z = 10000, bool parallel = false) {
-        typedef SEXP(*Ptr_cmp_loglik2)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
-        static Ptr_cmp_loglik2 p_cmp_loglik2 = NULL;
-        if (p_cmp_loglik2 == NULL) {
-            validateSignature("IntegerVector(*cmp_loglik2)(NumericVector,double,double,double,double,int,bool)");
-            p_cmp_loglik2 = (Ptr_cmp_loglik2)R_GetCCallable("cmp", "cmp_cmp_loglik2");
-        }
-        RObject __result;
-        {
-            RNGScope __rngScope;
-            __result = p_cmp_loglik2(Rcpp::wrap(x), Rcpp::wrap(lambda), Rcpp::wrap(nu), Rcpp::wrap(z), Rcpp::wrap(log_error_z), Rcpp::wrap(maxit_z), Rcpp::wrap(parallel));
-        }
-        if (__result.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (__result.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<IntegerVector >(__result);
     }
 
     inline double pois_loglik(NumericMatrix x, double lambda) {
@@ -283,6 +264,82 @@ namespace cmp {
         {
             RNGScope __rngScope;
             __result = p_nb_loglik(Rcpp::wrap(x), Rcpp::wrap(mu), Rcpp::wrap(size));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<double >(__result);
+    }
+
+    inline double pb_loglik(NumericMatrix x, double size, double prob) {
+        typedef SEXP(*Ptr_pb_loglik)(SEXP,SEXP,SEXP);
+        static Ptr_pb_loglik p_pb_loglik = NULL;
+        if (p_pb_loglik == NULL) {
+            validateSignature("double(*pb_loglik)(NumericMatrix,double,double)");
+            p_pb_loglik = (Ptr_pb_loglik)R_GetCCallable("cmp", "cmp_pb_loglik");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_pb_loglik(Rcpp::wrap(x), Rcpp::wrap(size), Rcpp::wrap(prob));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<double >(__result);
+    }
+
+    inline double cmp_kld(NumericMatrix x, NumericVector lambda, NumericVector nu, NumericVector z = NumericVector::create(NA), double log_error_z = 1e-6, int maxit_z = 10000) {
+        typedef SEXP(*Ptr_cmp_kld)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_cmp_kld p_cmp_kld = NULL;
+        if (p_cmp_kld == NULL) {
+            validateSignature("double(*cmp_kld)(NumericMatrix,NumericVector,NumericVector,NumericVector,double,int)");
+            p_cmp_kld = (Ptr_cmp_kld)R_GetCCallable("cmp", "cmp_cmp_kld");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_cmp_kld(Rcpp::wrap(x), Rcpp::wrap(lambda), Rcpp::wrap(nu), Rcpp::wrap(z), Rcpp::wrap(log_error_z), Rcpp::wrap(maxit_z));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<double >(__result);
+    }
+
+    inline double pois_kld(NumericMatrix x, double lambda) {
+        typedef SEXP(*Ptr_pois_kld)(SEXP,SEXP);
+        static Ptr_pois_kld p_pois_kld = NULL;
+        if (p_pois_kld == NULL) {
+            validateSignature("double(*pois_kld)(NumericMatrix,double)");
+            p_pois_kld = (Ptr_pois_kld)R_GetCCallable("cmp", "cmp_pois_kld");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_pois_kld(Rcpp::wrap(x), Rcpp::wrap(lambda));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<double >(__result);
+    }
+
+    inline double nb_kld(NumericMatrix x, double mu, double size) {
+        typedef SEXP(*Ptr_nb_kld)(SEXP,SEXP,SEXP);
+        static Ptr_nb_kld p_nb_kld = NULL;
+        if (p_nb_kld == NULL) {
+            validateSignature("double(*nb_kld)(NumericMatrix,double,double)");
+            p_nb_kld = (Ptr_nb_kld)R_GetCCallable("cmp", "cmp_nb_kld");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_nb_kld(Rcpp::wrap(x), Rcpp::wrap(mu), Rcpp::wrap(size));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

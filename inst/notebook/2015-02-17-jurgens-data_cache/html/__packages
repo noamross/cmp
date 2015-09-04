@@ -1,0 +1,7 @@
+base
+cmp
+dplyr
+tidyr
+magrittr
+ggplot2
+knitr

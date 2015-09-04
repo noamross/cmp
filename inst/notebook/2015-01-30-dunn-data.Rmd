@@ -5,7 +5,7 @@ library(dplyr)
 library(tidyr)
 library(magrittr)
 library(ggplot2)
-library(compoisson)
+library(cmp)
 ```
 
 ```{r data_cleanup, eval=FALSE}
@@ -37,10 +37,10 @@ fits = freqdata %>%
   group_by(material) %>%
   do({
     N = sum(.$count * .$freq)
-    com = cmp_fit(cbind(.$count, .$freq))
+    cmp = cmp_fit(cbind(.$count, .$freq))
     pois = pois_fit(cbind(.$count, .$freq))
     nb = nb_fit(cbind(.$count, .$freq))
-    data_frame(N, com_lambda = com$lambda, com_nu = com$nu, com_ll = com$log.likelihood,
+    data_frame(N, cmp_lambda = cmp$lambda, cmp_nu = cmp$nu, cmp_ll = cmp$log.likelihood,
                pois_lambda = pois$lambda, pois_ll = pois$log.likelihood,
                nb_mu = nb$mu, nb_size = nb$size, nb_ll = nb$log.likelihood)
   })
@@ -52,7 +52,7 @@ max_val = max(freqdata$count)
 sims = fits %>%
   group_by(material) %>%
   do(data_frame(count = 0:max_val,
-                sim_com = dcom(0:max_val, .$com_lambda, .$com_nu),
+                sim_cmp = dcmp(0:max_val, .$cmp_lambda, .$cmp_nu),
                 sim_pois = dpois(0:max_val, .$pois_lambda),
                 sim_nb = dnbinom(0:max_val, mu = .$nb_mu, size=.$nb_size)))
 sims = full_join(sims, freqdata, by=c('material', 'count')) %>%
@@ -62,7 +62,7 @@ sims = full_join(sims, freqdata, by=c('material', 'count')) %>%
 
 ```{r plotsims}
 sims2 = sims %>%
-  gather(origin, frequency, sim_com, sim_pois, sim_nb, freq)
+  gather(origin, frequency, sim_cmp, sim_pois, sim_nb, freq)
 ggplot(sims) +
   geom_bar(mapping = aes(x = count, y = frequency),
            data = filter(sims2, origin=="freq"),

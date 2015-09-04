@@ -7,8 +7,8 @@
 \alias{rcmp}
 \title{The Conway-Maxwell-Poisson Distribution}
 \usage{
-dcmp(x, lambda, nu, z = NA_real_, log = FALSE, log_error_z = 1e-06,
-  maxit_z = 10000L, parallel = FALSE)
+dcmp(x, lambda, nu, z = as.numeric(c(NA)), log = FALSE,
+  log_error_z = 1e-06, maxit_z = 10000L)
 
 pcmp(q, lambda, nu, z = NA_real_, log = FALSE, log_error_z = 1e-06,
   maxit_z = 10000L, parallel = FALSE)

@@ -1,0 +1,141 @@
+---
+title: "Examining Urchin Density Data"
+author: "Noam Ross"
+date: "February 17, 2015"
+output: html_document
+---
+
+[Laura Jurgens](http://laurajurgens.com/) kindly provided data on sea urchin
+counts to examine for underdispersion with the [cmp package](https://github.com/noamross/cmp),
+wich fits distributions to the [Conway-Maxell-Poisson] distribution.  This is
+a quick spin through the data.
+
+```{r libraries, message=FALSE}
+library(cmp) #get with devtools::install_github('noamross/cmp') if needed
+library(dplyr)
+library(tidyr)
+library(magrittr)
+library(ggplot2)
+library(knitr)
+opts_chunk$set(cache=TRUE)
+```
+
+Let's load and take a look at the data.
+
+```{r firstplot, message=FALSE}
+urchins = as.tbl(read.csv('../../data/UrchinDensity_data_MASTER.csv'))
+ggplot(urchins, aes(x = Live.per.quad, fill= Site.Name)) +
+  geom_bar() +
+  xlab("Live Urchins per .25 m2 quadrat") +
+  theme(legend.position="none") +
+  ylab("Frequency") +
+  facet_wrap(~Site.Name)
+```
+
+OK, for the moment I am only interested in the data that has non-zero counts.
+Let's subset those out and check the variance/mean ratios.
+
+```{r meanvars}
+urchins = urchins %>%
+  group_by(Site.Name) %>%
+  filter(sum(Live.per.quad) > 0) %>%
+  droplevels()
+u_sum = urchins %>% summarize(meanval = mean(Live.per.quad),
+                              variance = var(Live.per.quad),
+                              var_mean_ratio = variance/meanval)
+kable(u_sum, digits = 2)
+```
+
+It looks like all these have greater variance than mean, so they are *over*
+rather than underdispersed.  But the CMP distribution can model overdispersed
+data, too, so let's try.  Here I fit Poisson, Negative Binomial, and CMP distributions
+to each. 
+
+```{r fits}
+fits = urchins %>%
+  group_by(Site.Name) %>%
+  do({
+    urchin_dist = table(.$Live.per.quad)
+    urchin_dist = cbind(as.numeric(names(urchin_dist)), urchin_dist)
+    cmp = cmp_fit(urchin_dist)
+    pois = pois_fit(urchin_dist)
+    nb = nb_fit(urchin_dist)
+    data_frame(cmp_lambda = cmp$lambda, cmp_nu = cmp$nu, cmp_ll = cmp$log.likelihood,
+               pois_lambda = pois$lambda, pois_ll = pois$log.likelihood,
+               nb_mu = nb$mu, nb_size = nb$size, nb_ll = nb$log.likelihood)
+  })
+
+```
+
+```{r sims}
+max_val = max(urchins$Live.per.quad)
+
+freqs = urchins %>%
+  group_by(Site.Name) %>%
+  do({freq = table(.$Live.per.quad)
+      count = as.integer(names(freq))
+      data_frame(freq, count)}) %>%
+arrange(Site.Name, count)
+
+sims = fits %>%
+  group_by(Site.Name) %>%
+  do(data_frame(count = 0:max_val,
+                sim_cmp = dcmp(0:max_val, .$cmp_lambda, .$cmp_nu),
+                sim_pois = dpois(0:max_val, .$pois_lambda),
+                sim_nb = dnbinom(0:max_val, mu = .$nb_mu, size=.$nb_size)))
+sims = full_join(sims, freqs, by = c("Site.Name", "count")) %>%
+  mutate(freq = replace(freq, is.na(freq), 0)/sum(freq, na.rm=TRUE))
+
+sims2 = sims %>%
+  gather(origin, frequency, sim_cmp, sim_pois, sim_nb, freq)
+ggplot(sims) +
+  geom_bar(mapping = aes(x = count, y = frequency),
+           data = filter(sims2, origin=="freq"),
+           stat="identity", position="identity") +
+  geom_step(mapping = aes(x = count - 0.5, y = frequency, col=origin),
+            data = filter(sims2, origin!="freq")) + 
+  scale_color_discrete(name='Distribution', labels=c("CMP", "Poisson", "Negative Bionomial")) +
+  facet_wrap(~Site.Name, ncol=3) +
+  xlab('Count of Urchins per Quadrat') +
+  ylab('Frequency')
+```
+
+Both CMP and Negative Binomial produce wider estimated distributions than the Poisson.
+Is either better?  Let's look at the AIC statistics for each distribution at each site,
+which tells us which distribution better predicts the data, adjusting for model complexity.
+(Both negative bionmial and CMP distributions have 2 parameters, while Poisson only has 1).
+
+```{r AICplot}
+fits = fits %>%
+  mutate(cmp_AIC = 4 - 2*cmp_ll, pois_AIC = 2 - 2*pois_ll, nb_AIC = 4 - 2*nb_ll)
+aictab = fits %>%
+  select(ends_with("AIC")) %>%
+  gather("distribution", "AIC", ends_with("AIC")) %>%
+  group_by(Site.Name) %>%
+  mutate(rel_AIC = AIC - min(AIC)) %>%
+  arrange(Site.Name)
+
+ggplot(aictab, aes(x=rel_AIC, y=Site.Name, fill=distribution)) +
+  geom_point(size=3, alpha=0.5, pch=21, col="black") +
+  scale_fill_discrete(name="Distribution", labels=c("CMP", "Poisson", "Negative Bionomial")) +
+  xlab("Relative AIC") + ylab("Site")
+```
+
+Both the CMP and Negative Binomial fits are always  better (have lower AIC)
+than the Poisson.  Let's zoom in and see how they compare to each other:
+
+```{r AICplot2, message=FALSE, warning=FALSE}
+ggplot(aictab, aes(x=rel_AIC, y=Site.Name, fill=distribution)) +
+  geom_point(size=3, alpha=0.5, pch=21, col="black") +
+  scale_fill_discrete(name="Distribution", labels=c("CMP", "Poisson", "Negative Bionomial")) +
+  xlab("Relative AIC") + ylab("Site") +
+  xlim(0,2)
+```
+
+The site vary in whether the Negative Binomial or CMP distributions predict the
+data better, but the difference is never above 2, which is the general rule-of-thumb for distinguishing
+between fits. So both fit this data equally well.
+
+What did we learn? At least in this case, over-dispersed data seem to be
+modeled equally well by CMP or Negative Binomial distributions.  
+

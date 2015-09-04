@@ -1,0 +1,5 @@
+name: shinyapp
+account: noamross
+bundleId: 123288
+url: http://noamross.shinyapps.io/shinyapp
+server: shinyapps.io

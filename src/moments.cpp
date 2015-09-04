@@ -38,7 +38,7 @@ double cmp_log_mean(double lambda, double nu,
                        int maxit_z = 10000, bool parallel = false) {
   
   if (lambda < 0 || nu < 0) {
-    Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
+    return NAN;
   } 
   
   
@@ -96,7 +96,7 @@ double cmp_log_var(double lambda, double nu,
                        int maxit_z = 10000, bool parallel = false) {
   
   if (lambda < 0 || nu < 0) {
-    Rcpp::stop("Invalid arguments, only defined for lambda >= 0, nu >= 0");
+    return NAN;
   } 
       
   double log_z;
